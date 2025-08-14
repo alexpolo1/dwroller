@@ -1,0 +1,794 @@
+[
+  {
+    "id": "armour",
+    "name": "Armour",
+    "category": "Armor",
+    "req": 7,
+    "renown": "None",
+    "desc": "Armour: Reinforced structure and armour plate (All 7)"
+  },
+  {
+    "id": "armour-4",
+    "name": "Armour (4)",
+    "category": "Armor",
+    "req": 4,
+    "renown": "None",
+    "desc": "Armour (4), Natural Weapons, Quadruped, Regeneration,"
+  },
+  {
+    "id": "armour-machine",
+    "name": "Armour (Machine)",
+    "category": "Armor",
+    "req": 6,
+    "renown": "None",
+    "desc": "Armour (Machine): All 6"
+  },
+  {
+    "id": "armour-160",
+    "name": "Armour 160",
+    "category": "Armor",
+    "req": 160,
+    "renown": "None",
+    "desc": "Armour 160"
+  },
+  {
+    "id": "armour-craftsmanship-165",
+    "name": "Armour Craftsmanship 165",
+    "category": "Armor",
+    "req": 165,
+    "renown": "None",
+    "desc": "Armour Craftsmanship 165"
+  },
+  {
+    "id": "armour-plating-increase-armour-points-by-2",
+    "name": "Armour Plating Increase Armour Points By 2",
+    "category": "Armor",
+    "req": 2,
+    "renown": "None",
+    "desc": "Armour Plating Increase Armour Points by 2"
+  },
+  {
+    "id": "armour-points",
+    "name": "Armour Points",
+    "category": "Armor",
+    "req": 4,
+    "renown": "None",
+    "desc": "A storm shield provides +4 Armour Points"
+  },
+  {
+    "id": "armour-points-against-any-damage",
+    "name": "Armour Points Against Any Damage",
+    "category": "Armor",
+    "req": 2,
+    "renown": "None",
+    "desc": "counts as only having 2 Armour Points against any damage"
+  },
+  {
+    "id": "armour-points-by-1",
+    "name": "Armour Points By 1",
+    "category": "Armor",
+    "req": 1,
+    "renown": "None",
+    "desc": "The attack damages the target’s armour, reducing its Armour Points by 1"
+  },
+  {
+    "id": "armour-points-by-2-to-all-locations",
+    "name": "Armour Points By 2 To All Locations",
+    "category": "Armor",
+    "req": 2,
+    "renown": "None",
+    "desc": "Armour Points by 2 to all locations"
+  },
+  {
+    "id": "armour-points-of-protection",
+    "name": "Armour Points of Protection",
+    "category": "Armor",
+    "req": 8,
+    "renown": "None",
+    "desc": "because they provide 8 Armour Points of protection"
+  },
+  {
+    "id": "armour-points-of-protection-to-his",
+    "name": "Armour Points of Protection To His",
+    "category": "Armor",
+    "req": 10,
+    "renown": "None",
+    "desc": "power armour that provides 10 Armour Points of protection to his"
+  },
+  {
+    "id": "armour-points-to-6",
+    "name": "Armour Points To 6",
+    "category": "Armor",
+    "req": 6,
+    "renown": "None",
+    "desc": "reduces the sandbags Armour Points to 6"
+  },
+  {
+    "id": "armour-points-to-7",
+    "name": "Armour Points To 7",
+    "category": "Armor",
+    "req": 7,
+    "renown": "None",
+    "desc": "reduces the sandbags Armour Points to 7"
+  },
+  {
+    "id": "armour-monger-talent-113",
+    "name": "Armour-Monger (Talent) 113",
+    "category": "Armor",
+    "req": 113,
+    "renown": "None",
+    "desc": "Armour-Monger (Talent) 113"
+  },
+  {
+    "id": "armour-monger-500-talent-techmarine",
+    "name": "Armour-Monger 500 Talent Techmarine",
+    "category": "Armor",
+    "req": 500,
+    "renown": "None",
+    "desc": "Armour-Monger 500 Talent Techmarine"
+  },
+  {
+    "id": "astartes-artificer-armour-all-12-100-60",
+    "name": "Astartes Artificer Armour All 12 100 60",
+    "category": "Armor",
+    "req": 60,
+    "renown": "None",
+    "desc": "Astartes Artificer Armour All 12 100 60"
+  },
+  {
+    "id": "astartes-combat-shield-25-01",
+    "name": "Astartes Combat Shield 25 01",
+    "category": "Armor",
+    "req": 20,
+    "renown": "Distinguished",
+    "desc": "Astartes Combat Shield 25 01–10 3 20 Distinguished"
+  },
+  {
+    "id": "astartes-scout-armour-body",
+    "name": "Astartes Scout Armour Body",
+    "category": "Armor",
+    "req": 30,
+    "renown": "None",
+    "desc": "Astartes Scout Armour Body, Arms 6 30 N/A —"
+  },
+  {
+    "id": "astartes-storm-shield-55-01",
+    "name": "Astartes Storm Shield 55 01",
+    "category": "Armor",
+    "req": 35,
+    "renown": "Distinguished",
+    "desc": "Astartes Storm Shield 55 01–10 10 35 Distinguished"
+  },
+  {
+    "id": "astartes-terminator-armour-all-14-400-100",
+    "name": "Astartes Terminator Armour All 14 400 100",
+    "category": "Armor",
+    "req": 100,
+    "renown": "None",
+    "desc": "Astartes Terminator Armour All 14 400 100"
+  },
+  {
+    "id": "bertramsepheranmagronyngvarmorganscipio",
+    "name": "Bertramsepheranmagronyngvarmorganscipio",
+    "category": "Armor",
+    "req": 6,
+    "renown": "None",
+    "desc": "6BertramSepheranMagronYngvarMorganScipio"
+  },
+  {
+    "id": "carapace-armour-all-6-15-n-a",
+    "name": "Carapace Armour All 6 15 N/A",
+    "category": "Armor",
+    "req": 15,
+    "renown": "None",
+    "desc": "Carapace Armour All 6 15 N/A –"
+  },
+  {
+    "id": "damage-with-no-reduction-from-armour-and-suffers",
+    "name": "Damage (With No Reduction From Armour) and Suffers",
+    "category": "Armor",
+    "req": 10,
+    "renown": "None",
+    "desc": "suffers 1d10 Damage (with no reduction from armour) and suffers"
+  },
+  {
+    "id": "flak-armour-all-4-15-n-a",
+    "name": "Flak Armour All 4 15 N/A",
+    "category": "Armor",
+    "req": 15,
+    "renown": "None",
+    "desc": "Flak Armour All 4 15 N/A –"
+  },
+  {
+    "id": "his-armour-reduces-the-damage-by-10",
+    "name": "His Armour Reduces the Damage By 10",
+    "category": "Armor",
+    "req": 10,
+    "renown": "None",
+    "desc": "His armour reduces the Damage by 10, and"
+  },
+  {
+    "id": "horde-armour-value-of-5-against-damage-and",
+    "name": "Horde Armour Value of 5 Against Damage and",
+    "category": "Armor",
+    "req": 5,
+    "renown": "None",
+    "desc": "will also use its Horde armour value of 5 against damage and"
+  },
+  {
+    "id": "if-not-armoured",
+    "name": "If Not Armoured",
+    "category": "Armor",
+    "req": 1,
+    "renown": "None",
+    "desc": "If not armoured, the target is also Stunned for 1 Round"
+  },
+  {
+    "id": "levin-shield",
+    "name": "Levin Shield",
+    "category": "Armor",
+    "req": 50,
+    "renown": "Hero",
+    "desc": "The Levin Shield — — — — — — N/A — 10 50 Hero"
+  },
+  {
+    "id": "penetration-of-3-hits-a-target-with-5-armour-points",
+    "name": "Penetration of 3 Hits A Target With 5 Armour Points",
+    "category": "Armor",
+    "req": 5,
+    "renown": "None",
+    "desc": "Penetration of 3 hits a target with 5 Armour Points, the target"
+  },
+  {
+    "id": "photo-visors-and-sealed-armour-provide-a",
+    "name": "Photo-Visors and Sealed Armour Provide A",
+    "category": "Armor",
+    "req": 20,
+    "renown": "None",
+    "desc": "Photo-visors and sealed armour provide a +20 bonus to this"
+  },
+  {
+    "id": "possibility-shield-1000-wp-40",
+    "name": "Possibility Shield 1000 Wp 40",
+    "category": "Armor",
+    "req": 40,
+    "renown": "None",
+    "desc": "Possibility Shield 1000 WP 40+"
+  },
+  {
+    "id": "profile-on-page-376-and-are-armed-and-armoured-as-detailed",
+    "name": "Profile On Page 376 and Are Armed and Armoured As Detailed",
+    "category": "Armor",
+    "req": 376,
+    "renown": "None",
+    "desc": "profile on page 376 and are armed and armoured as detailed"
+  },
+  {
+    "id": "requisition-points-for-the-armour-itself-and-then",
+    "name": "Requisition Points For the Armour Itself and Then",
+    "category": "Armor",
+    "req": 60,
+    "renown": "None",
+    "desc": "pays the 60 Requisition Points for the armour itself and then"
+  },
+  {
+    "id": "sb-with-armour-points-counting-double-to-his",
+    "name": "Sb With Armour Points Counting Double) To His",
+    "category": "Armor",
+    "req": 3,
+    "renown": "None",
+    "desc": "(1d5–3+SB with Armour Points counting double) to his"
+  },
+  {
+    "id": "signature-wargear-hero-artificer-armour-1200-talent",
+    "name": "Signature Wargear (Hero) (Artificer Armour) 1200 Talent",
+    "category": "Armor",
+    "req": 200,
+    "renown": "Hero",
+    "desc": "Signature Wargear (Hero) (Artificer Armour) 1200 Talent —"
+  },
+  {
+    "id": "stygian-5th-armoured-division",
+    "name": "Stygian 5th Armoured Division",
+    "category": "Armor",
+    "req": 5,
+    "renown": "None",
+    "desc": "Stygian 5th Armoured Division"
+  },
+  {
+    "id": "tekarn-armoured",
+    "name": "Tekarn Armoured",
+    "category": "Armor",
+    "req": 1,
+    "renown": "None",
+    "desc": "Tekarn Armoured: 1 Regiment"
+  },
+  {
+    "id": "terminator-armour",
+    "name": "Terminator Armour",
+    "category": "Armor",
+    "req": 164,
+    "renown": "None",
+    "desc": "about Terminator Armour, see page 164"
+  },
+  {
+    "id": "toughness-bonus-and-armour",
+    "name": "Toughness Bonus and Armour",
+    "category": "Armor",
+    "req": 10,
+    "renown": "None",
+    "desc": "for his Toughness Bonus and armour, Myrdor suffers 10 points of"
+  },
+  {
+    "id": "walls-more-than-50cm-thick-and-certain-shielding-materials",
+    "name": "Walls More Than 50cm Thick and Certain Shielding Materials",
+    "category": "Armor",
+    "req": 50,
+    "renown": "None",
+    "desc": "walls more than 50cm thick and certain shielding materials"
+  },
+  {
+    "id": "astartes-blind-grenade-thrown-sbx3-s",
+    "name": "Astartes Blind Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 0,
+    "renown": "None",
+    "desc": "Astartes Blind Grenade Thrown SBx3 S/–/– – 0 Smoke 0"
+  },
+  {
+    "id": "astartes-bolt-pistol",
+    "name": "Astartes Bolt Pistol",
+    "category": "Explosives",
+    "req": 3,
+    "renown": "None",
+    "desc": "Astartes bolt pistol, 3 Astartes frag grenades, 3 Astartes"
+  },
+  {
+    "id": "astartes-frag-grenade-thrown-sbx3-s",
+    "name": "Astartes Frag Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 0,
+    "renown": "None",
+    "desc": "Astartes Frag Grenade Thrown SBx3 S/–/– 2d10 X 0 Blast (5) 0"
+  },
+  {
+    "id": "astartes-frag-missile",
+    "name": "Astartes Frag Missile",
+    "category": "Explosives",
+    "req": 4,
+    "renown": "None",
+    "desc": "Astartes Frag Missile – – – 2d10 X 4"
+  },
+  {
+    "id": "astartes-incendiary-missile",
+    "name": "Astartes Incendiary Missile",
+    "category": "Explosives",
+    "req": 15,
+    "renown": "None",
+    "desc": "Astartes Incendiary Missile – – – 1d10+3 E 0 Blast (5) 2 15 –"
+  },
+  {
+    "id": "astartes-krak-grenade-thrown-sbx3-s",
+    "name": "Astartes Krak Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 0,
+    "renown": "None",
+    "desc": "Astartes Krak Grenade Thrown SBx3 S/–/– 3d10+4 X 6 – 0"
+  },
+  {
+    "id": "astartes-krak-missile",
+    "name": "Astartes Krak Missile",
+    "category": "Explosives",
+    "req": 5,
+    "renown": "None",
+    "desc": "Astartes Krak Missile – – – 4d10+6 X 10 Blast (1) 2 5"
+  },
+  {
+    "id": "astartes-nova-grenade-thrown-sbx3-s",
+    "name": "Astartes Nova Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 0,
+    "renown": "None",
+    "desc": "Astartes Nova Grenade Thrown SBx3 S/–/– 1d10 E 0 Blast(3) 0"
+  },
+  {
+    "id": "astartes-plasma-grenade-thrown-sbx3-s",
+    "name": "Astartes Plasma Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 8,
+    "renown": "None",
+    "desc": "Astartes Plasma Grenade Thrown SBx3 S/–/– 1d10+12 E 8"
+  },
+  {
+    "id": "astartes-plasma-missile",
+    "name": "Astartes Plasma Missile",
+    "category": "Explosives",
+    "req": 12,
+    "renown": "None",
+    "desc": "Astartes Plasma Missile – – – 2d10+12 E 12"
+  },
+  {
+    "id": "astartes-stasis-grenade-thrown-sbx3-s",
+    "name": "Astartes Stasis Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 1,
+    "renown": "None",
+    "desc": "Astartes Stasis Grenade Thrown SBx3 S/–/– – 0 – 1 N/A N/A"
+  },
+  {
+    "id": "astartes-stun-grenade-thrown-sbx3-s",
+    "name": "Astartes Stun Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 0,
+    "renown": "None",
+    "desc": "Astartes Stun Grenade Thrown SBx3 S/–/– – 0 Blast (5) 0"
+  },
+  {
+    "id": "emp-grenade-thrown-sbx3-s",
+    "name": "Emp Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 0,
+    "renown": "None",
+    "desc": "EMP Grenade Thrown SBx3 S/–/– – 0 Haywire (3) 0"
+  },
+  {
+    "id": "grenade-launcher-with-a-clip-of-1",
+    "name": "Grenade Launcher With A Clip of 1)",
+    "category": "Explosives",
+    "req": 1,
+    "renown": "None",
+    "desc": "grenade launcher with a clip of 1)"
+  },
+  {
+    "id": "grenades-and-missiles-150",
+    "name": "Grenades and Missiles 150",
+    "category": "Explosives",
+    "req": 150,
+    "renown": "None",
+    "desc": "Grenades and Missiles 150"
+  },
+  {
+    "id": "missile-pod-basic-90m-s-2",
+    "name": "Missile Pod",
+    "category": "Explosives",
+    "req": 5,
+    "renown": "None",
+    "desc": "Missile Pod Basic 90m S/2/– 2d10+6 X 5 — — Mounted"
+  },
+  {
+    "id": "photon-flash-grenade-thrown-sbx3-s",
+    "name": "Photon Flash Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 0,
+    "renown": "None",
+    "desc": "Photon Flash Grenade Thrown SBx3 S/–/– Special 0 – 0"
+  },
+  {
+    "id": "so-a-grenade-with-blast-4-will-automatically",
+    "name": "So A Grenade With Blast (4) Will Automatically",
+    "category": "Explosives",
+    "req": 4,
+    "renown": "None",
+    "desc": "So a grenade with Blast (4) will automatically"
+  },
+  {
+    "id": "throwing-grenades-151",
+    "name": "Throwing Grenades 151",
+    "category": "Explosives",
+    "req": 151,
+    "renown": "None",
+    "desc": "Throwing Grenades 151"
+  },
+  {
+    "id": "vortex-grenade-has-a-radius-of-3-metres",
+    "name": "Vortex Grenade Has A Radius of 3 Metres",
+    "category": "Explosives",
+    "req": 3,
+    "renown": "None",
+    "desc": "The vortex grenade has a radius of 3 metres"
+  },
+  {
+    "id": "vortex-grenade-thrown-sbx3-s",
+    "name": "Vortex Grenade Thrown Sbx3 S/",
+    "category": "Explosives",
+    "req": 1,
+    "renown": "None",
+    "desc": "Vortex Grenade Thrown SBx3 S/–/– Special 0 – 1 N/A N/A"
+  },
+  {
+    "id": "astartes-force-fields-overload-on-a-roll-of-01",
+    "name": "Astartes Force Fields Overload On A Roll of 01",
+    "category": "Gear",
+    "req": 10,
+    "renown": "None",
+    "desc": "Astartes force fields overload on a roll of 01–10"
+  },
+  {
+    "id": "astartes-chainfist-mounted-2d10",
+    "name": "Astartes Chainfist",
+    "category": "Melee",
+    "req": 10,
+    "renown": "None",
+    "desc": "Astartes Chainfist Mounted 2d10"
+  },
+  {
+    "id": "astartes-chainsword-melee-1d10",
+    "name": "Astartes Chainsword Melee 1d10",
+    "category": "Melee",
+    "req": 5,
+    "renown": "None",
+    "desc": "Astartes Chainsword Melee 1d10+3 R 4 Balanced, Tearing 10 5 –"
+  },
+  {
+    "id": "astartes-combat-knife-melee-1d10",
+    "name": "Astartes Combat Knife Melee 1d10",
+    "category": "Melee",
+    "req": 3,
+    "renown": "None",
+    "desc": "Astartes Combat Knife Melee 1d10+2 R 2 – 2 3"
+  },
+  {
+    "id": "astartes-force-staff-melee-1d10",
+    "name": "Astartes Force Staff Melee 1d10",
+    "category": "Melee",
+    "req": 25,
+    "renown": "Respected",
+    "desc": "Astartes Force Staff Melee 1d10+1 I 0 Balanced, Special 5 25 Respected"
+  },
+  {
+    "id": "astartes-force-sword-melee-1d10",
+    "name": "Astartes Force Sword Melee 1d10",
+    "category": "Melee",
+    "req": 25,
+    "renown": "Respected",
+    "desc": "Astartes Force Sword Melee 1d10+2 R 2 Balanced, Special 5 25 Respected"
+  },
+  {
+    "id": "astartes-lightning-claw-melee-1d10",
+    "name": "Astartes Lightning Claw Melee 1d10",
+    "category": "Melee",
+    "req": 8,
+    "renown": "None",
+    "desc": "Astartes Lightning Claw Melee 1d10+6 E 8"
+  },
+  {
+    "id": "astartes-thunder-hammer-melee-2d10",
+    "name": "Astartes Thunder Hammer Melee 2d10",
+    "category": "Melee",
+    "req": 8,
+    "renown": "None",
+    "desc": "Astartes Thunder Hammer Melee 2d10+5 E 8"
+  },
+  {
+    "id": "omnissian-axe-astartes-pattern-melee-2d10",
+    "name": "Omnissian Axe (Astartes-Pattern) Melee 2d10",
+    "category": "Melee",
+    "req": 30,
+    "renown": "None",
+    "desc": "Omnissian Axe (Astartes-Pattern) Melee 2d10+6 E 6 Power Field, Unbalanced 14 30"
+  },
+  {
+    "id": "adeptus-astartes-heavy-flamer-see-page-145",
+    "name": "Adeptus Astartes Heavy Flamer (See Page 145)",
+    "category": "Ranged",
+    "req": 145,
+    "renown": "None",
+    "desc": "an Adeptus Astartes heavy flamer (see page 145), with all the"
+  },
+  {
+    "id": "astartes-digital-flamer-pistol-4m-s",
+    "name": "Astartes Digital Flamer",
+    "category": "Ranged",
+    "req": 1,
+    "renown": "None",
+    "desc": "Astartes Digital Flamer Pistol 4m S/–/– 2d10+2 E 3 1 Special Flame"
+  },
+  {
+    "id": "astartes-digital-melta-pistol-4m-s",
+    "name": "Astartes Digital Melta",
+    "category": "Ranged",
+    "req": 0,
+    "renown": "None",
+    "desc": "Astartes Digital Melta Pistol 4m S/–/– 2d10+5 E 12 1 Special – 0"
+  },
+  {
+    "id": "astartes-flamer-basic-20m-s",
+    "name": "Astartes Flamer",
+    "category": "Ranged",
+    "req": 10,
+    "renown": "None",
+    "desc": "Astartes Flamer Basic 20m S/–/– 2d10+2 E 3 6 2 Full Flame 15 10 –"
+  },
+  {
+    "id": "astartes-lascannon-heavy-300m-s",
+    "name": "Astartes Lascannon",
+    "category": "Ranged",
+    "req": 30,
+    "renown": "Respected",
+    "desc": "Astartes Lascannon Heavy 300m S/–/– 6d10+10 E 10 6 2 Full – 75 30 Respected"
+  },
+  {
+    "id": "astartes-plasma-pistol-see-page-148",
+    "name": "Astartes Plasma",
+    "category": "Ranged",
+    "req": 148,
+    "renown": "None",
+    "desc": "used as though it were an Astartes Plasma Pistol (see page 148)"
+  },
+  {
+    "id": "astartes-shotgun-basic-30m-s-2",
+    "name": "Astartes Shotgun",
+    "category": "Ranged",
+    "req": 18,
+    "renown": "None",
+    "desc": "Astartes Shotgun Basic 30m S/2/– 2d10+3 I 0 18 Full"
+  },
+  {
+    "id": "astartes-sniper-rifle-basic-200m-s",
+    "name": "Astartes Sniper Rifle",
+    "category": "Ranged",
+    "req": 2,
+    "renown": "None",
+    "desc": "Astartes Sniper Rifle Basic 200m S/–/– 1d10 R 0 6 2 Full"
+  },
+  {
+    "id": "autogun-basic-90m-s-3-10-1d10",
+    "name": "Autogun",
+    "category": "Ranged",
+    "req": 3,
+    "renown": "None",
+    "desc": "Autogun Basic 90m S/3/10 1d10+3 I 0 30 2 Full – 3"
+  },
+  {
+    "id": "autopistol-pistol-30m-s",
+    "name": "Autopistol",
+    "category": "Ranged",
+    "req": 2,
+    "renown": "None",
+    "desc": "Autopistol Pistol 30m S/–/6 1d10+2 I 0 18 Full – 2"
+  },
+  {
+    "id": "bolter-assault-free-3-no",
+    "name": "Bolter Assault Free 3 No",
+    "category": "Ranged",
+    "req": 3,
+    "renown": "None",
+    "desc": "Bolter Assault Free 3 No"
+  },
+  {
+    "id": "bolter-drill-talent-114",
+    "name": "Bolter Drill (Talent) 114",
+    "category": "Ranged",
+    "req": 114,
+    "renown": "None",
+    "desc": "Bolter Drill (Talent) 114"
+  },
+  {
+    "id": "bolter-drill-1",
+    "name": "Bolter Drill 1",
+    "category": "Ranged",
+    "req": 500,
+    "renown": "None",
+    "desc": "Bolter Drill 1,500 Talent Astartes Weapon Training"
+  },
+  {
+    "id": "bolter-drill-800-talent",
+    "name": "Bolter Drill 800 Talent",
+    "category": "Ranged",
+    "req": 800,
+    "renown": "None",
+    "desc": "Bolter Drill 800 Talent —"
+  },
+  {
+    "id": "boltgun-suffer-an-additional-30-penalty-and-can-only-be",
+    "name": "Boltgun Suffer An Additional –30 Penalty and Can Only Be",
+    "category": "Ranged",
+    "req": 30,
+    "renown": "None",
+    "desc": "boltgun suffer an additional –30 penalty and can only be"
+  },
+  {
+    "id": "gunmetalican-13th-armoured",
+    "name": "Gunmetalican 13th Armoured",
+    "category": "Ranged",
+    "req": 13,
+    "renown": "None",
+    "desc": "Gunmetalican 13th Armoured"
+  },
+  {
+    "id": "he-is-shot-by-a-lascannon-that-deals-21-points",
+    "name": "He Is Shot By A Lascannon That Deals 21 Points",
+    "category": "Ranged",
+    "req": 21,
+    "renown": "None",
+    "desc": "He is shot by a lascannon that deals 21 points"
+  },
+  {
+    "id": "lasgun",
+    "name": "Lasgun",
+    "category": "Ranged",
+    "req": 100,
+    "renown": "None",
+    "desc": "Lasgun, (100m"
+  },
+  {
+    "id": "laspistol-pistol-30m-s",
+    "name": "Laspistol",
+    "category": "Ranged",
+    "req": 1,
+    "renown": "None",
+    "desc": "Laspistol Pistol 30m S/–/– 1d10+2 E 0 30 Full Reliable 1"
+  },
+  {
+    "id": "launchers-152",
+    "name": "Launchers 152",
+    "category": "Ranged",
+    "req": 152,
+    "renown": "None",
+    "desc": "Launchers 152"
+  },
+  {
+    "id": "melta-bomb-12-25",
+    "name": "Melta Bomb 12 25",
+    "category": "Ranged",
+    "req": 25,
+    "renown": "None",
+    "desc": "Melta bomb 12 25 –"
+  },
+  {
+    "id": "mob-armed-with-autopistols-will-cause-3d10-2-damage-with",
+    "name": "Mob Armed With Autopistols Will Cause 3d10+2 Damage With",
+    "category": "Ranged",
+    "req": 2,
+    "renown": "None",
+    "desc": "mob armed with autopistols will cause 3d10+2 damage with"
+  },
+  {
+    "id": "plasma",
+    "name": "Plasma",
+    "category": "Ranged",
+    "req": 100,
+    "renown": "None",
+    "desc": "supplies hold 100 rounds of ammunition for Plasma, Melta, and"
+  },
+  {
+    "id": "plasma-cannon-would-fire-a-blast-3-on-maximal",
+    "name": "Plasma Cannon Would Fire A Blast (3) On Maximal)",
+    "category": "Ranged",
+    "req": 3,
+    "renown": "None",
+    "desc": "Plasma Cannon would fire a Blast (3) on Maximal)"
+  },
+  {
+    "id": "plasma-pistol-30m-s",
+    "name": "Plasma Pistol (30m, S/—/—",
+    "category": "Ranged",
+    "req": 30,
+    "renown": "None",
+    "desc": "plasma pistol (30m, S/—/—"
+  },
+  {
+    "id": "plasma-rifle-basic-90m-s-2",
+    "name": "Plasma Rifle",
+    "category": "Ranged",
+    "req": 8,
+    "renown": "None",
+    "desc": "Plasma Rifle Basic 90m S/2/– 2d10+9 E 8 — — Tearing, Mounted"
+  },
+  {
+    "id": "requisition-a-storm-bolter-20-requisition-to-use-instead",
+    "name": "Requisition A Storm Bolter (20 Requisition) To Use Instead",
+    "category": "Ranged",
+    "req": 20,
+    "renown": "None",
+    "desc": "decides to Requisition a storm bolter (20 Requisition) to use instead"
+  },
+  {
+    "id": "skapulan-bolter-basic-120m-s-2-4-2d10",
+    "name": "Skapulan Bolter",
+    "category": "Ranged",
+    "req": 28,
+    "renown": "None",
+    "desc": "Skapulan Bolter Basic 120m S/2/4 2d10+9 X 7 28 Full"
+  }
+]
