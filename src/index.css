@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply min-h-screen text-slate-100 p-4 sm:p-6 md:p-10;
+    background: linear-gradient(to bottom right, rgb(12, 21, 37), rgb(19, 32, 58));
+    background-attachment: fixed;
+  }
+
+  #root {
+    @apply min-h-screen flex flex-col;
+  }
+}
+
+@layer components {
+  .app-container {
+    @apply mx-auto w-full max-w-6xl space-y-4 sm:space-y-6;
+  }
+
+  .header {
+    @apply flex items-center justify-between;
+  }
+
+  .title {
+    @apply text-3xl md:text-4xl font-extrabold tracking-tight;
+  }
+
+  .card {
+    @apply rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-4 sm:p-5 shadow-xl;
+  }
+
+  .badge {
+    @apply text-xs px-2 py-1 rounded font-medium;
+  }
+
+  .badge-success {
+    @apply bg-emerald-600;
+  }
+
+  .badge-warning {
+    @apply bg-amber-500;
+  }
+
+  .badge-danger {
+    @apply bg-rose-600;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2;
+  }
+
+  .textarea-field {
+    @apply w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2;
+  }
+
+  .select-field {
+    @apply input-field appearance-none pr-8;
+  }
+
+  .grid-layout {
+    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6;
+  }
+
+  .result-group {
+    @apply space-y-4;
+  }
+
+  .section-title {
+    @apply text-xs uppercase tracking-wide text-slate-400;
+  }
+
+  .roll-stat {
+    @apply flex items-center gap-3;
+  }
+
+  .roll-card {
+    @apply rounded-xl border border-white/10 bg-black/20 p-3;
+  }
+
+  .roll-type {
+    @apply text-xs text-slate-400;
+  }
+
+  .roll-value {
+    @apply text-lg font-semibold;
+  }
+
+  .roll-info {
+    @apply text-xs text-slate-500 mt-1;
+  }
+
+  .progress-bar {
+    @apply h-2 w-full bg-white/10 rounded overflow-hidden;
+  }
+}
