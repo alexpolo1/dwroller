@@ -16,12 +16,8 @@ function App() {
   const [loginMsg, setLoginMsg] = useState('');
   const [players, setPlayers] = useState([]);
   const [playersError, setPlayersError] = useState('');
-  // Global GM state (moved from PlayerTab)
-  const GM_PASSWORD = 'bongo'
-  const [gmOpen, setGmOpen] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('dw:gm:session')) || false } catch { return false }
-  });
-  const [gmPassInput, setGmPassInput] = useState('');
+
+
 
   // Fetch player list for login (exposed so UI can refresh)
   async function fetchPlayers() {
@@ -140,16 +136,7 @@ function App() {
     setTimeout(() => setLoginMsg(''), 3000);
   }
 
-  function handleGmUnlock() {
-    if ((gmPassInput || '').trim() === GM_PASSWORD) {
-      setGmOpen(true);
-      localStorage.setItem('dw:gm:session', JSON.stringify(true));
-    } else {
-      setGmOpen(false);
-      localStorage.setItem('dw:gm:session', JSON.stringify(false));
-    }
-    setGmPassInput('');
-  }
+  // GM session is now handled through the regular login
 
   return (
     <div className="App min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -197,18 +184,6 @@ function App() {
                   {loginMsg && <span className="ml-2 text-xs px-2 py-1 rounded bg-red-500/20 border border-red-500/30 text-red-300">{loginMsg}</span>}
                 </div>
               )}
-              {/* GM quick unlock in header */}
-              <div className="ml-4 hidden sm:flex items-center gap-2">
-                <input
-                  className="rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/50 text-sm"
-                  type="password"
-                  placeholder="GM Password"
-                  value={gmPassInput}
-                  onChange={e=>setGmPassInput(e.target.value)}
-                  onKeyPress={(e)=>{ if (e.key==='Enter') handleGmUnlock() }}
-                />
-                <button onClick={handleGmUnlock} className="rounded-lg px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-sm">GM</button>
-              </div>
             </div>
           </div>
           
@@ -269,7 +244,10 @@ function App() {
           </div>
         )}
         
-        {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : <PlayerTab authedPlayer={authedPlayer} sessionId={sessionId} gmOpen={gmOpen} setGmOpen={setGmOpen} />}
+        {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : <PlayerTab 
+          authedPlayer={authedPlayer} 
+          sessionId={sessionId}
+        />}
       </div>
     </div>
   );

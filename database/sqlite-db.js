@@ -157,10 +157,17 @@ const playerHelpers = {
 
   update: (name, playerData) => {
     logToFile('DB: updatePlayer - start', name);
+    // Ensure we don't have nested tabInfo
+    const cleanTabInfo = playerData.tabInfo || {};
+    if (cleanTabInfo.tabInfo) {
+      logToFile('DB: updatePlayer - fixing nested tabInfo structure');
+      Object.assign(cleanTabInfo, cleanTabInfo.tabInfo);
+      delete cleanTabInfo.tabInfo;
+    }
     const result = statements.updatePlayer.run(
       JSON.stringify(playerData.rollerInfo || {}),
       JSON.stringify(playerData.shopInfo || {}),
-      JSON.stringify(playerData.tabInfo || {}),
+      JSON.stringify(cleanTabInfo),
       playerData.pw || '',
       playerData.pwHash || '',
       name

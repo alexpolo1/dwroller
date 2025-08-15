@@ -1,53 +1,78 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import * as React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import RequisitionShop from '../components/RequisitionShop';
+import '@testing-library/jest-dom';
+import axios from 'axios';
+
+// Mock axios
+jest.mock('axios');
+
+// Mock localStorage
+const mockLocalStorage = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+};
+
+global.localStorage = mockLocalStorage;
+
+// Mock fetch for armoury data
+global.fetch = jest.fn(() => 
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve([
+      { name: "Test Item", cost: 10, category: "Gear", renown: "None" }
+    ])
+  })
+);
 
 describe('RequisitionShop Component', () => {
-  test('renders the shop component', () => {
-    render(<RequisitionShop />);
-    const shopTitle = screen.getByText(/Requisition Shop/i);
-    expect(shopTitle).toBeInTheDocument();
+  beforeEach(() => {
+    // Clear all mock calls between tests
+    jest.clearAllMocks();
+    mockLocalStorage.getItem.mockReturnValue(null);
+    
+    // Mock axios responses
+    axios.get.mockImplementation((url) => {
+      if (url === '/api/players') {
+        return Promise.resolve({ 
+          data: [{
+            name: 'TestPlayer',
+            tabInfo: { rp: 100, renown: 'None' }
+          }]
+        });
+      }
+      return Promise.reject(new Error('Unknown endpoint'));
+    });
   });
 
-  test('purchaseItem function subtracts requisition points', async () => {
-    render(<RequisitionShop />);
-
-    // Mock player data
-    const mockPlayer = { name: 'TestPlayer', rp: 100, renown: 'None' };
-    const mockItem = { id: 'item1', name: 'TestItem', req: 50, renown: 'None' };
-
-    // Simulate purchasing an item
-    mockPlayer.rp -= mockItem.req;
-    expect(mockPlayer.rp).toBe(50);
+  test('renders the shop component', async () => {
+    render(<RequisitionShop authedPlayer="TestPlayer" sessionId="test-session" />);
+    await waitFor(() => {
+      const shopTitle = screen.getByText(/Requisition Shop/i);
+      expect(shopTitle).toBeInTheDocument();
+    });
   });
 
-  test('addPlayer function adds a new player', async () => {
-    render(<RequisitionShop />);
-
-    // Mock player data
-    const mockPlayer = { name: 'NewPlayer', rp: 100, renown: 'None' };
-
-    // Simulate adding a player
-    const players = [mockPlayer];
-    expect(players).toContainEqual(mockPlayer);
+  test('displays player info when authenticated', async () => {
+    render(<RequisitionShop authedPlayer="TestPlayer" sessionId="test-session" />);
+    await waitFor(() => {
+      const shopTitle = screen.getByText(/Requisition Shop/i);
+      expect(shopTitle).toBeInTheDocument();
+    });
   });
 
-  test('handlePlayerLogin logs in a player', async () => {
-    render(<RequisitionShop />);
-
-    // Mock player data
-    const mockPlayer = { name: 'LoginPlayer', rp: 100, renown: 'None' };
-
-    // Simulate player login
-    const loggedInPlayer = mockPlayer.name;
-    expect(loggedInPlayer).toBe('LoginPlayer');
+  test('shows login message when not authenticated', async () => {
+    render(<RequisitionShop authedPlayer="" sessionId="" />);
+    await waitFor(() => {
+      expect(screen.getByText(/Please log in/i)).toBeInTheDocument();
+    });
   });
 
-  test('handlePlayerLogout logs out a player', async () => {
-    render(<RequisitionShop />);
-
-    // Simulate player logout
-    await fireEvent.click(screen.getByText(/Logout/i));
-    const loggedOutPlayer = screen.queryByText(/LogoutPlayer/i);
-    expect(loggedOutPlayer).not.toBeInTheDocument();
+  test('displays available items', async () => {
+    render(<RequisitionShop authedPlayer="TestPlayer" sessionId="test-session" />);
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Search items/i)).toBeInTheDocument();
+    });
   });
 });

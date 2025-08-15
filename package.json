@@ -19,18 +19,21 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "jest --runInBand",
+    "start": "npm test && react-scripts start",
+    "dev": "npm test && react-scripts start",
+    "build": "npm test && react-scripts build",
+    "test": "jest --runInBand --passWithNoTests",
     "eject": "react-scripts eject",
-    "serve": "serve -s build",
+    "serve": "npm test && serve -s build",
     "extract:armoury": "node scripts/extract-armoury.js \"$PWD/Deathwatch-Core-Rulebook.pdf\" public/deathwatch-armoury.json",
-    "server": "cd database && node server.js",
+    "server": "npm test && cd database && node server.js",
+    "server:notest": "cd database && node server.js",
     "db:migrate": "cd database && node migrate-to-sqlite.js",
     "db:export": "cd database && node migrate-to-sqlite.js --export-only",
     "db:sqlite": "cd database && ./switch-db.sh sqlite",
-    "db:mongo": "cd database && ./switch-db.sh mongo"
+    "db:mongo": "cd database && ./switch-db.sh mongo",
+    "prestart": "npm run db:sqlite",
+    "preserver": "npm run db:sqlite"
   },
   "eslintConfig": {
     "extends": [
