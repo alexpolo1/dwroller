@@ -46,57 +46,82 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
   },[items])
   const [categoryFilter, setCategoryFilter] = useState('All')
 
-  // Items are sourced from a single JSON file; disable local persistence
-  // useEffect(()=>{ safeSet(STORAGE_SHOP_ITEMS, items) },[items])
-  // Remove localStorage for players
-  // Always fetch players from backend on mount and after updates
+  // Fetch both players and shop items from the backend
   useEffect(() => {
-    async function fetchPlayers() {
+    async function fetchData() {
       try {
+        // Fetch players
         console.log('Fetching players with sessionId:', sessionId);
-        const response = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
-        console.log('Fetched players:', response.data);
-        setPlayers(response.data);
+        const playersResponse = await axios.get('/api/players', { 
+          headers: { 'x-session-id': sessionId || '' }
+        });
+        console.log('Fetched players:', playersResponse.data);
+        setPlayers(playersResponse.data);
+
+        // Fetch shop items from the new database
+        console.log('Fetching shop items');
+        try {
+          const itemsResponse = await axios.get('/api/shop/items', {
+            headers: { 'x-session-id': sessionId || '' }
+          });
+          console.log('Fetched shop items:', itemsResponse.data);
+          
+          if (!itemsResponse.data || itemsResponse.data.length === 0) {
+            console.log('Warning: Shop items response was empty, falling back to JSON');
+            throw new Error('Empty shop items');
+          }
+          
+          const normalizedItems = itemsResponse.data.map(item => ({
+          id: item.id,
+          name: item.name,
+          category: item.category,
+          cost: item.requisition_cost,
+          req: item.requisition_cost,
+          renown: item.renown_requirement,
+          desc: item.stats ? JSON.parse(item.stats).description || '' : '',
+          stats: item.stats ? JSON.parse(item.stats) : {}
+        }));
+        
+        setItems(normalizedItems);
       } catch (error) {
-        console.error('Error fetching players:', error);
+        console.error('Error fetching data:', error);
+        if (error.response?.status === 404 && error.response?.data?.includes('shop')) {
+          // If shop API fails, fall back to JSON file
+          try {
+            const res = await fetch('/deathwatch-armoury.json', { cache: 'no-store' })
+            if (!res.ok) return;
+            const arr = await res.json()
+            const next = Array.isArray(arr) ? arr.map(normalizeItem).filter(Boolean) : []
+            if (next.length>0) {
+              setItems(next)
+            }
+          } catch (e) {
+            console.error('Failed to load fallback JSON:', e);
+          }
+        }
         setPlayers([]);
       }
     }
+    
     if (sessionId) {
-      fetchPlayers();
+      fetchData();
     }
   }, [sessionId]);
-
-  // On mount, validate sessionId if present
-  // Sync login state with localStorage/sessionId on mount, tab switch, and storage changes
-  // No per-tab session sync; handled globally
-  useEffect(()=>{
-    // Always load from the static JSON on startup
-    ;(async()=>{
-      try {
-        const res = await fetch('/deathwatch-armoury.json', { cache: 'no-store' })
-        if (!res.ok) return
-        const arr = await res.json()
-        const next = Array.isArray(arr) ? arr.map(normalizeItem).filter(Boolean) : []
-        if (next.length>0) {
-          setItems(next)
-        }
-      } catch {}
-    })()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
 
   const currentPlayer = useMemo(() => {
     const p = players.find(p => p.name === authedPlayer);
     if (!p) return null;
-    // Ensure tabInfo exists and has proper structure
+    
+    // Support both old and new data structure
+    // Old data is in tabInfo, new data is directly on the player object
     const tabInfo = p.tabInfo || {};
     return {
       ...p,
-      ...tabInfo,
-      rp: Number(tabInfo.rp || 0),
-      gear: Array.isArray(tabInfo.gear) ? tabInfo.gear : [],
-      transactions: Array.isArray(tabInfo.transactions) ? tabInfo.transactions : [],
+      id: p.id,
+      requisition_points: p.requisition_points !== undefined ? p.requisition_points : Number(tabInfo.rp || 0),
+      renown_level: p.renown_level || tabInfo.renown || 'None',
+      // Keep gear from tabInfo for now, as we transition to using the inventory table
+      gear: Array.isArray(tabInfo.gear) ? tabInfo.gear : []
     };
   }, [players, authedPlayer]);
   const filteredItems = useMemo(()=>{
@@ -108,7 +133,7 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
     })
   },[items, search, categoryFilter])
 
-  // Updated purchaseItem to subtract requisition points from the player
+  // Updated purchaseItem to use the new database transaction system
   async function purchaseItem(item) {
     if (!currentPlayer) {
       setErrorMsg('No player logged in');
@@ -120,62 +145,46 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
     }
 
     // Check if player has enough RP
-    if ((currentPlayer.rp || 0) < (item.cost || 0)) {
-      setErrorMsg(`Not enough Requisition Points. Need ${item.cost} RP but only have ${currentPlayer.rp || 0} RP.`);
+    const currentRp = currentPlayer.requisition_points || 0;
+    if (currentRp < item.cost) {
+      setErrorMsg(`Not enough Requisition Points. Need ${item.cost} RP but only have ${currentRp} RP.`);
       return;
     }
 
-    // Calculate new values
-    const newRp = Math.max(0, (currentPlayer.rp || 0) - (item.cost || 0));
-    const newGear = [...(currentPlayer.tabInfo?.gear || []), {
-      ...item,
-      id: Date.now(),
-      qty: 1
-    }];
-    const newTransactions = [...(currentPlayer.transactions || []), {
-      item,
-      cost: item.cost,
-      date: new Date().toISOString(),
-      previousRp: currentPlayer.rp || 0,
-      newRp: newRp
-    }];
+    // Check if player meets renown requirement
+    const playerRenown = currentPlayer.renown_level || 'None';
+    const requiredRenown = item.renown;
+    const playerRenownIndex = RANK_ORDER.indexOf(playerRenown);
+    const requiredRenownIndex = RANK_ORDER.indexOf(requiredRenown);
     
-    // Update player data including all existing fields
-    const updatedTabInfo = {
-      ...currentPlayer.tabInfo, // Preserve all existing tabInfo fields
-      rp: newRp,
-      gear: newGear,
-      transactions: newTransactions,
-      renown: currentPlayer.renown || 'None',
-    };
+    if (playerRenownIndex < requiredRenownIndex) {
+      setErrorMsg(`This item requires ${requiredRenown} renown level. Your current renown is ${playerRenown}.`);
+      return;
+    }
 
     try {
-      console.log('Updating player with:', currentPlayer.name, updatedTabInfo);
-      console.log('Sending update:', {
-        name: currentPlayer.name,
-        tabInfo: updatedTabInfo
-      });
+      console.log('Purchasing item:', item);
       
-      await axios.put(
-        `/api/players/${currentPlayer.name}`, 
+      // Use the new shop purchase endpoint
+      await axios.post(
+        '/api/shop/purchase',
         {
-          name: currentPlayer.name,
-          tabInfo: {
-            ...currentPlayer.tabInfo,
-            gear: updatedTabInfo.gear,
-            rp: updatedTabInfo.rp,
-            transactions: updatedTabInfo.transactions,
-            renown: updatedTabInfo.renown
-          }
+          playerId: currentPlayer.id,
+          itemId: item.id,
+          quantity: 1
         },
         { headers: { 'x-session-id': sessionId } }
       );
-      // Refetch players after update
-      const response = await axios.get('/api/players', { headers: { 'x-session-id': sessionId } });
+
+      // Refetch players to get updated RP and inventory
+      const response = await axios.get('/api/players', { 
+        headers: { 'x-session-id': sessionId } 
+      });
       setPlayers(response.data);
+      
       setErrorMsg(`Successfully purchased ${item.name} for ${item.cost} RP`);
     } catch (error) {
-      console.error('Failed to update player:', error);
+      console.error('Failed to purchase item:', error);
       setErrorMsg(error.response?.data?.error || 'Failed to make purchase');
     }
   }
@@ -214,7 +223,7 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
             </div>
             {currentPlayer && (
               <div className="text-sm text-blue-200">
-                Requisition Points: {currentPlayer.rp || 0} | Renown: {currentPlayer.renown || 'None'}
+                Requisition Points: {currentPlayer.requisition_points || 0} | Renown: {currentPlayer.renown_level || 'None'}
               </div>
             )}
           </div>
@@ -255,7 +264,7 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
                   {currentPlayer && (
                     <button
                       onClick={() => purchaseItem(item)}
-                      disabled={!currentPlayer || (currentPlayer.rp || 0) < item.cost}
+                      disabled={!currentPlayer || (currentPlayer.requisition_points || 0) < item.cost}
                       className="px-3 py-1 rounded bg-blue-600 hover:bg-blue-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-sm"
                     >
                       Buy
@@ -283,19 +292,4 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
   );
 }
 
-// GM subcomponents (GmAddPlayer, GmSetRP, GmSetRenown, GmResetPW, GmEditItemMeta, GmChangePassword)
-// were moved to PlayerTab.jsx to centralize player management.
 
-function GmEditItemMeta({ item, onSet }) {
-  const [req, setReq] = useState(item.req ?? item.cost ?? 0)
-  const [renown, setRenown] = useState(item.renown || 'None')
-  return (
-    <div className="flex items-center gap-1">
-      <input className="w-16 rounded border border-white/10 bg-white/10 px-2 py-1 text-xs" type="number" min={0} value={req} onChange={e=>setReq(e.target.value)} />
-      <select className="rounded border border-white/10 bg-white/10 px-2 py-1 text-xs" value={renown} onChange={e=>setRenown(e.target.value)}>
-        {['None','Respected','Distinguished','Famed','Hero'].map(r => <option key={r} value={r}>{r}</option>)}
-      </select>
-      <button onClick={()=>onSet(item.id, parseInt(req||'0'), renown)} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set</button>
-    </div>
-  )
-}

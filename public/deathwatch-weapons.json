@@ -1,0 +1,230 @@
+{
+  "rangedWeapons": [
+    {
+      "name": "Angelus Bolter",
+      "req": 25,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 50m; S/3/-; 1d10+9 X; Pen 6; Clip 36; Reload 2 Full; Tearing",
+        "class": "Basic - Bolt",
+        "source": "First Founding p97"
+      }
+    },
+    {
+      "name": "Astartes Armoursbane Missile Launcher",
+      "req": 15,
+      "renown": "None",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 200m; S/-/-; 0d0 S; Pen 0; Clip 1; Reload 2 Full; Two handed;",
+        "class": "Heavy - Launch",
+        "source": "Living Errata v1.1 p137"
+      }
+    },
+    {
+      "name": "Astartes Assault Cannon",
+      "req": 30,
+      "renown": "Hero",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 150m; -/-/10; 2d10+12 I; Pen 6; Clip 200; Reload 3 Full; Tearing, Devastating (1)",
+        "class": "Mounted - Solid Projectile",
+        "source": "Living Errata v1.1 p149"
+      }
+    },
+    {
+      "name": "Astartes Assault Shotgun",
+      "req": 7,
+      "renown": "None",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 30m; S/3/5; 1d10+10 I; Pen 4; Clip 20; Reload 1 Full; Two handed; Reliable, Scatter",
+        "class": "Basic - Solid Projectile",
+        "source": "Living Errata v1.1 p136"
+      }
+    },
+    {
+      "name": "Astartes Bolt Pistol",
+      "req": 5,
+      "renown": "None",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 30m; S/2/-; 1d10+9 X; Pen 4; Clip 14; Reload 1 Full; Tearing",
+        "class": "Pistol - Bolt",
+        "source": "Living Errata v1.1 p146"
+      }
+    },
+    {
+      "name": "Astartes Bolter-Godwyn",
+      "req": 5,
+      "renown": "None",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 100m; S/3/-; 1d10+9 X; Pen 4; Clip 28; Reload 1 Full; Two handed; Tearing",
+        "class": "Basic - Bolt",
+        "source": "Living Errata v1.1 p146"
+      }
+    },
+    {
+      "name": "Astartes Boltgun-Stalker",
+      "req": 15,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 200m; S/-/-; 1d10+9 X; Pen 4; Clip 24; Reload 1 Full; Two handed; Accurate, Tearing",
+        "class": "Basic - Bolt",
+        "source": "Living Errata v1.1 p146"
+      }
+    },
+    {
+      "name": "Astartes Combi-Weapon",
+      "req": 15,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 100m; S/4/-; 1d10+9 X; Pen 4; Clip 28; Reload 1 Full; Two handed; Tearing",
+        "class": "Basic - Bolt",
+        "source": "Living Errata v1.1 p146"
+      }
+    },
+    {
+      "name": "Astartes Conversion Beamer",
+      "req": 40,
+      "renown": "Hero",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 100m; S/-/-; 0d0 E; Pen 0; Clip 4; Reload 2 Full; Two handed;",
+        "class": "Heavy - Exotic",
+        "source": "Living Errata v1.1 p152"
+      }
+    },
+    {
+      "name": "Astartes Cyclone Missile Launcher",
+      "req": 25,
+      "renown": "Hero",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 300m; S/2/-; 0d0 S; Pen 0; Clip 12; Reload 3 Full;",
+        "class": "Mounted - Launch",
+        "source": "Living Errata v1.1 p152"
+      }
+    },
+    {
+      "name": "Astartes Digital Flamer",
+      "req": 35,
+      "renown": "Hero",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 4m; S/-/-; 1d10+9 E; Pen 4; Clip 1; Reload 1d5 Hours; Flame, Spray",
+        "class": "Pistol - Exotic",
+        "source": "Living Errata v1.1 p153"
+      }
+    }
+  ],
+  "meleeWeapons": [
+    {
+      "name": "Armour of the Remorseless Crusader (Forearm Sword)",
+      "req": 70,
+      "renown": "Hero",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+8 R; Pen 6; +10 to hit; Sanctified",
+        "class": "One-Handed Melee - Primitive",
+        "source": "Deathwatch Core Rulebook p167"
+      }
+    },
+    {
+      "name": "Artificer Omnissian Axe",
+      "req": 25,
+      "renown": "Distinguished",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+9 E; Pen 7; Power Field, Unbalanced",
+        "class": "One-Handed Melee - Power",
+        "source": "First Founding p99"
+      }
+    },
+    {
+      "name": "Astartes Chainfist",
+      "req": 40,
+      "renown": "Hero",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "2d10+\"2*SB\" E; Pen 10; Power Field, Tearing, Unwieldy",
+        "class": "One-Handed Melee - Power",
+        "source": "Living Errata v1.1 p154"
+      }
+    },
+    {
+      "name": "Astartes Chainsword",
+      "req": 5,
+      "renown": "None",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+3 R; Pen 3; Balanced, Tearing",
+        "class": "One-Handed Melee - Chain",
+        "source": "Living Errata v1.1 p153"
+      }
+    },
+    {
+      "name": "Astartes Combat Knife",
+      "req": 3,
+      "renown": "None",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10 R; Pen 2;",
+        "class": "One-Handed Melee - Primitive",
+        "source": "Living Errata v1.1 p155"
+      }
+    },
+    {
+      "name": "Astartes Combat Shield",
+      "req": 20,
+      "renown": "Distinguished",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d5+1 I; Pen 0; Balanced",
+        "class": "One-Handed Melee - Primitive",
+        "source": "Living Errata v1.1 p166"
+      }
+    }
+  ],
+  "grenades": [
+    {
+      "name": "Astartes Anti-Plant Grenade",
+      "req": 18,
+      "renown": "None",
+      "category": "Grenade",
+      "stats": {
+        "damage": "3d10 E; Pen 0; Blast (3)",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p136"
+      }
+    },
+    {
+      "name": "Astartes Blind Grenade",
+      "req": 10,
+      "renown": "None",
+      "category": "Grenade",
+      "stats": {
+        "damage": "0d0 S; Pen 0; Smoke (10)",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p150"
+      }
+    }
+  ],
+  "other": [
+    {
+      "name": "Argrax Clawed Hooves",
+      "req": 0,
+      "renown": "None",
+      "category": "Other",
+      "stats": {
+        "damage": "1d10 I; Pen 0;",
+        "class": "Natural - Primitive",
+        "source": "The Emperor Protects p46"
+      }
+    }
+  ]
+}

@@ -5,6 +5,8 @@ import logger, { debug, info, warn, logApiCall, logApiError, logUserAction } fro
 const STORAGE_SHOP_AUTHED = 'dw:shop:authedPlayer';
 const STORAGE_SHOP_PLAYERS = 'dw:shop:players:v1';
 
+const RANK_ORDER = ['None','Respected','Distinguished','Famed','Hero'];
+
 const GM_PASSWORD = 'bongo';
 
 function safeGet(key) {
@@ -432,6 +434,27 @@ function PlayerTab({
       </div>
     )
   }
+
+  function GmSetXP({ name, onSet }) {
+    const [xp, setXp] = useState('')
+    return (
+      <div className="flex gap-2">
+        <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" type="number" placeholder="XP" value={xp} onChange={e=>setXp(e.target.value)} />
+        <button onClick={()=>{ onSet(name, parseInt(xp||'0')); setXp('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set XP</button>
+      </div>
+    )
+  }
+
+  function GmSetXPSpent({ name, onSet }) {
+    const [xpSpent, setXpSpent] = useState('')
+    return (
+      <div className="flex gap-2">
+        <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" type="number" placeholder="XP Spent" value={xpSpent} onChange={e=>setXpSpent(e.target.value)} />
+        <button onClick={()=>{ onSet(name, parseInt(xpSpent||'0')); setXpSpent('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set XP Spent</button>
+      </div>
+    )
+  }
+
   function GmSetRenown({ name, value, onSet }) {
     const [renown, setRenown] = useState(value)
     return (
@@ -454,6 +477,50 @@ function PlayerTab({
   }
 
   // GM action handlers
+  async function gmSetXP(name, xp) {
+    console.log('PlayerTab: gmSetXP', { name, xp });
+    const player = players.find(p => p.name === name)
+    if (!player) {
+      console.error('PlayerTab: player not found')
+      flash('Player not found')
+      return
+    }
+    try {
+      const { data } = await axios.put(`/api/players/${name}`, {
+        tabInfo: { ...player.tabInfo, xp }
+      }, { headers: buildHeaders() })
+      
+      const res = await axios.get('/api/players', { headers: buildHeaders() });
+      setPlayers(res.data);
+      flash('XP updated')
+    } catch (e) {
+      console.error('PlayerTab: gmSetXP failed', e.response?.data || e.message)
+      flash('Failed to update XP')
+    }
+  }
+
+  async function gmSetXPSpent(name, xpSpent) {
+    console.log('PlayerTab: gmSetXPSpent', { name, xpSpent });
+    const player = players.find(p => p.name === name)
+    if (!player) {
+      console.error('PlayerTab: player not found')
+      flash('Player not found')
+      return
+    }
+    try {
+      const { data } = await axios.put(`/api/players/${name}`, {
+        tabInfo: { ...player.tabInfo, xpSpent }
+      }, { headers: buildHeaders() })
+      
+      const res = await axios.get('/api/players', { headers: buildHeaders() });
+      setPlayers(res.data);
+      flash('XP Spent updated')
+    } catch (e) {
+      console.error('PlayerTab: gmSetXPSpent failed', e.response?.data || e.message)
+      flash('Failed to update XP Spent')
+    }
+  }
+
   async function gmAddOrUpdatePlayer(name, rp, pw) {
     console.log('PlayerTab: gmAddOrUpdatePlayer', { name, rp, pwProvided: !!pw });
     try {
@@ -536,8 +603,6 @@ function PlayerTab({
     }
   }
 
-  const RANK_ORDER = ['None','Respected','Distinguished','Famed','Hero']
-  function normalizeRank(r) { const s = String(r||'').trim(); const found = RANK_ORDER.find(x=>x.toLowerCase()===s.toLowerCase()); return found || (s? s : 'None') }
 
 
   // Added: helper to build request headers (session + GM secret when GM unlocked)
@@ -985,8 +1050,22 @@ function PlayerTab({
               <div className="text-sm font-medium mb-2">Set Requisition Points (RP)</div>
               {players.map(player => (
                 <div key={player.name} className="flex items-center gap-2 mb-2">
-                  <span className="text-sm">{player.name}</span>
+                  <span className="text-sm">{player.name} (Current: {player.tabInfo?.rp || 0} RP)</span>
                   <GmSetRP name={player.name} onSet={gmSetRP} />
+                </div>
+              ))}
+            </div>
+
+            {/* Set XP */}
+            <div className="mb-4">
+              <div className="text-sm font-medium mb-2">Set Experience Points (XP)</div>
+              {players.map(player => (
+                <div key={player.name} className="flex items-center gap-2 mb-2">
+                  <span className="text-sm">{player.name} (Total XP: {player.tabInfo?.xp || 0}, Spent: {player.tabInfo?.xpSpent || 0})</span>
+                  <div className="flex gap-2">
+                    <GmSetXP name={player.name} onSet={gmSetXP} />
+                    <GmSetXPSpent name={player.name} onSet={gmSetXPSpent} />
+                  </div>
                 </div>
               ))}
             </div>
