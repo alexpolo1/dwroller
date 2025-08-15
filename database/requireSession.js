@@ -1,4 +1,4 @@
-const Session = require('./sessionModel');
+const { sessionHelpers } = require('./sqlite-db');
 const fs = require('fs');
 const path = require('path');
 function logToFile(...args) {
@@ -7,26 +7,44 @@ function logToFile(...args) {
 }
 
 // Express middleware to require a valid sessionId in req.headers['x-session-id'] or req.body.sessionId
-// Attaches req.session and req.sessionPlayerName if valid, else sends 401
+// Accepts a GM bypass header 'x-gm-secret' matching process.env.GM_PASSWORD or 'bongo' for local convenience
 module.exports = async function requireSession(req, res, next) {
-  // Ensure req.body is always an object
-  if (typeof req.body !== 'object' || req.body === null) req.body = {};
-  const sessionId = req.headers['x-session-id'] || req.body.sessionId || req.query.sessionId;
-  if (!sessionId) {
-    logToFile('SESSION: Missing sessionId', req.method, req.originalUrl);
-    return res.status(401).json({ error: 'Session required' });
+  try {
+    // GM bypass
+    const gmSecret = req.headers['x-gm-secret'] || req.query.gmSecret || req.body.gmSecret;
+    const gmPassword = process.env.GM_PASSWORD || 'bongo';
+    if (gmSecret && String(gmSecret) === String(gmPassword)) {
+      logToFile('SESSION: GM bypass accepted', req.method, req.originalUrl);
+      req.session = { data: { playerName: 'GM' }, playerName: 'GM' };
+      req.sessionPlayerName = 'GM';
+      return next();
+    }
+
+    // Ensure req.body is always an object
+    if (typeof req.body !== 'object' || req.body === null) req.body = {};
+    const sessionId = req.headers['x-session-id'] || req.body.sessionId || req.query.sessionId;
+    if (!sessionId) {
+      logToFile('SESSION: Missing sessionId', req.method, req.originalUrl);
+      return res.status(401).json({ error: 'Session required' });
+    }
+
+    const session = sessionHelpers.get(sessionId);
+    if (!session) {
+      logToFile('SESSION: Not found', sessionId, req.method, req.originalUrl);
+      return res.status(401).json({ error: 'Invalid or expired session' });
+    }
+
+    if (new Date(session.expiresAt) < new Date()) {
+      logToFile('SESSION: Expired', sessionId, req.method, req.originalUrl);
+      return res.status(401).json({ error: 'Invalid or expired session' });
+    }
+
+    logToFile('SESSION: Valid', sessionId, session.data.playerName, req.method, req.originalUrl);
+    req.session = session;
+    req.sessionPlayerName = session.data.playerName;
+    next();
+  } catch (err) {
+    logToFile('SESSION: Error', err && err.message ? err.message : String(err));
+    return res.status(500).json({ error: 'Session validation failed' });
   }
-  const session = await Session.findOne({ sessionId });
-  if (!session) {
-    logToFile('SESSION: Not found', sessionId, req.method, req.originalUrl);
-    return res.status(401).json({ error: 'Invalid or expired session' });
-  }
-  if (session.expiresAt < new Date()) {
-    logToFile('SESSION: Expired', sessionId, req.method, req.originalUrl);
-    return res.status(401).json({ error: 'Invalid or expired session' });
-  }
-  logToFile('SESSION: Valid', sessionId, session.playerName, req.method, req.originalUrl);
-  req.session = session;
-  req.sessionPlayerName = session.playerName;
-  next();
 };

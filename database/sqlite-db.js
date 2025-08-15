@@ -2,6 +2,17 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 
+// Simple DB logger to backend.log
+const backendLogPath = path.join(__dirname, 'backend.log');
+function logToFile(...args) {
+  try {
+    const msg = `[${new Date().toISOString()}] ` + args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ') + '\n';
+    fs.appendFileSync(backendLogPath, msg, { encoding: 'utf8' });
+  } catch (err) {
+    console.error('Failed to write backend log', err);
+  }
+}
+
 // Create database directory if it doesn't exist
 const dbDir = path.join(__dirname, 'sqlite');
 if (!fs.existsSync(dbDir)) {
@@ -90,8 +101,9 @@ const statements = {
 // Helper functions
 const playerHelpers = {
   getAll: () => {
+    logToFile('DB: getAllPlayers - start');
     const rows = statements.getAllPlayers.all();
-    return rows.map(row => ({
+    const result = rows.map(row => ({
       name: row.name,
       rollerInfo: JSON.parse(row.roller_info || '{}'),
       shopInfo: JSON.parse(row.shop_info || '{}'),
@@ -102,12 +114,18 @@ const playerHelpers = {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     }));
+    logToFile('DB: getAllPlayers - resultCount', result.length);
+    return result;
   },
 
   getByName: (name) => {
+    logToFile('DB: getPlayerByName - start', name);
     const row = statements.getPlayerByName.get(name);
-    if (!row) return null;
-    return {
+    if (!row) {
+      logToFile('DB: getPlayerByName - not found', name);
+      return null;
+    }
+    const result = {
       name: row.name,
       rollerInfo: JSON.parse(row.roller_info || '{}'),
       shopInfo: JSON.parse(row.shop_info || '{}'),
@@ -118,9 +136,12 @@ const playerHelpers = {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
+    logToFile('DB: getPlayerByName - found', name);
+    return result;
   },
 
   create: (playerData) => {
+    logToFile('DB: createPlayer - start', playerData.name);
     const result = statements.insertPlayer.run(
       playerData.name,
       JSON.stringify(playerData.rollerInfo || {}),
@@ -129,10 +150,13 @@ const playerHelpers = {
       playerData.pw || '',
       playerData.pwHash || ''
     );
-    return { ...playerData, _id: result.lastInsertRowid };
+    const out = { ...playerData, _id: result.lastInsertRowid };
+    logToFile('DB: createPlayer - done', playerData.name, 'rowid', result.lastInsertRowid);
+    return out;
   },
 
   update: (name, playerData) => {
+    logToFile('DB: updatePlayer - start', name);
     const result = statements.updatePlayer.run(
       JSON.stringify(playerData.rollerInfo || {}),
       JSON.stringify(playerData.shopInfo || {}),
@@ -141,42 +165,59 @@ const playerHelpers = {
       playerData.pwHash || '',
       name
     );
+    logToFile('DB: updatePlayer - changes', result.changes, name);
     return result.changes > 0;
   },
 
   delete: (name) => {
+    logToFile('DB: deletePlayer - start', name);
     const result = statements.deletePlayer.run(name);
+    logToFile('DB: deletePlayer - changes', result.changes, name);
     return result.changes > 0;
   }
 };
 
 const sessionHelpers = {
   get: (sessionId) => {
+    logToFile('DB: getSession - start', sessionId);
     const row = statements.getSession.get(sessionId);
-    if (!row) return null;
-    return {
+    if (!row) {
+      logToFile('DB: getSession - not found', sessionId);
+      return null;
+    }
+    const out = {
       sessionId: row.session_id,
       data: JSON.parse(row.data || '{}'),
       expiresAt: row.expires_at
     };
+    logToFile('DB: getSession - ok', sessionId);
+    return out;
   },
 
   create: (sessionId, data, expiresAt) => {
-    statements.insertSession.run(sessionId, JSON.stringify(data), expiresAt);
+    logToFile('DB: createSession - start', sessionId, 'expiresAt', expiresAt);
+    const res = statements.insertSession.run(sessionId, JSON.stringify(data), expiresAt);
+    logToFile('DB: createSession - done', sessionId);
   },
 
   update: (sessionId, data, expiresAt) => {
+    logToFile('DB: updateSession - start', sessionId);
     const result = statements.updateSession.run(JSON.stringify(data), expiresAt, sessionId);
+    logToFile('DB: updateSession - changes', result.changes, sessionId);
     return result.changes > 0;
   },
 
   delete: (sessionId) => {
+    logToFile('DB: deleteSession - start', sessionId);
     const result = statements.deleteSession.run(sessionId);
+    logToFile('DB: deleteSession - changes', result.changes, sessionId);
     return result.changes > 0;
   },
 
   cleanExpired: () => {
+    logToFile('DB: cleanExpiredSessions - start');
     const result = statements.cleanExpiredSessions.run();
+    logToFile('DB: cleanExpiredSessions - removed', result.changes);
     return result.changes;
   }
 };
@@ -186,5 +227,6 @@ module.exports = {
   statements,
   playerHelpers,
   sessionHelpers,
-  close: () => db.close()
+  close: () => db.close(),
+  logToFile
 };

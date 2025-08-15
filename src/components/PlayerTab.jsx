@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { debug, info, warn, logApiCall, logApiError, logUserAction } from '../utils/logger';
+import logger, { debug, info, warn, logApiCall, logApiError, logUserAction } from '../utils/logger';
 
 const STORAGE_SHOP_AUTHED = 'dw:shop:authedPlayer';
 const STORAGE_SHOP_PLAYERS = 'dw:shop:players:v1';
@@ -134,7 +134,7 @@ function PlayerTab({ authedPlayer, sessionId }) {
     setPlayerName(currentPlayer.name || '');
     setGear(tabInfo.gear || []);
     setChapter(tabInfo.chapter || '');
-    setDemeanour(tabInfo.demeanour || '');
+    setDemeour(tabInfo.demeanour || '');
     setSpeciality(tabInfo.speciality || '');
     setRank(tabInfo.rank || '');
     setPowerArmour(tabInfo.powerArmour || '');
@@ -216,7 +216,7 @@ function PlayerTab({ authedPlayer, sessionId }) {
     async function fetchPlayers() {
       try {
         logApiCall('PlayerTab', 'GET', '/api/players');
-        const response = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+        const response = await axios.get('/api/players', { headers: buildHeaders() });
         const data = response.data;
         if (!Array.isArray(data)) {
           warn('PlayerTab', '/api/players did not return an array', data);
@@ -232,7 +232,7 @@ function PlayerTab({ authedPlayer, sessionId }) {
       }
     }
     fetchPlayers();
-  }, [sessionId]);
+  }, [sessionId, gmOpen]);
 
   // On mount, validate sessionId if present
   // Sync login state with localStorage/sessionId on mount, tab switch, and storage changes
@@ -242,9 +242,9 @@ function PlayerTab({ authedPlayer, sessionId }) {
   async function updatePlayerData(updatedPlayer) {
     try {
       logApiCall('PlayerTab', 'PUT', `/api/players/${updatedPlayer.playerName}`, updatedPlayer);
-      await axios.put(`/api/players/${updatedPlayer.playerName}`, { ...updatedPlayer }, { headers: { 'x-session-id': sessionId || '' } });
+      await axios.put(`/api/players/${updatedPlayer.playerName}`, { ...updatedPlayer }, { headers: buildHeaders() });
       // Refetch players after update to get fresh data
-      const response = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      const response = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(response.data);
       info('PlayerTab', 'Player data updated successfully', { playerName: updatedPlayer.playerName });
     } catch (apiError) {
@@ -312,7 +312,7 @@ function PlayerTab({ authedPlayer, sessionId }) {
   // No per-tab logout; handled globally
 
   // Added GM Panel button and Requisition Points display
-  const [gmOpen, setGmOpen] = useState(false);
+  const [gmOpen, setGmOpen] = useState(!!safeGet('dw:gm:session'));
   const [gmPassInput, setGmPassInput] = useState('');
 
   // Define shopAuthed for use in the component
@@ -332,11 +332,14 @@ function PlayerTab({ authedPlayer, sessionId }) {
 
   // GM unlock handler (simple client-side check)
   function handleGmUnlock() {
+    console.log('PlayerTab: handleGmUnlock called', { input: gmPassInput });
     if ((gmPassInput || '').trim() === GM_PASSWORD) {
       setGmOpen(true);
       flash('GM unlocked');
+      console.log('PlayerTab: GM unlocked');
     } else {
       flash('Bad GM password');
+      console.log('PlayerTab: GM unlock failed');
     }
     setGmPassInput('');
   }
@@ -345,8 +348,8 @@ function PlayerTab({ authedPlayer, sessionId }) {
   async function gmDeletePlayer(name) {
     try {
       logApiCall('PlayerTab', 'DELETE', `/api/players/${name}`)
-      await axios.delete(`/api/players/${name}`, { headers: { 'x-session-id': sessionId || '' } });
-      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      await axios.delete(`/api/players/${name}`, { headers: buildHeaders() });
+      const res = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(res.data);
       flash('Player deleted');
     } catch (e) {
@@ -433,50 +436,64 @@ function PlayerTab({ authedPlayer, sessionId }) {
 
   // GM action handlers
   async function gmAddOrUpdatePlayer(name, rp, pw) {
+    console.log('PlayerTab: gmAddOrUpdatePlayer', { name, rp, pwProvided: !!pw });
     try {
       logApiCall('PlayerTab', 'POST', '/api/players')
-      await axios.post('/api/players', { name, rp, pw }, { headers: { 'x-session-id': sessionId || '' } });
-      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      const body = { name, rp, pw };
+      const headers = buildHeaders();
+      const resPost = await axios.post('/api/players', body, { headers });
+      console.log('PlayerTab: gmAddOrUpdatePlayer POST response', resPost.status, resPost.data);
+      const res = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(res.data);
       flash('Player added/updated');
     } catch (e) {
       logApiError('PlayerTab', 'POST', '/api/players', e);
+      console.error('PlayerTab: gmAddOrUpdatePlayer failed', e.response?.data || e.message);
       flash('Failed to add player');
     }
   }
   async function gmSetRP(name, rp) {
+    console.log('PlayerTab: gmSetRP', { name, rp });
     try {
       logApiCall('PlayerTab', 'PUT', `/api/players/${name}/rp`)
-      await axios.put(`/api/players/${name}/rp`, { rp }, { headers: { 'x-session-id': sessionId || '' } });
-      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      const headers = buildHeaders();
+      await axios.put(`/api/players/${name}`, { rp }, { headers });
+      const res = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(res.data);
       flash('RP updated');
     } catch (e) {
       logApiError('PlayerTab', 'PUT', `/api/players/${name}/rp`, e);
+      console.error('PlayerTab: gmSetRP failed', e.response?.data || e.message);
       flash('Failed to set RP');
     }
   }
   async function gmSetRenown(name, renown) {
+    console.log('PlayerTab: gmSetRenown', { name, renown });
     try {
       logApiCall('PlayerTab', 'PUT', `/api/players/${name}/renown`)
-      await axios.put(`/api/players/${name}/renown`, { renown }, { headers: { 'x-session-id': sessionId || '' } });
-      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      const headers = buildHeaders();
+      await axios.put(`/api/players/${name}`, { renown }, { headers });
+      const res = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(res.data);
       flash('Renown updated');
     } catch (e) {
       logApiError('PlayerTab', 'PUT', `/api/players/${name}/renown`, e);
+      console.error('PlayerTab: gmSetRenown failed', e.response?.data || e.message);
       flash('Failed to set renown');
     }
   }
   async function gmResetPlayerPw(name, pw) {
+    console.log('PlayerTab: gmResetPlayerPw', { name, pwProvided: !!pw });
     try {
       logApiCall('PlayerTab', 'PUT', `/api/players/${name}/pw`)
-      await axios.put(`/api/players/${name}/pw`, { pw }, { headers: { 'x-session-id': sessionId || '' } });
-      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      const headers = buildHeaders();
+      await axios.put(`/api/players/${name}`, { pw }, { headers });
+      const res = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(res.data);
       flash('Password reset');
     } catch (e) {
       logApiError('PlayerTab', 'PUT', `/api/players/${name}/pw`, e);
+      console.error('PlayerTab: gmResetPlayerPw failed', e.response?.data || e.message);
       flash('Failed to reset password');
     }
   }
@@ -484,6 +501,24 @@ function PlayerTab({ authedPlayer, sessionId }) {
   const RANK_ORDER = ['None','Respected','Distinguished','Famed','Hero']
   function normalizeRank(r) { const s = String(r||'').trim(); const found = RANK_ORDER.find(x=>x.toLowerCase()===s.toLowerCase()); return found || (s? s : 'None') }
   function renownClass(r) { const rr = normalizeRank(r); if (rr==='Respected') return 'bg-emerald-700'; if (rr==='Distinguished') return 'bg-indigo-700'; if (rr==='Famed') return 'bg-purple-700'; if (rr==='Hero') return 'bg-rose-700'; return 'bg-slate-700' }
+
+  // Added: helper to build request headers (session + GM secret when GM unlocked)
+  function buildHeaders(extra = {}) {
+    const headers = { 'x-session-id': sessionId || '' , ...extra };
+    if (gmOpen) {
+      headers['x-gm-secret'] = GM_PASSWORD;
+    }
+    return headers;
+  }
+
+  // In-app debug log panel state
+  const [showLogs, setShowLogs] = useState(false);
+  const [logs, setLogs] = useState([]);
+  useEffect(() => {
+    if (showLogs) setLogs(logger.getLogs({ limit: 200 }));
+  }, [showLogs]);
+  function refreshLogs() { setLogs(logger.getLogs({ limit: 200 })); }
+  function clearLogs() { logger.clearLogs(); setLogs([]); }
 
   // No per-tab login/logout; handled globally
 
@@ -571,6 +606,7 @@ function PlayerTab({ authedPlayer, sessionId }) {
             >
               Save
             </button>
+            <button onClick={() => setShowLogs(s => !s)} className="px-3 py-1.5 rounded-lg border border-white/10 text-sm bg-slate-700 hover:bg-slate-600">{showLogs ? 'Hide Logs' : 'Show Logs'}</button>
             {saveMsg && (
               <span className="ml-2 text-xs px-2 py-1 rounded bg-white/10 border border-white/10">
                 {saveMsg}
@@ -896,6 +932,29 @@ function PlayerTab({ authedPlayer, sessionId }) {
                   <button onClick={() => gmDeletePlayer(player.name)} className="text-xs px-2 py-1 rounded bg-red-600 hover:bg-red-500">
                     Delete
                   </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* In-app log panel */}
+        {showLogs && (
+          <div className="mt-4 bg-white/5 rounded-xl p-3 border border-white/10">
+            <div className="flex items-center justify-between mb-2">
+              <div className="font-semibold">Client Logs (latest)</div>
+              <div className="flex gap-2">
+                <button onClick={refreshLogs} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Refresh</button>
+                <button onClick={clearLogs} className="text-xs px-2 py-1 rounded bg-rose-600 hover:bg-rose-500">Clear</button>
+              </div>
+            </div>
+            <div className="max-h-64 overflow-y-auto text-xs font-mono">
+              {logs.length === 0 && <div className="opacity-70">No logs</div>}
+              {logs.map(l => (
+                <div key={l.id} className="mb-1 border-b border-white/5 pb-1">
+                  <div className="text-xs opacity-80">{l.timestamp} <span className="uppercase">{l.level}</span> <span className="opacity-60">[{l.component}]</span></div>
+                  <div className="text-sm">{l.message}</div>
+                  {l.data && <pre className="text-xs mt-1 whitespace-pre-wrap">{l.data}</pre>}
                 </div>
               ))}
             </div>

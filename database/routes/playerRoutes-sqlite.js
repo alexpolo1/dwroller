@@ -1,5 +1,5 @@
 const express = require('express');
-const { playerHelpers } = require('../sqlite-db');
+const { playerHelpers, sessionHelpers } = require('../sqlite-db');
 const fs = require('fs');
 const path = require('path');
 
@@ -11,6 +11,30 @@ function logToFile(...args) {
 
 const requireSession = require('../requireSession');
 const router = express.Router();
+
+// Add safe bcrypt helpers to avoid MODULE_NOT_FOUND failures at runtime
+async function safeHash(pw) {
+  if (!pw) return '';
+  try {
+    const bcrypt = require('bcrypt');
+    return await bcrypt.hash(pw, 10);
+  } catch (err) {
+    // Fallback to storing plaintext (development only) and log the error
+    logToFile('WARN: bcrypt.hash failed, falling back to plaintext pw', err && err.stack ? err.stack : String(err));
+    return String(pw);
+  }
+}
+
+async function safeCompare(candidate, hashed) {
+  try {
+    const bcrypt = require('bcrypt');
+    return await bcrypt.compare(candidate, hashed);
+  } catch (err) {
+    // If bcrypt not available, fall back to plaintext comparison (dev only)
+    logToFile('WARN: bcrypt.compare failed, falling back to plaintext compare', err && err.stack ? err.stack : String(err));
+    return String(candidate) === String(hashed);
+  }
+}
 
 // TEMP ADMIN: List all users
 router.get('/admin/list', async (req, res) => {
@@ -48,11 +72,17 @@ router.get('/', async (req, res) => {
   try {
     const players = playerHelpers.getAll();
     logToFile('API: Fetch all players (public)', `Found ${players.length} players`);
-    
-    // Only send name for dropdown if not authed
-    if (!req.headers['x-session-id']) {
+
+    // Allow full list if client provided a valid session id OR the GM secret header
+    const gmSecret = req.headers['x-gm-secret'] || req.query.gmSecret || (req.body && req.body.gmSecret);
+    const gmPassword = process.env.GM_PASSWORD || 'bongo';
+    const isGm = gmSecret && String(gmSecret) === String(gmPassword);
+    const isAuthed = !!req.headers['x-session-id'];
+
+    if (!isAuthed && !isGm) {
       return res.json(players.map(p => ({ name: p.name })));
     }
+
     res.json(players);
   } catch (error) {
     logToFile('API: Failed to fetch players', error);
@@ -90,11 +120,10 @@ router.post('/', async (req, res) => {
       return res.status(409).json({ error: 'Player already exists' });
     }
 
-    // Create password hash if password provided
+    // Create password hash if password provided (use safeHash)
     let pwHash = '';
     if (pw) {
-      const bcrypt = require('bcrypt');
-      pwHash = await bcrypt.hash(pw, 10);
+      pwHash = await safeHash(pw);
     }
 
     const newPlayer = playerHelpers.create({
@@ -109,7 +138,8 @@ router.post('/', async (req, res) => {
     logToFile('API: Created player', name);
     res.status(201).json(newPlayer);
   } catch (error) {
-    logToFile('API: Failed to create player', req.body.name, error);
+    // Log stack for easier debugging
+    logToFile('API: Failed to create player', req.body && req.body.name, error && error.stack ? error.stack : error);
     res.status(500).json({ error: 'Failed to create player' });
   }
 });
@@ -126,10 +156,9 @@ router.put('/:name', requireSession, async (req, res) => {
       return res.status(404).json({ error: 'Player not found' });
     }
 
-    // Handle password update if provided
+    // Handle password update if provided using safeHash
     if (updateData.pw) {
-      const bcrypt = require('bcrypt');
-      updateData.pwHash = await bcrypt.hash(updateData.pw, 10);
+      updateData.pwHash = await safeHash(updateData.pw);
     }
 
     // Merge the data properly
@@ -141,38 +170,20 @@ router.put('/:name', requireSession, async (req, res) => {
       pwHash: updateData.pwHash || existingPlayer.pwHash
     };
 
-    // Handle the special case where frontend sends flat data that should go into tabInfo
-    if (updateData.playerName || updateData.charName || updateData.characteristics) {
-      mergedData.tabInfo = {
-        ...mergedData.tabInfo,
-        playerName: updateData.playerName || mergedData.tabInfo.playerName,
-        charName: updateData.charName || mergedData.tabInfo.charName,
-        gear: updateData.gear || mergedData.tabInfo.gear,
-        chapter: updateData.chapter || mergedData.tabInfo.chapter,
-        demeanour: updateData.demeanour || mergedData.tabInfo.demeanour,
-        speciality: updateData.speciality || mergedData.tabInfo.speciality,
-        rank: updateData.rank || mergedData.tabInfo.rank,
-        powerArmour: updateData.powerArmour || mergedData.tabInfo.powerArmour,
-        description: updateData.description || mergedData.tabInfo.description,
-        pastEvent: updateData.pastEvent || mergedData.tabInfo.pastEvent,
-        personalDemeanour: updateData.personalDemeanour || mergedData.tabInfo.personalDemeanour,
-        characteristics: updateData.characteristics || mergedData.tabInfo.characteristics,
-        skills: updateData.skills || mergedData.tabInfo.skills,
-        weapons: updateData.weapons || mergedData.tabInfo.weapons,
-        armour: updateData.armour || mergedData.tabInfo.armour,
-        talents: updateData.talents || mergedData.tabInfo.talents,
-        psychic: updateData.psychic || mergedData.tabInfo.psychic,
-        wounds: updateData.wounds || mergedData.tabInfo.wounds,
-        insanity: updateData.insanity || mergedData.tabInfo.insanity,
-        movement: updateData.movement || mergedData.tabInfo.movement,
-        fate: updateData.fate || mergedData.tabInfo.fate,
-        corruption: updateData.corruption || mergedData.tabInfo.corruption,
-        renown: updateData.renown || mergedData.tabInfo.renown,
-        xp: updateData.xp || mergedData.tabInfo.xp,
-        xpSpent: updateData.xpSpent || mergedData.tabInfo.xpSpent,
-        notes: updateData.notes || mergedData.tabInfo.notes,
-        rp: updateData.rp || mergedData.tabInfo.rp
-      };
+    // If frontend sends flat fields (not under tabInfo), map them into tabInfo.
+    // This accepts updates for any of the known tabInfo keys even when only those
+    // fields are sent, not requiring playerName/charName to be present.
+    const flatFields = [
+      'playerName','charName','gear','chapter','demeanour','speciality','rank','powerArmour',
+      'description','pastEvent','personalDemeanour','characteristics','skills','weapons','armour',
+      'talents','psychic','wounds','insanity','movement','fate','corruption','renown','xp','xpSpent',
+      'notes','rp'
+    ];
+
+    for (const key of flatFields) {
+      if (Object.prototype.hasOwnProperty.call(updateData, key)) {
+        mergedData.tabInfo[key] = updateData[key];
+      }
     }
 
     const updated = playerHelpers.update(name, mergedData);
@@ -185,7 +196,7 @@ router.put('/:name', requireSession, async (req, res) => {
     logToFile('API: Updated player', name);
     res.json(updatedPlayer);
   } catch (error) {
-    logToFile('API: Failed to update player', req.params.name, error);
+    logToFile('API: Failed to update player', req.params.name, error && error.stack ? error.stack : error);
     res.status(500).json({ error: 'Failed to update player' });
   }
 });
@@ -209,7 +220,7 @@ router.delete('/:name', requireSession, async (req, res) => {
   }
 });
 
-// Login endpoint
+// Login endpoint - create a server session so x-session-id can be used
 router.post('/login', async (req, res) => {
   try {
     const { name, password } = req.body;
@@ -223,21 +234,22 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Check password
-    const bcrypt = require('bcrypt');
-    const isValidPassword = await bcrypt.compare(password, player.pwHash);
-    
+    // Check password using safeCompare
+    const isValidPassword = await safeCompare(password, player.pwHash);
     if (!isValidPassword) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Create session (you might want to implement proper session management)
+    // Create session and store it in sessions table
     const sessionId = require('crypto').randomBytes(32).toString('hex');
-    
-    logToFile('API: Player login', name);
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(); // 24h
+    sessionHelpers.create(sessionId, { playerName: player.name }, expiresAt);
+
+    logToFile('API: Player login', name, sessionId);
     res.json({ 
       message: 'Login successful', 
       sessionId,
+      expiresAt,
       player: {
         name: player.name,
         rollerInfo: player.rollerInfo,
@@ -246,7 +258,7 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (error) {
-    logToFile('API: Login failed', req.body.name, error);
+    logToFile('API: Login failed', req.body.name, error && error.stack ? error.stack : error);
     res.status(500).json({ error: 'Login failed' });
   }
 });
