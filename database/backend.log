@@ -3832,3 +3832,20 @@ Connected to MongoDB
 [2025-08-15T14:20:58.429Z] DB: deleteSession - start 6a8d664d3aeff993925be7a44ea26f8b13962589186577a74a6e74c92f692ea8
 [2025-08-15T14:20:58.429Z] DB: deleteSession - changes 1 6a8d664d3aeff993925be7a44ea26f8b13962589186577a74a6e74c92f692ea8
 [2025-08-15T14:20:58.429Z] SESSION: Logout success 6a8d664d3aeff993925be7a44ea26f8b13962589186577a74a6e74c92f692ea8
+[2025-08-15T14:25:17.796Z] DB: getAllPlayers - start
+[2025-08-15T14:25:17.797Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T14:25:17.798Z] API: Fetch all players (public) Found 5 players
+[2025-08-15T14:25:19.517Z] DB: getPlayerByName - start christoffer
+[2025-08-15T14:25:19.517Z] DB: getPlayerByName - found christoffer
+[2025-08-15T14:25:19.517Z] DB: createSession - start fe0b3f4794cc84ed631a01c6ca84f57bc15718e8b288879bc549fbf98fe24df9 expiresAt 2025-08-16T14:25:19.517Z
+[2025-08-15T14:25:19.517Z] DB: createSession - done fe0b3f4794cc84ed631a01c6ca84f57bc15718e8b288879bc549fbf98fe24df9
+[2025-08-15T14:25:19.517Z] SESSION: Login success christoffer fe0b3f4794cc84ed631a01c6ca84f57bc15718e8b288879bc549fbf98fe24df9
+[2025-08-15T14:25:19.563Z] DB: getSession - start fe0b3f4794cc84ed631a01c6ca84f57bc15718e8b288879bc549fbf98fe24df9
+[2025-08-15T14:25:19.563Z] DB: getSession - ok fe0b3f4794cc84ed631a01c6ca84f57bc15718e8b288879bc549fbf98fe24df9
+[2025-08-15T14:25:19.563Z] SESSION: Validate success fe0b3f4794cc84ed631a01c6ca84f57bc15718e8b288879bc549fbf98fe24df9 christoffer
+[2025-08-15T14:25:19.565Z] DB: getAllPlayers - start
+[2025-08-15T14:25:19.566Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T14:25:19.566Z] API: Fetch all players (public) Found 5 players
+[2025-08-15T14:25:24.150Z] DB: deleteSession - start fe0b3f4794cc84ed631a01c6ca84f57bc15718e8b288879bc549fbf98fe24df9
+[2025-08-15T14:25:24.150Z] DB: deleteSession - changes 1 fe0b3f4794cc84ed631a01c6ca84f57bc15718e8b288879bc549fbf98fe24df9
+[2025-08-15T14:25:24.150Z] SESSION: Logout success fe0b3f4794cc84ed631a01c6ca84f57bc15718e8b288879bc549fbf98fe24df9
