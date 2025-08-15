@@ -5,8 +5,7 @@ import { debug, info, warn, logApiCall, logApiError, logUserAction } from '../ut
 const STORAGE_SHOP_AUTHED = 'dw:shop:authedPlayer';
 const STORAGE_SHOP_PLAYERS = 'dw:shop:players:v1';
 
-
-
+const GM_PASSWORD = 'bongo';
 
 function safeGet(key) {
   try {
@@ -314,7 +313,8 @@ function PlayerTab({ authedPlayer, sessionId }) {
 
   // Added GM Panel button and Requisition Points display
   const [gmOpen, setGmOpen] = useState(false);
-  
+  const [gmPassInput, setGmPassInput] = useState('');
+
   // Define shopAuthed for use in the component
   const shopAuthed = getShopAuthed();
 
@@ -330,6 +330,161 @@ function PlayerTab({ authedPlayer, sessionId }) {
     safeSet('dw:gm:session', gmOpen);
   }, [gmOpen]);
 
+  // GM unlock handler (simple client-side check)
+  function handleGmUnlock() {
+    if ((gmPassInput || '').trim() === GM_PASSWORD) {
+      setGmOpen(true);
+      flash('GM unlocked');
+    } else {
+      flash('Bad GM password');
+    }
+    setGmPassInput('');
+  }
+
+  // GM delete handler
+  async function gmDeletePlayer(name) {
+    try {
+      logApiCall('PlayerTab', 'DELETE', `/api/players/${name}`)
+      await axios.delete(`/api/players/${name}`, { headers: { 'x-session-id': sessionId || '' } });
+      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      setPlayers(res.data);
+      flash('Player deleted');
+    } catch (e) {
+      logApiError('PlayerTab', 'DELETE', `/api/players/${name}`, e);
+      flash('Failed to delete player');
+    }
+  }
+
+  // Early return if not authenticated
+  if (!authedPlayer && !gmOpen) {
+    return (
+      <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8">
+        <div className="mx-auto max-w-7xl space-y-6">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Player Tab</h1>
+            <p className="text-slate-400">Please log in to access player data</p>
+          </div>
+
+          {/* Small GM login panel under global login */}
+          <div className="mx-auto max-w-md bg-white/5 rounded-xl p-4 border border-white/10">
+            <div className="text-sm font-medium mb-2">GM Login</div>
+            <div className="flex gap-2">
+              <input
+                type="password"
+                className="flex-1 rounded border border-white/10 bg-white/10 px-2 py-1"
+                placeholder="GM Password"
+                value={gmPassInput}
+                onChange={e => setGmPassInput(e.target.value)}
+              />
+              <button onClick={handleGmUnlock} className="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500">Unlock</button>
+            </div>
+            <div className="text-xs opacity-70 mt-2">GM can create/delete users, set RP and reset passwords.</div>
+          </div>
+
+        </div>
+      </section>
+    );
+  }
+
+  // GM management components
+  function GmAddPlayer({ onAdd }) {
+    const [name, setName] = useState('')
+    const [rp, setRp] = useState(10)
+    const [pw, setPw] = useState('')
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+        <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" placeholder="Player name" value={name} onChange={e=>setName(e.target.value)} />
+        <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} value={rp} onChange={e=>setRp(parseInt(e.target.value||'0'))} />
+        <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="password" placeholder="Password" value={pw} onChange={e=>setPw(e.target.value)} />
+        <button onClick={()=>{ onAdd(name, rp, pw); setName(''); setRp(10); setPw('') }} className="rounded-xl px-3 py-2 bg-amber-600 hover:bg-amber-500">Add/Update</button>
+        <div className="self-center text-xs opacity-70">Add or overwrite by name</div>
+      </div>
+    )
+  }
+  function GmSetRP({ name, onSet }) {
+    const [rp, setRp] = useState('')
+    return (
+      <div className="flex gap-2">
+        <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" type="number" placeholder="RP" value={rp} onChange={e=>setRp(e.target.value)} />
+        <button onClick={()=>{ onSet(name, parseInt(rp||'0')); setRp('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set RP</button>
+      </div>
+    )
+  }
+  function GmSetRenown({ name, value, onSet }) {
+    const [renown, setRenown] = useState(value)
+    return (
+      <div className="flex gap-2">
+        <select className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" value={renown} onChange={e=>setRenown(e.target.value)}>
+          {RANK_ORDER.map(r => <option key={r} value={r}>{r}</option>)}
+        </select>
+        <button onClick={()=>{ onSet(name, renown); setRenown(value) }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set Renown</button>
+      </div>
+    )
+  }
+  function GmResetPW({ name, onReset }) {
+    const [pw, setPw] = useState('')
+    return (
+      <div className="flex gap-2">
+        <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm" type="password" placeholder="New PW" value={pw} onChange={e=>setPw(e.target.value)} />
+        <button onClick={()=>{ onReset(name, pw); setPw('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Reset PW</button>
+      </div>
+    )
+  }
+
+  // GM action handlers
+  async function gmAddOrUpdatePlayer(name, rp, pw) {
+    try {
+      logApiCall('PlayerTab', 'POST', '/api/players')
+      await axios.post('/api/players', { name, rp, pw }, { headers: { 'x-session-id': sessionId || '' } });
+      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      setPlayers(res.data);
+      flash('Player added/updated');
+    } catch (e) {
+      logApiError('PlayerTab', 'POST', '/api/players', e);
+      flash('Failed to add player');
+    }
+  }
+  async function gmSetRP(name, rp) {
+    try {
+      logApiCall('PlayerTab', 'PUT', `/api/players/${name}/rp`)
+      await axios.put(`/api/players/${name}/rp`, { rp }, { headers: { 'x-session-id': sessionId || '' } });
+      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      setPlayers(res.data);
+      flash('RP updated');
+    } catch (e) {
+      logApiError('PlayerTab', 'PUT', `/api/players/${name}/rp`, e);
+      flash('Failed to set RP');
+    }
+  }
+  async function gmSetRenown(name, renown) {
+    try {
+      logApiCall('PlayerTab', 'PUT', `/api/players/${name}/renown`)
+      await axios.put(`/api/players/${name}/renown`, { renown }, { headers: { 'x-session-id': sessionId || '' } });
+      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      setPlayers(res.data);
+      flash('Renown updated');
+    } catch (e) {
+      logApiError('PlayerTab', 'PUT', `/api/players/${name}/renown`, e);
+      flash('Failed to set renown');
+    }
+  }
+  async function gmResetPlayerPw(name, pw) {
+    try {
+      logApiCall('PlayerTab', 'PUT', `/api/players/${name}/pw`)
+      await axios.put(`/api/players/${name}/pw`, { pw }, { headers: { 'x-session-id': sessionId || '' } });
+      const res = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      setPlayers(res.data);
+      flash('Password reset');
+    } catch (e) {
+      logApiError('PlayerTab', 'PUT', `/api/players/${name}/pw`, e);
+      flash('Failed to reset password');
+    }
+  }
+
+  const RANK_ORDER = ['None','Respected','Distinguished','Famed','Hero']
+  function normalizeRank(r) { const s = String(r||'').trim(); const found = RANK_ORDER.find(x=>x.toLowerCase()===s.toLowerCase()); return found || (s? s : 'None') }
+  function renownClass(r) { const rr = normalizeRank(r); if (rr==='Respected') return 'bg-emerald-700'; if (rr==='Distinguished') return 'bg-indigo-700'; if (rr==='Famed') return 'bg-purple-700'; if (rr==='Hero') return 'bg-rose-700'; return 'bg-slate-700' }
+
   // No per-tab login/logout; handled globally
 
   // Early return if not authenticated
@@ -341,6 +496,23 @@ function PlayerTab({ authedPlayer, sessionId }) {
             <h1 className="text-2xl font-bold mb-4">Player Tab</h1>
             <p className="text-slate-400">Please log in to access player data</p>
           </div>
+
+          {/* Small GM login panel under global login */}
+          <div className="mx-auto max-w-md bg-white/5 rounded-xl p-4 border border-white/10">
+            <div className="text-sm font-medium mb-2">GM Login</div>
+            <div className="flex gap-2">
+              <input
+                type="password"
+                className="flex-1 rounded border border-white/10 bg-white/10 px-2 py-1"
+                placeholder="GM Password"
+                value={gmPassInput}
+                onChange={e => setGmPassInput(e.target.value)}
+              />
+              <button onClick={handleGmUnlock} className="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500">Unlock</button>
+            </div>
+            <div className="text-xs opacity-70 mt-2">GM can create/delete users, set RP and reset passwords.</div>
+          </div>
+
         </div>
       </section>
     );
@@ -349,7 +521,25 @@ function PlayerTab({ authedPlayer, sessionId }) {
   return (
     <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        
+
+        {/* Small GM login panel (visible under global header) */}
+        {!gmOpen && (
+          <div className="mx-auto max-w-md bg-white/5 rounded-xl p-4 border border-white/10">
+            <div className="text-sm font-medium mb-2">GM Login</div>
+            <div className="flex gap-2">
+              <input
+                type="password"
+                className="flex-1 rounded border border-white/10 bg-white/10 px-2 py-1"
+                placeholder="GM Password"
+                value={gmPassInput}
+                onChange={e => setGmPassInput(e.target.value)}
+              />
+              <button onClick={handleGmUnlock} className="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500">Unlock</button>
+            </div>
+            <div className="text-xs opacity-70 mt-2">GM can create/delete users, set RP and reset passwords.</div>
+          </div>
+        )}
+
         {/* Character Name & Player Name */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white/5 rounded-xl p-3 border border-white/10">
           <div>
@@ -653,6 +843,64 @@ function PlayerTab({ authedPlayer, sessionId }) {
           <textarea className="w-full h-24 rounded border border-white/10 bg-white/10 px-2 py-1" value={notes} onChange={e=>setNotes(e.target.value)} />
         </div>
 
+        {/* GM Panel - Player Management */}
+        {gmOpen && (
+          <div className="bg-white/5 rounded-xl p-4 border border-white/10 mt-4">
+            <div className="font-semibold text-lg mb-4">Player Management</div>
+            
+            {/* Add/Update Player */}
+            <div className="mb-4">
+              <div className="text-sm font-medium mb-2">Add or Update Player</div>
+              <GmAddPlayer onAdd={gmAddOrUpdatePlayer} />
+            </div>
+
+            {/* Set RP */}
+            <div className="mb-4">
+              <div className="text-sm font-medium mb-2">Set Requisition Points (RP)</div>
+              {players.map(player => (
+                <div key={player.name} className="flex items-center gap-2 mb-2">
+                  <span className="text-sm">{player.name}</span>
+                  <GmSetRP name={player.name} onSet={gmSetRP} />
+                </div>
+              ))}
+            </div>
+
+            {/* Set Renown */}
+            <div className="mb-4">
+              <div className="text-sm font-medium mb-2">Set Renown</div>
+              {players.map(player => (
+                <div key={player.name} className="flex items-center gap-2 mb-2">
+                  <span className="text-sm">{player.name}</span>
+                  <GmSetRenown name={player.name} value={player.renown} onSet={gmSetRenown} />
+                </div>
+              ))}
+            </div>
+
+            {/* Reset Password */}
+            <div className="mb-4">
+              <div className="text-sm font-medium mb-2">Reset Password</div>
+              {players.map(player => (
+                <div key={player.name} className="flex items-center gap-2 mb-2">
+                  <span className="text-sm">{player.name}</span>
+                  <GmResetPW name={player.name} onReset={gmResetPlayerPw} />
+                </div>
+              ))}
+            </div>
+
+            {/* Delete Player */}
+            <div className="mb-4">
+              <div className="text-sm font-medium mb-2">Delete Player</div>
+              {players.map(player => (
+                <div key={player.name} className="flex items-center gap-2 mb-2">
+                  <span className="text-sm">{player.name}</span>
+                  <button onClick={() => gmDeletePlayer(player.name)} className="text-xs px-2 py-1 rounded bg-red-600 hover:bg-red-500">
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

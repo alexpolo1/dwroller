@@ -161,3 +161,22 @@ Connected to MongoDB
 [2025-08-15T08:12:28.154Z] API: Fetch all players (public) Found 3 players
 [2025-08-15T08:12:35.062Z] SESSION: Logout success dc5481ec7357cc3b25cfaa2d10bbbbe65496c6645eb0368bb5369d7f13d732a7
 [2025-08-15T08:12:35.100Z] API: Fetch all players (public) Found 3 players
+[2025-08-15T08:48:12.845Z] API: Fetch all players (public) Found 3 players
+[2025-08-15T08:48:15.381Z] SESSION: Login success christoffer 0a26d571b01ed1c2ba2e1ab7fd56cab27434d3e5ca65b2b4a3a7ae68c2f9e4e7
+[2025-08-15T08:48:15.392Z] SESSION: Validate success 0a26d571b01ed1c2ba2e1ab7fd56cab27434d3e5ca65b2b4a3a7ae68c2f9e4e7 christoffer
+[2025-08-15T08:49:04.328Z] SESSION: Logout success 0a26d571b01ed1c2ba2e1ab7fd56cab27434d3e5ca65b2b4a3a7ae68c2f9e4e7
+[2025-08-15T08:49:12.186Z] API: Fetch all players (public) Found 3 players
+[2025-08-15T08:49:20.129Z] SESSION: Login success christoffer 7ca595896cf4e1ab7ffa90ee2334e71593aaa80380b22e1c0108d6388424faad
+[2025-08-15T08:49:20.138Z] API: Fetch all players (public) Found 3 players
+[2025-08-15T08:49:20.142Z] SESSION: Validate success 7ca595896cf4e1ab7ffa90ee2334e71593aaa80380b22e1c0108d6388424faad christoffer
+[2025-08-15T09:07:28.709Z] SESSION: Validate success 7ca595896cf4e1ab7ffa90ee2334e71593aaa80380b22e1c0108d6388424faad christoffer
+[2025-08-15T09:07:30.722Z] SESSION: Logout success 7ca595896cf4e1ab7ffa90ee2334e71593aaa80380b22e1c0108d6388424faad
+[2025-08-15T09:07:36.074Z] API: Fetch all players (public) Found 3 players
+[2025-08-15T09:07:44.071Z] SESSION: Login success christoffer 6cc910f09effb8c44ece418cc44b69fcb17501b7070656b4e1ba0cf95fff4844
+[2025-08-15T09:07:44.079Z] SESSION: Validate success 6cc910f09effb8c44ece418cc44b69fcb17501b7070656b4e1ba0cf95fff4844 christoffer
+[2025-08-15T09:08:57.772Z] API: Fetch all players (public) Found 3 players
+[2025-08-15T09:09:30.592Z] SESSION: Validate success 6cc910f09effb8c44ece418cc44b69fcb17501b7070656b4e1ba0cf95fff4844 christoffer
+[2025-08-15T09:09:31.684Z] API: Fetch all players (public) Found 3 players
+[2025-08-15T09:10:12.600Z] SESSION: Validate success 6cc910f09effb8c44ece418cc44b69fcb17501b7070656b4e1ba0cf95fff4844 christoffer
+[2025-08-15T09:11:44.183Z] SESSION: Validate success 6cc910f09effb8c44ece418cc44b69fcb17501b7070656b4e1ba0cf95fff4844 christoffer
+[2025-08-15T09:12:00.469Z] API: Fetch all players (public) Found 3 players

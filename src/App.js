@@ -1,4 +1,3 @@
-
 import './App.css';
 import DeathwatchRoller from './components/DeathwatchRoller';
 import RequisitionShop from './components/RequisitionShop';
@@ -16,19 +15,26 @@ function App() {
   const [loginPw, setLoginPw] = useState('');
   const [loginMsg, setLoginMsg] = useState('');
   const [players, setPlayers] = useState([]);
+  const [playersError, setPlayersError] = useState('');
+  // Global GM state (moved from PlayerTab)
+  const GM_PASSWORD = 'bongo'
+  const [gmOpen, setGmOpen] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('dw:gm:session')) || false } catch { return false }
+  });
+  const [gmPassInput, setGmPassInput] = useState('');
 
-  // Fetch player list for login
-  useEffect(() => {
-    async function fetchPlayers() {
-      try {
-        const res = await axios.get('/api/players');
-        setPlayers(res.data);
-      } catch {
-        setPlayers([]);
-      }
+  // Fetch player list for login (exposed so UI can refresh)
+  async function fetchPlayers() {
+    try {
+      setPlayersError('')
+      const res = await axios.get('/api/players');
+      setPlayers(res.data || []);
+    } catch (err) {
+      console.error('fetchPlayers failed', err);
+      setPlayers([]);
+      setPlayersError('Failed to load users — is the backend running? Check console/network.');
     }
-    fetchPlayers();
-  }, []);
+  }
 
   // Validate session on mount/refresh
   useEffect(() => {
@@ -134,6 +140,17 @@ function App() {
     setTimeout(() => setLoginMsg(''), 3000);
   }
 
+  function handleGmUnlock() {
+    if ((gmPassInput || '').trim() === GM_PASSWORD) {
+      setGmOpen(true);
+      localStorage.setItem('dw:gm:session', JSON.stringify(true));
+    } else {
+      setGmOpen(false);
+      localStorage.setItem('dw:gm:session', JSON.stringify(false));
+    }
+    setGmPassInput('');
+  }
+
   return (
     <div className="App min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Persistent Header */}
@@ -180,6 +197,18 @@ function App() {
                   {loginMsg && <span className="ml-2 text-xs px-2 py-1 rounded bg-red-500/20 border border-red-500/30 text-red-300">{loginMsg}</span>}
                 </div>
               )}
+              {/* GM quick unlock in header */}
+              <div className="ml-4 hidden sm:flex items-center gap-2">
+                <input
+                  className="rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/50 text-sm"
+                  type="password"
+                  placeholder="GM Password"
+                  value={gmPassInput}
+                  onChange={e=>setGmPassInput(e.target.value)}
+                  onKeyPress={(e)=>{ if (e.key==='Enter') handleGmUnlock() }}
+                />
+                <button onClick={handleGmUnlock} className="rounded-lg px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-sm">GM</button>
+              </div>
             </div>
           </div>
           
@@ -212,9 +241,19 @@ function App() {
         {/* User Info Card for easy access */}
         {!authedPlayer && (
           <div className="mb-6 p-4 rounded-lg bg-blue-900/20 border border-blue-500/30">
-            <h3 className="text-sm font-semibold text-blue-300 mb-2">Available Users</h3>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-semibold text-blue-300">Available Users</h3>
+              <div className="flex items-center gap-2">
+                <button onClick={fetchPlayers} className="text-xs px-2 py-1 rounded bg-slate-700/30 hover:bg-slate-700/50">Refresh</button>
+              </div>
+            </div>
+            {playersError ? (
+              <div className="text-xs text-red-400 mb-2">
+                {playersError}
+              </div>
+            ) : null}
             <div className="flex flex-wrap gap-2 text-xs">
-              {players.map(player => (
+              {players && players.length > 0 ? players.map(player => (
                 <button
                   key={player.name}
                   onClick={() => {setLoginName(player.name); setLoginPw('1234');}}
@@ -222,13 +261,15 @@ function App() {
                 >
                   {player.name}
                 </button>
-              ))}
+              )) : (
+                <div className="text-xs text-blue-200/60">No users found. Click Refresh or check backend.</div>
+              )}
             </div>
             <p className="text-xs text-blue-300/70 mt-2">Password for all users: <code className="bg-blue-800/40 px-1 rounded">1234</code></p>
           </div>
         )}
         
-        {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : <PlayerTab authedPlayer={authedPlayer} sessionId={sessionId} />}
+        {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : <PlayerTab authedPlayer={authedPlayer} sessionId={sessionId} gmOpen={gmOpen} setGmOpen={setGmOpen} />}
       </div>
     </div>
   );

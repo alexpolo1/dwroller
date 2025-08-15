@@ -1,0 +1,18 @@
+[Unit]
+Description=Deathwatch Roller API
+After=network.target
+
+[Service]
+Type=simple
+User={{RUN_AS_USER}}
+WorkingDirectory={{REPO_DIR}}/database
+ExecStart=/usr/bin/node {{REPO_DIR}}/database/server.js
+Restart=always
+RestartSec=5
+EnvironmentFile=/etc/default/deathwatch-server
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=deathwatch-server
+
+[Install]
+WantedBy=multi-user.target

@@ -323,73 +323,16 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
             ))}
           </div>
 
-          {/* GM Panel */}
+          {/* GM Panel moved to PlayerTab - GM controls (add/set RP/renown/reset PW) available in PlayerTab when GM is logged in */}
           <div className="border-t border-white/10 pt-4">
-            <button
-              onClick={() => setGmOpen(!gmOpen)}
-              className="px-3 py-2 rounded bg-amber-600 hover:bg-amber-500 text-sm font-medium"
-            >
-              {gmOpen ? 'Hide' : 'Show'} GM Panel
-            </button>
-            
-            {gmOpen && !gmUnlocked && (
-              <div className="mt-3 p-3 rounded bg-amber-900/20 border border-amber-500/30">
-                <div className="flex gap-2">
-                  <input
-                    className="rounded border border-white/10 bg-white/10 px-2 py-1"
-                    type="password"
-                    placeholder="GM Password"
-                    value={gmPassInput}
-                    onChange={e => setGmPassInput(e.target.value)}
-                  />
-                  <button
-                    onClick={handleGmUnlock}
-                    className="px-3 py-1 rounded bg-amber-600 hover:bg-amber-500"
-                  >
-                    Unlock
-                  </button>
-                </div>
+            <div className="p-3 rounded bg-amber-900/20 border border-amber-500/30">
+              <div className="text-amber-300 font-semibold mb-2">
+                GM Panel
               </div>
-            )}
-
-            {gmOpen && gmUnlocked && (
-              <div className="mt-3 space-y-4">
-                <div className="p-3 rounded bg-amber-900/20 border border-amber-500/30">
-                  <div className="text-amber-300 font-semibold mb-2">Add/Update Player</div>
-                  <GmAddPlayer onAdd={addPlayer} />
-                </div>
-
-                <div className="p-3 rounded bg-red-900/20 border border-red-500/30">
-                  <div className="text-red-300 font-semibold mb-2">Manage Players</div>
-                  <div className="space-y-2">
-                    {players.map(player => (
-                      <div key={player.name} className="flex items-center gap-3 p-2 rounded bg-black/20">
-                        <div className="flex-1">
-                          <div className="font-medium">{player.name}</div>
-                          <div className="text-xs text-slate-400">
-                            RP: {player.rp || 0} | Renown: {player.renown || 'None'}
-                          </div>
-                        </div>
-                        <GmSetRP name={player.name} onSet={setPlayerRP} />
-                        <GmSetRenown name={player.name} value={player.renown || 'None'} onSet={setPlayerRenown} />
-                        <GmResetPW name={player.name} onReset={resetPlayerPw} />
-                        <button
-                          onClick={() => deletePlayer(player.name)}
-                          className="px-2 py-1 rounded bg-red-600 hover:bg-red-500 text-xs"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-3 rounded bg-purple-900/20 border border-purple-500/30">
-                  <div className="text-purple-300 font-semibold mb-2">GM Settings</div>
-                  <GmChangePassword onSet={newPw => setGmPassword(newPw)} />
-                </div>
+              <div className="text-sm text-amber-200">
+                GM controls have been moved to the PlayerTab. When logged in as GM, you can add players, set RP and renown, reset passwords, and manage items.
               </div>
-            )}
+            </div>
           </div>
         </>
       )}
@@ -397,49 +340,8 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
   );
 }
 
-function GmAddPlayer({ onAdd }) {
-  const [name, setName] = useState('')
-  const [rp, setRp] = useState(10)
-  const [pw, setPw] = useState('')
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
-      <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" placeholder="Player name" value={name} onChange={e=>setName(e.target.value)} />
-      <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} value={rp} onChange={e=>setRp(parseInt(e.target.value||'0'))} />
-      <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="password" placeholder="Password" value={pw} onChange={e=>setPw(e.target.value)} />
-      <button onClick={()=>{ onAdd(name, rp, pw); setName(''); setRp(10); setPw('') }} className="rounded-xl px-3 py-2 bg-amber-600 hover:bg-amber-500">Add/Update</button>
-      <div className="self-center text-xs opacity-70">Add or overwrite by name</div>
-    </div>
-  )
-}
-function GmSetRP({ name, onSet }) {
-  const [rp, setRp] = useState('')
-  return (
-    <div className="flex gap-2">
-      <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" type="number" placeholder="RP" value={rp} onChange={e=>setRp(e.target.value)} />
-      <button onClick={()=>{ onSet(name, parseInt(rp||'0')); setRp('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set RP</button>
-    </div>
-  )
-}
-function GmSetRenown({ name, value, onSet }) {
-  const [renown, setRenown] = useState(value)
-  return (
-    <div className="flex gap-2">
-      <select className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" value={renown} onChange={e=>setRenown(e.target.value)}>
-        {RANK_ORDER.map(r => <option key={r} value={r}>{r}</option>)}
-      </select>
-      <button onClick={()=>{ onSet(name, renown); setRenown(value) }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set Renown</button>
-    </div>
-  )
-}
-function GmResetPW({ name, onReset }) {
-  const [pw, setPw] = useState('')
-  return (
-    <div className="flex gap-2">
-      <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm" type="password" placeholder="New PW" value={pw} onChange={e=>setPw(e.target.value)} />
-      <button onClick={()=>{ onReset(name, pw); setPw('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Reset PW</button>
-    </div>
-  )
-}
+// GM subcomponents (GmAddPlayer, GmSetRP, GmSetRenown, GmResetPW, GmEditItemMeta, GmChangePassword)
+// were moved to PlayerTab.jsx to centralize player management.
 
 function GmEditItemMeta({ item, onSet }) {
   const [req, setReq] = useState(item.req ?? item.cost ?? 0)
@@ -448,19 +350,9 @@ function GmEditItemMeta({ item, onSet }) {
     <div className="flex items-center gap-1">
       <input className="w-16 rounded border border-white/10 bg-white/10 px-2 py-1 text-xs" type="number" min={0} value={req} onChange={e=>setReq(e.target.value)} />
       <select className="rounded border border-white/10 bg-white/10 px-2 py-1 text-xs" value={renown} onChange={e=>setRenown(e.target.value)}>
-        {RANK_ORDER.map(r => <option key={r} value={r}>{r}</option>)}
+        {['None','Respected','Distinguished','Famed','Hero'].map(r => <option key={r} value={r}>{r}</option>)}
       </select>
       <button onClick={()=>onSet(item.id, parseInt(req||'0'), renown)} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set</button>
-    </div>
-  )
-}
-
-function GmChangePassword({ onSet }){
-  const [pw, setPw] = useState('')
-  return (
-    <div className="flex items-center gap-2 text-xs">
-      <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1" type="password" placeholder="New GM password (not persisted)" value={pw} onChange={e=>setPw(e.target.value)} />
-      <button onClick={()=>{ onSet(pw); setPw('') }} className="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500">Set Password</button>
     </div>
   )
 }
