@@ -1,9 +1,11 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
+import { debug, info, warn, logApiCall, logApiError, logUserAction } from '../utils/logger';
 
-const STORAGE_PLAYER = 'dw:player:v1'
-const STORAGE_SHOP_AUTHED = 'dw:shop:authedPlayer'
+const STORAGE_SHOP_AUTHED = 'dw:shop:authedPlayer';
 const STORAGE_SHOP_PLAYERS = 'dw:shop:players:v1';
+
+
 
 
 function safeGet(key) {
@@ -14,7 +16,6 @@ function safeGet(key) {
   } catch { return null }
 }
 function safeSet(key, val) { try { if (typeof window !== 'undefined' && 'localStorage' in window) window.localStorage.setItem(key, JSON.stringify(val)) } catch {} }
-function safeRemove(key) { try { if (typeof window !== 'undefined' && 'localStorage' in window) window.localStorage.removeItem(key) } catch {} }
 
 const CHARACTERISTICS = [
   { key: 'ws', label: 'Weapon Skill (WS)' },
@@ -40,55 +41,63 @@ const SKILLS = [
 ]
 
 // Updated PlayerTab to clear data unless logged in and maintain session across all tabs
-function PlayerTab() {
+function PlayerTab({ authedPlayer, sessionId }) {
   // helpers to read shop state
   function getShopAuthed() {
     return safeGet(STORAGE_SHOP_AUTHED) || '';
   }
 
   // UI state
-  const init = safeGet(STORAGE_PLAYER) || {};
-  const [charName, setCharName] = useState(init.charName || '');
-  const [playerName, setPlayerName] = useState(init.playerName || '');
-  const [shopAuthed, setShopAuthed] = useState(getShopAuthed());
+  const [charName, setCharName] = useState('');
+  const [playerName, setPlayerName] = useState('');
   const [saveMsg, setSaveMsg] = useState('');
 
-  const [gear, setGear] = useState(init.gear || []);
-  const [chapter, setChapter] = useState(init.chapter || '');
-  const [demeanour, setDemeanour] = useState(init.demeanour || '');
-  const [speciality, setSpeciality] = useState(init.speciality || '');
-  const [rank, setRank] = useState(init.rank || '');
-  const [powerArmour, setPowerArmour] = useState(init.powerArmour || '');
-  const [description, setDescription] = useState(init.description || '');
-  const [pastEvent, setPastEvent] = useState(init.pastEvent || '');
-  const [personalDemeanour, setPersonalDemeanour] = useState(init.personalDemeanour || '');
-  const [characteristics, setCharacteristics] = useState(init.characteristics || {});
-  const [skills, setSkills] = useState(init.skills || []);
-  const [weapons, setWeapons] = useState(init.weapons || []);
-  const [armour, setArmour] = useState(init.armour || {});
-  const [talents, setTalents] = useState(init.talents || '');
-  const [psychic, setPsychic] = useState(init.psychic || '');
-  const [wounds, setWounds] = useState(init.wounds || {});
-  const [insanity, setInsanity] = useState(init.insanity || {});
-  const [movement, setMovement] = useState(init.movement || {});
-  const [fate, setFate] = useState(init.fate || {});
-  const [corruption, setCorruption] = useState(init.corruption || 0);
-  const [renown, setRenown] = useState(init.renown || '');
-  const [xp, setXp] = useState(init.xp || 0);
-  const [xpSpent, setXpSpent] = useState(init.xpSpent || 0);
-  const [notes, setNotes] = useState(init.notes || '');
+  const [gear, setGear] = useState([]);
+  const [chapter, setChapter] = useState('');
+  const [demeanour, setDemeanour] = useState('');
+  const [speciality, setSpeciality] = useState('');
+  const [rank, setRank] = useState('');
+  const [powerArmour, setPowerArmour] = useState('');
+  const [description, setDescription] = useState('');
+  const [pastEvent, setPastEvent] = useState('');
+  const [personalDemeanour, setPersonalDemeanour] = useState('');
+  const [characteristics, setCharacteristics] = useState({});
+  const [skills, setSkills] = useState([]);
+  const [weapons, setWeapons] = useState([]);
+  const [armour, setArmour] = useState({});
+  const [talents, setTalents] = useState('');
+  const [psychic, setPsychic] = useState('');
+  const [wounds, setWounds] = useState({});
+  const [insanity, setInsanity] = useState({});
+  const [movement, setMovement] = useState({});
+  const [fate, setFate] = useState({});
+  const [corruption, setCorruption] = useState(0);
+  const [renown, setRenown] = useState('');
+  const [xp, setXp] = useState(0);
+  const [xpSpent, setXpSpent] = useState(0);
+  const [notes, setNotes] = useState('');
 
-  // Defined STORAGE_SHOP_PLAYERS and utilized setPlayers
-  const [players, setPlayers] = useState(() => safeGet(STORAGE_SHOP_PLAYERS) || []);
+  // Always start with empty array, and fill from backend
+  const [players, setPlayers] = useState([]);
+
+  // Remove localStorage cache for players except after backend fetch
+
+  const currentPlayer = useMemo(() => {
+    if (!Array.isArray(players)) {
+      warn('PlayerTab', 'players is not an array', players);
+      return null;
+    }
+    const player = players.find(p => p.name === authedPlayer) || null;
+    debug('PlayerTab', 'currentPlayer computed', { authedPlayer, playerFound: !!player });
+    return player;
+  }, [players, authedPlayer]);
 
   useEffect(() => {
-    safeSet(STORAGE_SHOP_PLAYERS, players);
-  }, [players]);
-
-  const currentPlayer = useMemo(() => players.find(p => p.name === shopAuthed) || null, [players, shopAuthed]);
-
-  useEffect(() => {
-    if (!shopAuthed) {
+    debug('PlayerTab', 'Data loading effect triggered', { authedPlayer, hasCurrentPlayer: !!currentPlayer });
+    
+    if (!authedPlayer || !currentPlayer) {
+      // Clear form when not logged in or no player selected
+      info('PlayerTab', 'Clearing form data - no auth or player');
       setCharName('');
       setPlayerName('');
       setGear([]);
@@ -115,18 +124,46 @@ function PlayerTab() {
       setXp(0);
       setXpSpent(0);
       setNotes('');
-      setSaveMsg('');
+      return;
     }
-  }, [shopAuthed]);
 
-  useEffect(() => {
-    if (shopAuthed) {
-      const currentPlayer = players.find(p => p.name === shopAuthed);
-      if (currentPlayer) {
-        setGear(currentPlayer.inventory || []);
-      }
-    }
-  }, [players, shopAuthed]);
+    // Load player data when logged in
+    info('PlayerTab', 'Loading player data', { playerName: currentPlayer.name });
+    const tabInfo = currentPlayer.tabInfo || {};
+    
+    setCharName(tabInfo.charName || '');
+    setPlayerName(currentPlayer.name || '');
+    setGear(tabInfo.gear || []);
+    setChapter(tabInfo.chapter || '');
+    setDemeanour(tabInfo.demeanour || '');
+    setSpeciality(tabInfo.speciality || '');
+    setRank(tabInfo.rank || '');
+    setPowerArmour(tabInfo.powerArmour || '');
+    setDescription(tabInfo.description || '');
+    setPastEvent(tabInfo.pastEvent || '');
+    setPersonalDemeanour(tabInfo.personalDemeanour || '');
+    setCharacteristics(tabInfo.characteristics || {});
+    setSkills(tabInfo.skills || []);
+    setWeapons(tabInfo.weapons || []);
+    setArmour(tabInfo.armour || {});
+    setTalents(tabInfo.talents || '');
+    setPsychic(tabInfo.psychic || '');
+    setWounds(tabInfo.wounds || {});
+    setInsanity(tabInfo.insanity || {});
+    setMovement(tabInfo.movement || {});
+    setFate(tabInfo.fate || {});
+    setCorruption(tabInfo.corruption || 0);
+    setRenown(tabInfo.renown || '');
+    setXp(tabInfo.xp || 0);
+    setXpSpent(tabInfo.xpSpent || 0);
+    setNotes(tabInfo.notes || '');
+    
+    debug('PlayerTab', 'Player data loaded', { 
+      charName: tabInfo.charName,
+      rp: tabInfo.rp,
+      gearCount: (tabInfo.gear || []).length 
+    });
+  }, [players, authedPlayer, currentPlayer]);
 
   function handleCharChange(key, value) {
     setCharacteristics(prev => ({ ...prev, [key]: value }));
@@ -175,46 +212,72 @@ function PlayerTab() {
     setTimeout(() => setSaveMsg(''), 2000);
   }
 
-  // Fetch players from the database
+  // Fetch players from the database and only update localStorage after successful fetch
   useEffect(() => {
     async function fetchPlayers() {
       try {
-        const response = await axios.get('/api/players');
-        setPlayers(response.data);
-      } catch (error) {
-        console.error('Failed to fetch players:', error);
+        logApiCall('PlayerTab', 'GET', '/api/players');
+        const response = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+        const data = response.data;
+        if (!Array.isArray(data)) {
+          warn('PlayerTab', '/api/players did not return an array', data);
+          setPlayers([]);
+        } else {
+          info('PlayerTab', `Fetched ${data.length} players`);
+          setPlayers(data);
+          safeSet(STORAGE_SHOP_PLAYERS, data);
+        }
+      } catch (apiError) {
+        logApiError('PlayerTab', 'GET', '/api/players', apiError);
+        setPlayers([]);
       }
     }
     fetchPlayers();
-  }, []);
+  }, [sessionId]);
+
+  // On mount, validate sessionId if present
+  // Sync login state with localStorage/sessionId on mount, tab switch, and storage changes
+  // No per-tab session sync; handled globally
 
   // Update player data in the database
   async function updatePlayerData(updatedPlayer) {
     try {
-      await axios.put(`/api/players/${updatedPlayer.name}`, updatedPlayer);
-      setPlayers(prevPlayers => {
-        const index = prevPlayers.findIndex(p => p.name === updatedPlayer.name);
-        if (index !== -1) {
-          const newPlayers = [...prevPlayers];
-          newPlayers[index] = updatedPlayer;
-          return newPlayers;
-        }
-        return [...prevPlayers, updatedPlayer];
-      });
-    } catch (error) {
-      console.error('Failed to update player:', error);
+      logApiCall('PlayerTab', 'PUT', `/api/players/${updatedPlayer.playerName}`, updatedPlayer);
+      await axios.put(`/api/players/${updatedPlayer.playerName}`, { ...updatedPlayer }, { headers: { 'x-session-id': sessionId || '' } });
+      // Refetch players after update to get fresh data
+      const response = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+      setPlayers(response.data);
+      info('PlayerTab', 'Player data updated successfully', { playerName: updatedPlayer.playerName });
+    } catch (apiError) {
+      logApiError('PlayerTab', 'PUT', `/api/players/${updatedPlayer.playerName}`, apiError);
+      flash('Failed to save player data');
     }
   }
 
   // Updated saveLocal to persist all player data including requisition points
   async function saveLocal() {
-    if (!shopAuthed) {
+    logUserAction('PlayerTab', 'save_attempt', { authedPlayer, gmOpen });
+    
+    // In GM mode, allow saving for any selected player
+    if (!authedPlayer && !gmOpen) {
       flash('Not logged in');
+      warn('PlayerTab', 'Save blocked - not logged in');
       return;
     }
+    // Determine which player to save
+    let targetName = authedPlayer;
+    if (gmOpen && playerName) {
+      targetName = playerName;
+    }
+    if (!targetName) {
+      flash('No player selected');
+      warn('PlayerTab', 'Save blocked - no player selected');
+      return;
+    }
+    
     const playerData = {
+      playerName: targetName,
       charName,
-      playerName,
       gear,
       chapter,
       demeanour,
@@ -239,24 +302,24 @@ function PlayerTab() {
       xp,
       xpSpent,
       notes,
-      rp: currentPlayer?.rp || 0,
+      rp: (currentPlayer?.tabInfo?.rp) || 0,
     };
+    
+    info('PlayerTab', 'Saving player data', { targetName, dataKeys: Object.keys(playerData) });
     await updatePlayerData(playerData);
     flash('Player data saved');
   }
 
-  function logoutShop() {
-    safeRemove(STORAGE_SHOP_AUTHED);
-    setShopAuthed('');
-    flash('Logged out');
-  }
+  // No per-tab logout; handled globally
 
   // Added GM Panel button and Requisition Points display
   const [gmOpen, setGmOpen] = useState(false);
-  const [playerPw, setPlayerPw] = useState('');
+  
+  // Define shopAuthed for use in the component
+  const shopAuthed = getShopAuthed();
 
   function isGMOrShopAuthed() {
-    return gmOpen || shopAuthed;
+    return gmOpen || authedPlayer;
   }
 
   function isGMLoggedIn() {
@@ -267,93 +330,34 @@ function PlayerTab() {
     safeSet('dw:gm:session', gmOpen);
   }, [gmOpen]);
 
-  async function handlePlayerLogin() {
-    const player = players.find(p => p.name === playerName);
-    if (player && player.pw === playerPw) {
-      setShopAuthed(playerName);
-      flash('Player logged in');
-    } else {
-      flash('Invalid player credentials');
-    }
-  }
+  // No per-tab login/logout; handled globally
 
-  function handlePlayerLogout() {
-    safeRemove(STORAGE_SHOP_AUTHED);
-    setShopAuthed('');
-    flash('Player logged out');
+  // Early return if not authenticated
+  if (!authedPlayer && !gmOpen) {
+    return (
+      <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8">
+        <div className="mx-auto max-w-7xl space-y-6">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Player Tab</h1>
+            <p className="text-slate-400">Please log in to access player data</p>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        {/* Player Login Section */}
-        <div className="rounded-xl border border-white/10 bg-black/20 p-3 space-y-2">
-          <div className="text-xs uppercase opacity-70">Player Login</div>
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-            <select className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={playerName} onChange={e => setPlayerName(e.target.value)}>
-              <option value="">Select player</option>
-              {players.map(p => (<option key={p.name} value={p.name}>{p.name}</option>))}
-            </select>
-            <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="password" placeholder="Password" value={playerPw} onChange={e => setPlayerPw(e.target.value)} />
-            {!shopAuthed ? (
-              <button onClick={handlePlayerLogin} className="rounded-xl px-3 py-2 bg-blue-600 hover:bg-blue-500">Login</button>
-            ) : (
-              <button onClick={handlePlayerLogout} className="rounded-xl px-3 py-2 bg-slate-700 hover:bg-slate-600">Logout ({shopAuthed})</button>
-            )}
-            <div className="rounded-xl bg-white/10 px-3 py-2 text-sm">
-              RP: <span className="font-semibold">{currentPlayer ? (currentPlayer.rp || 0) : '-'}</span>{' '}
-              <span className="opacity-70">• Renown:</span> <span className="font-semibold">{currentPlayer ? (currentPlayer.renown || 'None') : '-'}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Top Bar: Save + Logout */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-          <div className="text-sm opacity-80">
-            {shopAuthed ? (
-              <>
-                <span className="mr-2">
-                  Logged in as <span className="font-semibold">{shopAuthed}</span>
-                </span>
-              </>
-            ) : (
-              <span className="italic opacity-70">Not logged into shop</span>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={saveLocal}
-              className={`px-3 py-1.5 rounded-lg border border-white/10 text-sm ${shopAuthed ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-emerald-900/40 cursor-not-allowed'}`}
-              disabled={!shopAuthed}
-            >
-              Save
-            </button>
-            <button
-              onClick={logoutShop}
-              className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 border border-white/10 text-sm"
-            >
-              Logout
-            </button>
-            {saveMsg && (
-              <span className="ml-2 text-xs px-2 py-1 rounded bg-white/10 border border-white/10">
-                {saveMsg}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Character Info Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-white/5 rounded-xl p-3 border border-white/10">
-          <div className="col-span-4">
-            <h2 className="text-lg font-semibold mb-4">Character Info</h2>
-          </div>
+        
+        {/* Character Name & Player Name */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white/5 rounded-xl p-3 border border-white/10">
           <div>
             <label className="text-xs uppercase opacity-70">Character Name</label>
             <input
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={charName}
               onChange={(e) => setCharName(e.target.value)}
-              disabled={!shopAuthed || gmOpen}
             />
           </div>
           <div>
@@ -362,16 +366,35 @@ function PlayerTab() {
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={playerName}
               onChange={(e) => setPlayerName(e.target.value)}
-              disabled={!shopAuthed || gmOpen}
             />
           </div>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <div className="text-sm opacity-80">
+            {/* Login status now handled globally in header */}
+            <span className="italic opacity-70">Character data auto-saves when logged in</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={saveLocal}
+              className={`px-3 py-1.5 rounded-lg border border-white/10 text-sm ${(authedPlayer || gmOpen) ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-emerald-900/40 cursor-not-allowed'}`}
+              disabled={!(authedPlayer || gmOpen)}
+            >
+              Save
+            </button>
+            {saveMsg && (
+              <span className="ml-2 text-xs px-2 py-1 rounded bg-white/10 border border-white/10">
+                {saveMsg}
+              </span>
+            )}
+          </div>
+        </div>
           <div>
             <label className="text-xs uppercase opacity-70">Chapter</label>
             <input
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={chapter}
               onChange={(e) => setChapter(e.target.value)}
-              disabled={gmOpen}
+              disabled={!(shopAuthed || gmOpen)}
             />
           </div>
           <div>
@@ -380,7 +403,7 @@ function PlayerTab() {
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={demeanour}
               onChange={(e) => setDemeanour(e.target.value)}
-              disabled={gmOpen}
+              disabled={!(shopAuthed || gmOpen)}
             />
           </div>
           <div>
@@ -389,7 +412,7 @@ function PlayerTab() {
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={speciality}
               onChange={(e) => setSpeciality(e.target.value)}
-              disabled={gmOpen}
+              disabled={!(shopAuthed || gmOpen)}
             />
           </div>
           <div>
@@ -398,7 +421,7 @@ function PlayerTab() {
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={rank}
               onChange={(e) => setRank(e.target.value)}
-              disabled={gmOpen}
+              disabled={!(shopAuthed || gmOpen)}
             />
           </div>
           <div>
@@ -407,7 +430,7 @@ function PlayerTab() {
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={powerArmour}
               onChange={(e) => setPowerArmour(e.target.value)}
-              disabled={gmOpen}
+              disabled={!(shopAuthed || gmOpen)}
             />
           </div>
           <div>
@@ -416,7 +439,7 @@ function PlayerTab() {
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              disabled={gmOpen}
+              disabled={!(shopAuthed || gmOpen)}
             />
           </div>
           <div>
@@ -425,7 +448,7 @@ function PlayerTab() {
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={pastEvent}
               onChange={(e) => setPastEvent(e.target.value)}
-              disabled={gmOpen}
+              disabled={!(shopAuthed || gmOpen)}
             />
           </div>
           <div>
@@ -434,7 +457,7 @@ function PlayerTab() {
               className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
               value={personalDemeanour}
               onChange={(e) => setPersonalDemeanour(e.target.value)}
-              disabled={gmOpen}
+              disabled={!(shopAuthed || gmOpen)}
             />
           </div>
           <div className="col-span-4 flex justify-end mt-4">
@@ -450,7 +473,7 @@ function PlayerTab() {
         {/* Requisition Points Display */}
         <div className="rounded-xl border border-white/10 bg-black/20 p-3 space-y-2">
           <div className="text-sm font-medium">Requisition Points</div>
-          <div className="text-xs opacity-70">Current RP: <span className="font-semibold">{currentPlayer ? currentPlayer.rp : 'N/A'}</span></div>
+          <div className="text-xs opacity-70">Current RP: <span className="font-semibold">{currentPlayer?.tabInfo?.rp || 'N/A'}</span></div>
         </div>
 
         {/* Characteristics */}
@@ -629,9 +652,10 @@ function PlayerTab() {
           <div className="font-semibold mb-2">Notes</div>
           <textarea className="w-full h-24 rounded border border-white/10 bg-white/10 px-2 py-1" value={notes} onChange={e=>setNotes(e.target.value)} />
         </div>
+
       </div>
     </section>
-  )
+  );
 }
 
-export default PlayerTab
+export default PlayerTab;
