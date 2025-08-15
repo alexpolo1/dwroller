@@ -3,6 +3,9 @@ const { playerHelpers, sessionHelpers } = require('../sqlite-db');
 const fs = require('fs');
 const path = require('path');
 
+// Load shop data
+const shopData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../public/deathwatch-armoury.json'), 'utf8'));
+
 // Simple file logger
 function logToFile(...args) {
   const msg = `[${new Date().toISOString()}] ` + args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ') + '\n';
@@ -11,6 +14,26 @@ function logToFile(...args) {
 
 const requireSession = require('../requireSession');
 const router = express.Router();
+
+// PUBLIC ROUTES - before session middleware
+// Get shop inventory
+router.get('/shop', (req, res) => {
+  try {
+    console.log('Shop endpoint hit');
+    const filePath = path.join(__dirname, '../../public/deathwatch-armoury.json');
+    console.log('Looking for shop data at:', filePath);
+    const shopData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    console.log('Shop data loaded:', Object.keys(shopData));
+    res.json(shopData);
+  } catch (error) {
+    console.error('Shop error:', error);
+    logToFile('API: Failed to get shop data', error);
+    res.status(500).json({ error: String(error) });
+  }
+});
+
+// Apply session middleware to all routes EXCEPT those above this line
+router.use(requireSession);
 
 // Add safe bcrypt helpers to avoid MODULE_NOT_FOUND failures at runtime
 async function safeHash(pw) {
@@ -46,6 +69,8 @@ router.get('/admin/list', async (req, res) => {
     res.status(500).json({ error: 'Failed to list players' });
   }
 });
+
+// Shop endpoint already defined above
 
 // TEMP ADMIN: Delete test users (name contains 'test' or 'Test')
 router.delete('/admin/delete-tests', async (req, res) => {

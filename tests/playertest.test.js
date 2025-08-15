@@ -2,9 +2,10 @@ jest.setTimeout(20000);
 const { execSync } = require('child_process');
 
 describe('Player flow (login, update sheet, gear/spend RP)', () => {
-  const name = 'christoffer';
+  const name = 'testplayer';
   const baseURL = process.env.API_BASE || 'http://localhost:5000';
   let sessionId;
+  const gmHeaders = `-H "x-gm-secret: ${process.env.GM_PASSWORD || 'bongo'}"`;
 
   const curl = (method, url, data = null, headers = '') => {
     const command = `curl -X ${method} ${headers} -H "Content-Type: application/json" ${data ? `-d '${JSON.stringify(data)}'` : ''} ${url}`;
@@ -28,6 +29,18 @@ describe('Player flow (login, update sheet, gear/spend RP)', () => {
   };
 
   test('should login, update sheet, and manage gear/RP', () => {
+    // create test player first
+    try {
+      curl('DELETE', `${baseURL}/api/players/${name}`, null, gmHeaders);
+    } catch (e) {
+      // ignore error if player doesn't exist
+    }
+    
+    // create test player
+    const create = curl('POST', `${baseURL}/api/players`, { name, rp: 10, pw: '1234' }, gmHeaders);
+    expect(create.status).toBe(201);
+    expect(create.data.name).toBe(name);
+    
     // login as player
     const login = curl('POST', `${baseURL}/api/players/login`, { name, password: '1234' });
     expect(login.status).toBe(200);
@@ -56,5 +69,9 @@ describe('Player flow (login, update sheet, gear/spend RP)', () => {
     expect(upd2.status).toBe(200);
     expect(Array.isArray(upd2.data.tabInfo.skills)).toBe(true);
     expect(upd2.data.tabInfo.playerName).toBe('Chris');
+
+    // cleanup - delete test player
+    const del = curl('DELETE', `${baseURL}/api/players/${name}`, null, gmHeaders);
+    expect(del.status).toBe(200);
   });
 });
