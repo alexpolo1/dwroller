@@ -76,19 +76,20 @@ function App() {
   const handleLogin = async () => {
     try {
       logUserAction('user', 'Login attempt', { username: loginName });
-      const response = await axios.post('/api/sessions/login', { 
-        username: loginName, 
+      const response = await axios.post('/api/players/login', { 
+        name: loginName, 
         password: loginPw 
       });
       
-      logApiCall('POST', '/api/sessions/login', { username: loginName }, response.status);
+      logApiCall('POST', '/api/players/login', { name: loginName }, response.status);
       
-      if (response.data.success) {
-        // Update global state with session info
-        setAuthedPlayer(response.data.playerName);
+      if (response.data.sessionId && response.data.player) {
+        // Update global state with session info and player data
+        setAuthedPlayer(response.data.player.name);
         setSessionId(response.data.sessionId);
-        localStorage.setItem('dw:shop:authedPlayer', JSON.stringify(response.data.playerName));
+        localStorage.setItem('dw:shop:authedPlayer', JSON.stringify(response.data.player.name));
         localStorage.setItem('dw:shop:sessionId', JSON.stringify(response.data.sessionId));
+        localStorage.setItem('dw:shop:playerData', JSON.stringify(response.data.player));
         
         info(`Login successful for user: ${loginName}`, 'auth');
         logUserAction('user', 'Login successful', { username: loginName });
@@ -99,14 +100,14 @@ function App() {
         // Clear success message after 3 seconds
         setTimeout(() => setLoginMsg(''), 3000);
       } else {
-        warn(`Login failed for user: ${loginName} - ${response.data.message}`, 'auth');
+        warn(`Login failed for user: ${loginName} - ${response.data.message || 'Unknown error'}`, 'auth');
         setLoginMsg(response.data.message || 'Login failed');
         
         // Clear error message after 5 seconds
         setTimeout(() => setLoginMsg(''), 5000);
       }
     } catch (err) {
-      logApiError('POST', '/api/sessions/login', err);
+      logApiError('POST', '/api/players/login', err);
       error(`Login error for user: ${loginName} - ${err.message}`, 'auth');
       setLoginMsg('Login failed. Please check your credentials and try again.');
       

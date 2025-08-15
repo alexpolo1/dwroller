@@ -10,8 +10,12 @@ function logToFile(...args) {
 // Accepts a GM bypass header 'x-gm-secret' matching process.env.GM_PASSWORD or 'bongo' for local convenience
 module.exports = async function requireSession(req, res, next) {
   try {
+    // Ensure req.body is always an object before any access
+    if (typeof req.body !== 'object' || req.body === null) req.body = {};
+    if (typeof req.query !== 'object' || req.query === null) req.query = {};
+    
     // GM bypass
-    const gmSecret = req.headers['x-gm-secret'] || req.query.gmSecret || req.body.gmSecret;
+    const gmSecret = req.headers['x-gm-secret'] || (req.query && req.query.gmSecret) || (req.body && req.body.gmSecret);
     const gmPassword = process.env.GM_PASSWORD || 'bongo';
     if (gmSecret && String(gmSecret) === String(gmPassword)) {
       logToFile('SESSION: GM bypass accepted', req.method, req.originalUrl);
@@ -20,9 +24,7 @@ module.exports = async function requireSession(req, res, next) {
       return next();
     }
 
-    // Ensure req.body is always an object
-    if (typeof req.body !== 'object' || req.body === null) req.body = {};
-    const sessionId = req.headers['x-session-id'] || req.body.sessionId || req.query.sessionId;
+    const sessionId = req.headers['x-session-id'] || (req.body && req.body.sessionId) || (req.query && req.query.sessionId);
     if (!sessionId) {
       logToFile('SESSION: Missing sessionId', req.method, req.originalUrl);
       return res.status(401).json({ error: 'Session required' });
