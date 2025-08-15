@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const playerRoutes = require('./routes/playerRoutes-sqlite');
 const sessionRoutes = require('./routes/sessionRoutes-sqlite');
 const shopRoutes = require('./routes/shopRoutes');
@@ -11,6 +12,9 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, '../build')));
 
 // Initialize SQLite database
 const { db } = require('./sqlite-db');
@@ -49,6 +53,11 @@ app.get('/api/health', (req, res) => {
 app.use('/api/players', playerRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/shop', shopRoutes);
+
+// Catch all handler: send back React's index.html file for any non-API routes
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {

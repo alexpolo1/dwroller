@@ -1,0 +1,629 @@
+#!/usr/bin/env node
+
+/**
+ * Enhanced scraper that uses a comprehensive weapons dataset
+ * This includes a manually curated list of weapons from the 40k RPG Tools website
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+// Comprehensive weapon dataset based on the 40k RPG Tools website
+const comprehensiveWeaponsData = {
+  "rangedWeapons": [
+    {
+      "name": "Angelus Bolter",
+      "req": 25,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 50m; S/3/-; 1d10+9 X; Pen 6; Clip 36; Reload 2 Full; Tearing",
+        "class": "Basic - Bolt",
+        "source": "First Founding p97"
+      }
+    },
+    {
+      "name": "Astartes Armoursbane Missile Launcher",
+      "req": 15,
+      "renown": "Any",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 200m; S/-/-; 0d0 S; Pen 0; Clip 1; Reload 2 Full; Two handed",
+        "class": "Heavy - Launch",
+        "source": "Rites of Battle p137"
+      }
+    },
+    {
+      "name": "Astartes Assault Cannon",
+      "req": 30,
+      "renown": "Famed",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 150m; -/-/10; 3d10+6 I; Pen 6; Clip 200; Reload 3 Full; Tearing",
+        "class": "Mounted - Solid Projectile",
+        "source": "Deathwatch Core Rulebook p149"
+      }
+    },
+    {
+      "name": "Astartes Assault Shotgun",
+      "req": 7,
+      "renown": "Any",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 30m; S/3/5; 1d10+10 I; Pen 4; Clip 20; Reload 1 Full; Two handed; Reliable, Scatter",
+        "class": "Basic - Solid Projectile",
+        "source": "Living Errata v1.1 p136"
+      }
+    },
+    {
+      "name": "Astartes Bolt Pistol",
+      "req": 5,
+      "renown": "Any",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 30m; S/2/-; 1d10+9 X; Pen 4; Clip 14; Reload 1 Full; Tearing",
+        "class": "Pistol - Bolt",
+        "source": "Living Errata v1.1 p146"
+      }
+    },
+    {
+      "name": "Astartes Bolter-Godwyn",
+      "req": 5,
+      "renown": "Any",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 100m; S/3/-; 1d10+9 X; Pen 4; Clip 28; Reload 1 Full; Two handed; Tearing",
+        "class": "Basic - Bolt",
+        "source": "Living Errata v1.1 p146"
+      }
+    },
+    {
+      "name": "Astartes Boltgun-Stalker",
+      "req": 15,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 200m; S/-/-; 1d10+9 X; Pen 4; Clip 24; Reload 1 Full; Two handed; Accurate, Tearing",
+        "class": "Basic - Bolt",
+        "source": "Living Errata v1.1 p146"
+      }
+    },
+    {
+      "name": "Astartes Chainfist",
+      "req": 40,
+      "renown": "Famed",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "2d10+2*SB E; Pen 10; Power Field, Tearing, Unwieldy",
+        "class": "One-Handed Melee - Power",
+        "source": "Living Errata v1.1 p154"
+      }
+    },
+    {
+      "name": "Astartes Combi-Weapon",
+      "req": 15,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 100m; S/4/-; 1d10+9 X; Pen 4; Clip 28; Reload 1 Full; Two handed; Tearing",
+        "class": "Basic - Bolt",
+        "source": "Living Errata v1.1 p146"
+      }
+    },
+    {
+      "name": "Astartes Conversion Beamer",
+      "req": 40,
+      "renown": "Hero",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 100m; S/-/-; 0d0 E; Pen 0; Clip 4; Reload 2 Full; Two handed",
+        "class": "Heavy - Exotic",
+        "source": "Living Errata v1.1 p152"
+      }
+    },
+    {
+      "name": "Astartes Cyclone Missile Launcher",
+      "req": 25,
+      "renown": "Famed",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 300m; S/2/-; 0d0 S; Pen 0; Clip 12; Reload 3 Full",
+        "class": "Mounted - Launch",
+        "source": "Living Errata v1.1 p152"
+      }
+    },
+    {
+      "name": "Astartes Digital Flamer",
+      "req": 35,
+      "renown": "Famed",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 4m; S/-/-; 1d10+9 E; Pen 4; Clip 1; Reload 1d5 Hours; Flame, Spray",
+        "class": "Pistol - Exotic",
+        "source": "Living Errata v1.1 p153"
+      }
+    },
+    {
+      "name": "Astartes Digital Laser",
+      "req": 35,
+      "renown": "Famed",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 4m; S/-/-; 1d10+4 E; Pen 7; Clip 1; Reload 1d5 Hours; Reliable",
+        "class": "Pistol - Exotic",
+        "source": "Living Errata v1.1 p153"
+      }
+    },
+    {
+      "name": "Astartes Digital Melta",
+      "req": 35,
+      "renown": "Famed",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 4m; S/-/-; 2d10+12 E; Pen 10; Clip 1; Reload 1d5 Hours",
+        "class": "Pistol - Exotic",
+        "source": "Living Errata v1.1 p153"
+      }
+    },
+    {
+      "name": "Astartes Executioner Axe",
+      "req": 25,
+      "renown": "Famed",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "1d10+13 E; Pen 8; Two handed; Power Field, Unwieldy, Felling (x1)",
+        "class": "Two-Handed Melee - Power",
+        "source": "Living Errata v1.1 p139"
+      }
+    },
+    {
+      "name": "Astartes Flamer",
+      "req": 10,
+      "renown": "Any",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 20m; S/-/-; 1d10+9 E; Pen 4; Clip 6; Reload 2 Full; Two handed; Flame, Spray",
+        "class": "Basic - Flame",
+        "source": "Living Errata v1.1 p148"
+      }
+    },
+    {
+      "name": "Astartes Heavy Flamer",
+      "req": 15,
+      "renown": "Any",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 30m; S/-/-; 1d10+12 E; Pen 6; Clip 10; Reload 2 Full; Two handed; Flame, Spray",
+        "class": "Heavy - Flame",
+        "source": "Living Errata v1.1 p149"
+      }
+    },
+    {
+      "name": "Astartes Heavy-Bolter",
+      "req": 20,
+      "renown": "Any",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 150m; -/-/6; 1d10+12 X; Pen 5; Clip 60; Reload 1 Full; Two handed; Tearing",
+        "class": "Heavy - Bolt",
+        "source": "Living Errata v1.1 p147"
+      }
+    },
+    {
+      "name": "Astartes Infernus Pistol",
+      "req": 35,
+      "renown": "Famed",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 10m; S/-/-; 2d10+12 E; Pen 12; Clip 4; Reload 1 Full; Melta",
+        "class": "Pistol - Melta",
+        "source": "Living Errata v1.1 p148"
+      }
+    },
+    {
+      "name": "Astartes Lascannon",
+      "req": 30,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 300m; S/-/-; 5d10+10 E; Pen 10; Clip 6; Reload 2 Full; Two handed; Proven (3)",
+        "class": "Heavy - Las",
+        "source": "Living Errata v1.1 p149"
+      }
+    },
+    {
+      "name": "Astartes Lightning Claw",
+      "req": 30,
+      "renown": "Distinguished",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "1d10+6 E; Pen 8; Power Field, Proven (4)",
+        "class": "One-Handed Melee - Power",
+        "source": "Living Errata v1.1 p154"
+      }
+    },
+    {
+      "name": "Astartes Meltagun-Vulkan",
+      "req": 20,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 30m; S/-/-; 2d10+14 E; Pen 12; Clip 6; Reload 2 Full; Two handed; Melta",
+        "class": "Basic - Melta",
+        "source": "Living Errata v1.1 p148"
+      }
+    },
+    {
+      "name": "Astartes Missile Launcher-Soundstrike",
+      "req": 10,
+      "renown": "Any",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 250m; S/-/-; 0d0 S; Pen 0; Clip 8; Reload 1 Full; Two handed",
+        "class": "Heavy - Launch",
+        "source": "Living Errata v1.1 p152"
+      }
+    },
+    {
+      "name": "Astartes Multi-Melta - Maxima",
+      "req": 35,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 60m; S/-/-; 2d10+16 E; Pen 12; Clip 12; Reload 2 Full; Two handed; Blast (1), Melta",
+        "class": "Heavy - Melta",
+        "source": "Living Errata v1.1 p148"
+      }
+    },
+    {
+      "name": "Astartes Plasma Cannon",
+      "req": 30,
+      "renown": "Distinguished",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 150m; S/-/-; 2d10+12 E; Pen 10; Clip 16; Reload 5 Full; Two handed; Blast (3), Volatile, Maximal",
+        "class": "Heavy - Plasma",
+        "source": "Living Errata v1.1 p147"
+      }
+    },
+    {
+      "name": "Astartes Plasma Gun -Ragefire",
+      "req": 20,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 100m; S/2/-; 1d10+12 E; Pen 10; Clip 24; Reload 4 Full; Volatile, Maximal",
+        "class": "Basic - Plasma",
+        "source": "Living Errata v1.1 p148"
+      }
+    },
+    {
+      "name": "Astartes Plasma Pistol",
+      "req": 25,
+      "renown": "Respected",
+      "category": "Ranged Weapon",
+      "stats": {
+        "damage": "Range 30m; S/2/-; 1d10+10 E; Pen 8; Clip 12; Reload 3 Full; Volatile, Maximal",
+        "class": "Pistol - Plasma",
+        "source": "Living Errata v1.1 p148"
+      }
+    }
+  ],
+  "meleeWeapons": [
+    {
+      "name": "Armour of the Remorseless Crusader (Forearm Sword)",
+      "req": 70,
+      "renown": "Hero",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+8 R; Pen 6; +10 to hit; Sanctified",
+        "class": "One-Handed Melee - Primitive",
+        "source": "Deathwatch Core Rulebook p167"
+      }
+    },
+    {
+      "name": "Artificer Omnissian Axe",
+      "req": 25,
+      "renown": "Distinguished",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+9 E; Pen 7; Power Field, Unbalanced",
+        "class": "One-Handed Melee - Power",
+        "source": "First Founding p99"
+      }
+    },
+    {
+      "name": "Astartes Chainsword",
+      "req": 5,
+      "renown": "Any",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+3 R; Pen 3; Balanced, Tearing",
+        "class": "One-Handed Melee - Chain",
+        "source": "Living Errata v1.1 p153"
+      }
+    },
+    {
+      "name": "Astartes Combat Knife",
+      "req": 3,
+      "renown": "Any",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10 R; Pen 2",
+        "class": "One-Handed Melee - Primitive",
+        "source": "Living Errata v1.1 p155"
+      }
+    },
+    {
+      "name": "Astartes Combat Shield",
+      "req": 20,
+      "renown": "Distinguished",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d5+1 I; Pen 0; Balanced",
+        "class": "One-Handed Melee - Primitive",
+        "source": "Living Errata v1.1 p166"
+      }
+    },
+    {
+      "name": "Astartes Power Axe",
+      "req": 20,
+      "renown": "Respected",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+8 E; Pen 7; Power Field, Unbalanced",
+        "class": "One-Handed Melee - Power",
+        "source": "Living Errata v1.1 p155"
+      }
+    },
+    {
+      "name": "Astartes Power Claymore",
+      "req": 15,
+      "renown": "Distinguished",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+11 E; Pen 8; Two handed; Power Field, Unwieldy, Devastating (1)",
+        "class": "Two-Handed Melee - Power",
+        "source": "Living Errata v1.1 p139"
+      }
+    },
+    {
+      "name": "Astartes Power Falchion",
+      "req": 25,
+      "renown": "Distinguished",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+4 E; Pen 6; Two handed; Power Field, Razor Sharp",
+        "class": "One-Handed Melee - Power",
+        "source": "Living Errata v1.1 p139"
+      }
+    },
+    {
+      "name": "Astartes Power Fist",
+      "req": 30,
+      "renown": "Distinguished",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "2d10+2*SB E; Pen 9; Power Field, Unwieldy",
+        "class": "One-Handed Melee - Power",
+        "source": "Living Errata v1.1 p155"
+      }
+    },
+    {
+      "name": "Astartes Power Spear",
+      "req": 15,
+      "renown": "Distinguished",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+6 E; Pen 7; Two handed; Power Field",
+        "class": "Two-Handed Melee - Power",
+        "source": "Living Errata v1.1 p139"
+      }
+    },
+    {
+      "name": "Astartes Power Sword",
+      "req": 20,
+      "renown": "Respected",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+6 E; Pen 6; Balanced, Power Field",
+        "class": "One-Handed Melee - Power",
+        "source": "Living Errata v1.1 p155"
+      }
+    },
+    {
+      "name": "Astartes Force Staff",
+      "req": 25,
+      "renown": "Respected",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+1+PR+SB S; Pen PR; Balanced",
+        "class": "One-Handed Melee - Primitive",
+        "source": "Living Errata v1.1 p155"
+      }
+    },
+    {
+      "name": "Astartes Force Sword",
+      "req": 25,
+      "renown": "Respected",
+      "category": "Melee Weapon",
+      "stats": {
+        "damage": "1d10+2+PR+SB S; Pen 2+PR; Balanced",
+        "class": "One-Handed Melee - Primitive",
+        "source": "Living Errata v1.1 p156"
+      }
+    }
+  ],
+  "grenades": [
+    {
+      "name": "Astartes Anti-Plant Grenade",
+      "req": 18,
+      "renown": "Any",
+      "category": "Grenade",
+      "stats": {
+        "damage": "3d10 E; Pen 0; Blast (3)",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p136"
+      }
+    },
+    {
+      "name": "Astartes Blind Grenade",
+      "req": 10,
+      "renown": "Any",
+      "category": "Grenade",
+      "stats": {
+        "damage": "0d0 S; Pen 0; Smoke (10)",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p150"
+      }
+    },
+    {
+      "name": "Astartes Frag Grenade",
+      "req": 1,
+      "renown": "Any",
+      "category": "Grenade",
+      "stats": {
+        "damage": "2d10+2 X; Pen 0; Blast (4)",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p150"
+      }
+    },
+    {
+      "name": "Astartes Incendiary Grenade",
+      "req": 15,
+      "renown": "Any",
+      "category": "Grenade",
+      "stats": {
+        "damage": "1d10+4 E; Pen 0; Blast (3)",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p150"
+      }
+    },
+    {
+      "name": "Astartes Krak Grenade",
+      "req": 1,
+      "renown": "Any",
+      "category": "Grenade",
+      "stats": {
+        "damage": "3d10+4 X; Pen 6",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p150"
+      }
+    },
+    {
+      "name": "Astartes Nova Grenade",
+      "req": 15,
+      "renown": "Any",
+      "category": "Grenade",
+      "stats": {
+        "damage": "1d10 E; Pen 0; Blast (3)",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p151"
+      }
+    },
+    {
+      "name": "Astartes Photon Flash Grenade",
+      "req": 5,
+      "renown": "Any",
+      "category": "Grenade",
+      "stats": {
+        "damage": "0d0 S; Pen 0",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p151"
+      }
+    },
+    {
+      "name": "Astartes Plasma Grenade",
+      "req": 20,
+      "renown": "Distinguished",
+      "category": "Grenade",
+      "stats": {
+        "damage": "1d10+12 E; Pen 8; Blast (3)",
+        "class": "Thrown - Grenade",
+        "source": "Living Errata v1.1 p151"
+      }
+    }
+  ],
+  "other": [
+    {
+      "name": "Argrax Clawed Hooves",
+      "req": 0,
+      "renown": "Any",
+      "category": "Other",
+      "stats": {
+        "damage": "1d10 I; Pen 0",
+        "class": "Natural - Primitive",
+        "source": "The Emperor Protects p46"
+      }
+    },
+    {
+      "name": "Assault Cannon-Samech",
+      "req": 0,
+      "renown": "Any",
+      "category": "Other",
+      "stats": {
+        "damage": "Range 120m; -/-/10; 3d10+6 I; Pen 5; Clip 200; Reload 2 Full; Tearing",
+        "class": "Mounted - Solid Projectile",
+        "source": "The Emperor Protects p120"
+      }
+    },
+    {
+      "name": "Astartes Servo-Arm",
+      "req": 30,
+      "renown": "Any",
+      "category": "Other",
+      "stats": {
+        "damage": "2d10+14 I; Pen 10",
+        "class": "Mounted - Primitive",
+        "source": "Living Errata v1.1 p177"
+      }
+    },
+    {
+      "name": "Astartes Servo-Arm Exceptional",
+      "req": 30,
+      "renown": "Any",
+      "category": "Other",
+      "stats": {
+        "damage": "2d10+16 I; Pen 10",
+        "class": "Mounted - Primitive",
+        "source": "Deathwatch Core Rulebook p177"
+      }
+    }
+  ]
+};
+
+function main() {
+  try {
+    console.log('Using comprehensive weapons dataset...');
+    
+    // Count items
+    const totalItems = Object.values(comprehensiveWeaponsData).reduce((sum, category) => sum + category.length, 0);
+    console.log(`Total weapons: ${totalItems}`);
+    
+    // Show breakdown by category
+    Object.keys(comprehensiveWeaponsData).forEach(category => {
+      console.log(`${category}: ${comprehensiveWeaponsData[category].length} items`);
+    });
+    
+    // Write to file
+    const outputPath = path.join(__dirname, '..', 'public', 'deathwatch-weapons-comprehensive.json');
+    fs.writeFileSync(outputPath, JSON.stringify(comprehensiveWeaponsData, null, 2));
+    console.log(`Comprehensive weapon data written to: ${outputPath}`);
+    
+    console.log('\nNext steps:');
+    console.log('1. Review the data in deathwatch-weapons-comprehensive.json');
+    console.log('2. Run: node scripts/build-shop-db.js to rebuild the shop database');
+    console.log('3. Run: cd database && node migrations/add-shop-tables.js to update SQLite');
+    console.log('4. Restart your server to see the updated shop');
+    
+  } catch (error) {
+    console.error('Error:', error);
+    process.exit(1);
+  }
+}
+
+if (require.main === module) {
+  main();
+}
+
+module.exports = comprehensiveWeaponsData;

@@ -4339,3 +4339,140 @@ Connected to MongoDB
 [2025-08-15T20:53:49.092Z] SESSION: Validate success afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106 anders
 [2025-08-15T20:53:49.124Z] DB: getAllPlayers - start
 [2025-08-15T20:53:49.124Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:22:45.188Z] DB: getSession - start afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106
+[2025-08-15T21:22:45.189Z] DB: getSession - ok afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106
+[2025-08-15T21:22:45.189Z] SESSION: Validate success afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106 anders
+[2025-08-15T21:22:46.620Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:22:46.658Z] DB: getAllPlayers - start
+[2025-08-15T21:22:46.659Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:29:23.567Z] DB: getSession - start afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106
+[2025-08-15T21:29:23.567Z] DB: getSession - ok afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106
+[2025-08-15T21:29:23.567Z] SESSION: Validate success afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106 anders
+[2025-08-15T21:29:25.371Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:29:25.409Z] DB: getAllPlayers - start
+[2025-08-15T21:29:25.409Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:29:36.385Z] DB: getSession - start afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106
+[2025-08-15T21:29:36.386Z] DB: getSession - ok afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106
+[2025-08-15T21:29:36.386Z] SESSION: Validate success afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106 anders
+[2025-08-15T21:29:38.354Z] DB: deleteSession - start afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106
+[2025-08-15T21:29:38.354Z] DB: deleteSession - changes 1 afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106
+[2025-08-15T21:29:38.354Z] SESSION: Logout success afa1764cd4e0f771ff1de452c3acc4c584b0d3d3eb46c35713dafe1deee88106
+[2025-08-15T21:29:43.475Z] DB: getAllPlayers - start
+[2025-08-15T21:29:43.475Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:29:47.831Z] DB: getPlayerByName - start claes
+[2025-08-15T21:29:47.831Z] DB: getPlayerByName - found claes
+[2025-08-15T21:29:47.831Z] DB: createSession - start 1ccc2ff25d47abecbaac311d49e8856631b9a22b9da5cb9a7055c3383c73597e expiresAt 2025-08-16T21:29:47.831Z
+[2025-08-15T21:29:47.831Z] DB: createSession - done 1ccc2ff25d47abecbaac311d49e8856631b9a22b9da5cb9a7055c3383c73597e
+[2025-08-15T21:29:47.831Z] SESSION: Login success claes 1ccc2ff25d47abecbaac311d49e8856631b9a22b9da5cb9a7055c3383c73597e
+[2025-08-15T21:29:47.875Z] DB: getSession - start 1ccc2ff25d47abecbaac311d49e8856631b9a22b9da5cb9a7055c3383c73597e
+[2025-08-15T21:29:47.875Z] DB: getSession - ok 1ccc2ff25d47abecbaac311d49e8856631b9a22b9da5cb9a7055c3383c73597e
+[2025-08-15T21:29:47.875Z] SESSION: Validate success 1ccc2ff25d47abecbaac311d49e8856631b9a22b9da5cb9a7055c3383c73597e claes
+[2025-08-15T21:29:49.140Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:29:49.173Z] DB: getAllPlayers - start
+[2025-08-15T21:29:49.174Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:31:23.013Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:31:23.048Z] DB: getAllPlayers - start
+[2025-08-15T21:31:23.049Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:32:01.247Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:32:07.111Z] DB: deleteSession - start 1ccc2ff25d47abecbaac311d49e8856631b9a22b9da5cb9a7055c3383c73597e
+[2025-08-15T21:32:07.112Z] DB: deleteSession - changes 1 1ccc2ff25d47abecbaac311d49e8856631b9a22b9da5cb9a7055c3383c73597e
+[2025-08-15T21:32:07.112Z] SESSION: Logout success 1ccc2ff25d47abecbaac311d49e8856631b9a22b9da5cb9a7055c3383c73597e
+[2025-08-15T21:32:07.150Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:32:23.503Z] DB: getPlayerByName - start gm
+[2025-08-15T21:32:23.504Z] DB: getPlayerByName - found gm
+[2025-08-15T21:32:23.504Z] DB: createSession - start 6f79ce5355731e67d99dd56e343d14a1f27f2185a66b51a06f8912ca33a66595 expiresAt 2025-08-16T21:32:23.504Z
+[2025-08-15T21:32:23.504Z] DB: createSession - done 6f79ce5355731e67d99dd56e343d14a1f27f2185a66b51a06f8912ca33a66595
+[2025-08-15T21:32:23.504Z] SESSION: Login success gm 6f79ce5355731e67d99dd56e343d14a1f27f2185a66b51a06f8912ca33a66595
+[2025-08-15T21:32:23.553Z] SESSION: GM bypass accepted GET /api/players
+[2025-08-15T21:32:23.553Z] DB: getAllPlayers - start
+[2025-08-15T21:32:23.554Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:32:23.554Z] API: Fetch all players (public) Found 5 players
+[2025-08-15T21:32:23.555Z] DB: getSession - start 6f79ce5355731e67d99dd56e343d14a1f27f2185a66b51a06f8912ca33a66595
+[2025-08-15T21:32:23.555Z] DB: getSession - ok 6f79ce5355731e67d99dd56e343d14a1f27f2185a66b51a06f8912ca33a66595
+[2025-08-15T21:32:23.555Z] SESSION: Validate success 6f79ce5355731e67d99dd56e343d14a1f27f2185a66b51a06f8912ca33a66595 gm
+[2025-08-15T21:32:33.300Z] SESSION: GM bypass accepted GET /api/players
+[2025-08-15T21:32:33.300Z] DB: getAllPlayers - start
+[2025-08-15T21:32:33.300Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:32:33.300Z] API: Fetch all players (public) Found 5 players
+[2025-08-15T21:32:51.231Z] DB: deleteSession - start 6f79ce5355731e67d99dd56e343d14a1f27f2185a66b51a06f8912ca33a66595
+[2025-08-15T21:32:51.231Z] DB: deleteSession - changes 1 6f79ce5355731e67d99dd56e343d14a1f27f2185a66b51a06f8912ca33a66595
+[2025-08-15T21:32:51.231Z] SESSION: Logout success 6f79ce5355731e67d99dd56e343d14a1f27f2185a66b51a06f8912ca33a66595
+[2025-08-15T21:32:51.287Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:32:55.693Z] DB: getPlayerByName - start anders
+[2025-08-15T21:32:55.694Z] DB: getPlayerByName - found anders
+[2025-08-15T21:32:55.694Z] DB: createSession - start c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c expiresAt 2025-08-16T21:32:55.694Z
+[2025-08-15T21:32:55.694Z] DB: createSession - done c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:32:55.694Z] SESSION: Login success anders c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:32:56.149Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:32:56.151Z] DB: getSession - start c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:32:56.151Z] DB: getSession - ok c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:32:56.151Z] SESSION: Validate success c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c anders
+[2025-08-15T21:33:45.027Z] DB: getSession - start c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:33:45.027Z] DB: getSession - ok c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:33:45.027Z] SESSION: Valid c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c anders PUT /api/players/anders
+[2025-08-15T21:33:45.028Z] DB: getSession - start c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:33:45.028Z] DB: getSession - ok c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:33:45.028Z] SESSION: Valid c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c anders PUT /api/players/anders
+[2025-08-15T21:33:45.028Z] DB: getPlayerByName - start anders
+[2025-08-15T21:33:45.028Z] DB: getPlayerByName - found anders
+[2025-08-15T21:33:45.028Z] DB: updatePlayer - start anders
+[2025-08-15T21:33:45.029Z] DB: updatePlayer - changes 1 anders
+[2025-08-15T21:33:45.029Z] DB: getPlayerByName - start anders
+[2025-08-15T21:33:45.029Z] DB: getPlayerByName - found anders
+[2025-08-15T21:33:45.029Z] API: Updated player anders
+[2025-08-15T21:33:45.070Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:33:56.877Z] DB: deleteSession - start c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:33:56.877Z] DB: deleteSession - changes 1 c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:33:56.877Z] SESSION: Logout success c57dde4a145cf03e40ac371e371fee63b1e2a6b1559031171201e15d1dc1151c
+[2025-08-15T21:33:56.924Z] SESSION: Error Cannot read properties of undefined (reading 'gmSecret')
+[2025-08-15T21:34:02.953Z] DB: getPlayerByName - start gm
+[2025-08-15T21:34:02.953Z] DB: getPlayerByName - found gm
+[2025-08-15T21:34:02.953Z] DB: createSession - start b940d74752f8a862fc4379711bd037488c0004b7cafd26b27cf8b07e422d01f2 expiresAt 2025-08-16T21:34:02.953Z
+[2025-08-15T21:34:02.953Z] DB: createSession - done b940d74752f8a862fc4379711bd037488c0004b7cafd26b27cf8b07e422d01f2
+[2025-08-15T21:34:02.953Z] SESSION: Login success gm b940d74752f8a862fc4379711bd037488c0004b7cafd26b27cf8b07e422d01f2
+[2025-08-15T21:34:02.992Z] SESSION: GM bypass accepted GET /api/players
+[2025-08-15T21:34:02.993Z] DB: getAllPlayers - start
+[2025-08-15T21:34:02.993Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:34:02.993Z] API: Fetch all players (public) Found 5 players
+[2025-08-15T21:34:02.999Z] DB: getSession - start b940d74752f8a862fc4379711bd037488c0004b7cafd26b27cf8b07e422d01f2
+[2025-08-15T21:34:02.999Z] DB: getSession - ok b940d74752f8a862fc4379711bd037488c0004b7cafd26b27cf8b07e422d01f2
+[2025-08-15T21:34:02.999Z] SESSION: Validate success b940d74752f8a862fc4379711bd037488c0004b7cafd26b27cf8b07e422d01f2 gm
+[2025-08-15T21:34:12.502Z] SESSION: GM bypass accepted PUT /api/players/anders
+[2025-08-15T21:34:12.502Z] SESSION: GM bypass accepted PUT /api/players/anders
+[2025-08-15T21:34:12.503Z] DB: getPlayerByName - start anders
+[2025-08-15T21:34:12.503Z] DB: getPlayerByName - found anders
+[2025-08-15T21:34:12.503Z] DB: updatePlayer - start anders
+[2025-08-15T21:34:12.503Z] DB: updatePlayer - changes 1 anders
+[2025-08-15T21:34:12.503Z] DB: getPlayerByName - start anders
+[2025-08-15T21:34:12.503Z] DB: getPlayerByName - found anders
+[2025-08-15T21:34:12.503Z] API: Updated player anders
+[2025-08-15T21:34:12.545Z] SESSION: GM bypass accepted GET /api/players
+[2025-08-15T21:34:12.545Z] DB: getAllPlayers - start
+[2025-08-15T21:34:12.545Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:34:12.545Z] API: Fetch all players (public) Found 5 players
+[2025-08-15T21:34:45.147Z] SESSION: GM bypass accepted PUT /api/players/gm
+[2025-08-15T21:34:45.148Z] SESSION: GM bypass accepted PUT /api/players/gm
+[2025-08-15T21:34:45.148Z] DB: getPlayerByName - start gm
+[2025-08-15T21:34:45.148Z] DB: getPlayerByName - found gm
+[2025-08-15T21:34:45.148Z] DB: updatePlayer - start gm
+[2025-08-15T21:34:45.148Z] DB: updatePlayer - changes 1 gm
+[2025-08-15T21:34:45.148Z] DB: getPlayerByName - start gm
+[2025-08-15T21:34:45.148Z] DB: getPlayerByName - found gm
+[2025-08-15T21:34:45.148Z] API: Updated player gm
+[2025-08-15T21:34:45.194Z] SESSION: GM bypass accepted GET /api/players
+[2025-08-15T21:34:45.195Z] DB: getAllPlayers - start
+[2025-08-15T21:34:45.195Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:34:45.195Z] API: Fetch all players (public) Found 5 players
+[2025-08-15T21:35:43.856Z] SESSION: GM bypass accepted PUT /api/players/gm
+[2025-08-15T21:35:43.856Z] SESSION: GM bypass accepted PUT /api/players/gm
+[2025-08-15T21:35:43.856Z] DB: getPlayerByName - start gm
+[2025-08-15T21:35:43.857Z] DB: getPlayerByName - found gm
+[2025-08-15T21:35:43.857Z] DB: updatePlayer - start gm
+[2025-08-15T21:35:43.857Z] DB: updatePlayer - changes 1 gm
+[2025-08-15T21:35:43.857Z] DB: getPlayerByName - start gm
+[2025-08-15T21:35:43.858Z] DB: getPlayerByName - found gm
+[2025-08-15T21:35:43.858Z] API: Updated player gm
+[2025-08-15T21:35:43.910Z] SESSION: GM bypass accepted GET /api/players
+[2025-08-15T21:35:43.911Z] DB: getAllPlayers - start
+[2025-08-15T21:35:43.911Z] DB: getAllPlayers - resultCount 5
+[2025-08-15T21:35:43.911Z] API: Fetch all players (public) Found 5 players

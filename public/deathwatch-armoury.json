@@ -1,15 +1,16 @@
 {
-  "version": "2.0.0",
-  "lastUpdated": "2025-08-15T13:31:19.082Z",
+  "version": "3.0.0",
+  "lastUpdated": "2025-08-15T21:27:14.033Z",
   "categories": [
     "rangedWeapons",
     "meleeWeapons",
     "grenades",
     "otherWeapons",
     "powerArmor",
+    "powerArmorHelms",
     "carapaceArmor",
-    "primitiveArmor",
     "naturalArmor",
+    "primitiveArmor",
     "xenosArmor",
     "shields",
     "otherArmor"
@@ -30,29 +31,29 @@
       {
         "name": "Astartes Armoursbane Missile Launcher",
         "req": 15,
-        "renown": "None",
+        "renown": "Any",
         "category": "Ranged Weapon",
         "stats": {
-          "damage": "Range 200m; S/-/-; 0d0 S; Pen 0; Clip 1; Reload 2 Full; Two handed;",
+          "damage": "Range 200m; S/-/-; 0d0 S; Pen 0; Clip 1; Reload 2 Full; Two handed",
           "class": "Heavy - Launch",
-          "source": "Living Errata v1.1 p137"
+          "source": "Rites of Battle p137"
         }
       },
       {
         "name": "Astartes Assault Cannon",
         "req": 30,
-        "renown": "Hero",
+        "renown": "Famed",
         "category": "Ranged Weapon",
         "stats": {
-          "damage": "Range 150m; -/-/10; 2d10+12 I; Pen 6; Clip 200; Reload 3 Full; Tearing, Devastating (1)",
+          "damage": "Range 150m; -/-/10; 3d10+6 I; Pen 6; Clip 200; Reload 3 Full; Tearing",
           "class": "Mounted - Solid Projectile",
-          "source": "Living Errata v1.1 p149"
+          "source": "Deathwatch Core Rulebook p149"
         }
       },
       {
         "name": "Astartes Assault Shotgun",
         "req": 7,
-        "renown": "None",
+        "renown": "Any",
         "category": "Ranged Weapon",
         "stats": {
           "damage": "Range 30m; S/3/5; 1d10+10 I; Pen 4; Clip 20; Reload 1 Full; Two handed; Reliable, Scatter",
@@ -63,7 +64,7 @@
       {
         "name": "Astartes Bolt Pistol",
         "req": 5,
-        "renown": "None",
+        "renown": "Any",
         "category": "Ranged Weapon",
         "stats": {
           "damage": "Range 30m; S/2/-; 1d10+9 X; Pen 4; Clip 14; Reload 1 Full; Tearing",
@@ -74,7 +75,7 @@
       {
         "name": "Astartes Bolter-Godwyn",
         "req": 5,
-        "renown": "None",
+        "renown": "Any",
         "category": "Ranged Weapon",
         "stats": {
           "damage": "Range 100m; S/3/-; 1d10+9 X; Pen 4; Clip 28; Reload 1 Full; Two handed; Tearing",
@@ -94,6 +95,17 @@
         }
       },
       {
+        "name": "Astartes Chainfist",
+        "req": 40,
+        "renown": "Famed",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "2d10+2*SB E; Pen 10; Power Field, Tearing, Unwieldy",
+          "class": "One-Handed Melee - Power",
+          "source": "Living Errata v1.1 p154"
+        }
+      },
+      {
         "name": "Astartes Combi-Weapon",
         "req": 15,
         "renown": "Respected",
@@ -110,7 +122,7 @@
         "renown": "Hero",
         "category": "Ranged Weapon",
         "stats": {
-          "damage": "Range 100m; S/-/-; 0d0 E; Pen 0; Clip 4; Reload 2 Full; Two handed;",
+          "damage": "Range 100m; S/-/-; 0d0 E; Pen 0; Clip 4; Reload 2 Full; Two handed",
           "class": "Heavy - Exotic",
           "source": "Living Errata v1.1 p152"
         }
@@ -118,10 +130,10 @@
       {
         "name": "Astartes Cyclone Missile Launcher",
         "req": 25,
-        "renown": "Hero",
+        "renown": "Famed",
         "category": "Ranged Weapon",
         "stats": {
-          "damage": "Range 300m; S/2/-; 0d0 S; Pen 0; Clip 12; Reload 3 Full;",
+          "damage": "Range 300m; S/2/-; 0d0 S; Pen 0; Clip 12; Reload 3 Full",
           "class": "Mounted - Launch",
           "source": "Living Errata v1.1 p152"
         }
@@ -129,12 +141,177 @@
       {
         "name": "Astartes Digital Flamer",
         "req": 35,
-        "renown": "Hero",
+        "renown": "Famed",
         "category": "Ranged Weapon",
         "stats": {
           "damage": "Range 4m; S/-/-; 1d10+9 E; Pen 4; Clip 1; Reload 1d5 Hours; Flame, Spray",
           "class": "Pistol - Exotic",
           "source": "Living Errata v1.1 p153"
+        }
+      },
+      {
+        "name": "Astartes Digital Laser",
+        "req": 35,
+        "renown": "Famed",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 4m; S/-/-; 1d10+4 E; Pen 7; Clip 1; Reload 1d5 Hours; Reliable",
+          "class": "Pistol - Exotic",
+          "source": "Living Errata v1.1 p153"
+        }
+      },
+      {
+        "name": "Astartes Digital Melta",
+        "req": 35,
+        "renown": "Famed",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 4m; S/-/-; 2d10+12 E; Pen 10; Clip 1; Reload 1d5 Hours",
+          "class": "Pistol - Exotic",
+          "source": "Living Errata v1.1 p153"
+        }
+      },
+      {
+        "name": "Astartes Executioner Axe",
+        "req": 25,
+        "renown": "Famed",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "1d10+13 E; Pen 8; Two handed; Power Field, Unwieldy, Felling (x1)",
+          "class": "Two-Handed Melee - Power",
+          "source": "Living Errata v1.1 p139"
+        }
+      },
+      {
+        "name": "Astartes Flamer",
+        "req": 10,
+        "renown": "Any",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 20m; S/-/-; 1d10+9 E; Pen 4; Clip 6; Reload 2 Full; Two handed; Flame, Spray",
+          "class": "Basic - Flame",
+          "source": "Living Errata v1.1 p148"
+        }
+      },
+      {
+        "name": "Astartes Heavy Flamer",
+        "req": 15,
+        "renown": "Any",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 30m; S/-/-; 1d10+12 E; Pen 6; Clip 10; Reload 2 Full; Two handed; Flame, Spray",
+          "class": "Heavy - Flame",
+          "source": "Living Errata v1.1 p149"
+        }
+      },
+      {
+        "name": "Astartes Heavy-Bolter",
+        "req": 20,
+        "renown": "Any",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 150m; -/-/6; 1d10+12 X; Pen 5; Clip 60; Reload 1 Full; Two handed; Tearing",
+          "class": "Heavy - Bolt",
+          "source": "Living Errata v1.1 p147"
+        }
+      },
+      {
+        "name": "Astartes Infernus Pistol",
+        "req": 35,
+        "renown": "Famed",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 10m; S/-/-; 2d10+12 E; Pen 12; Clip 4; Reload 1 Full; Melta",
+          "class": "Pistol - Melta",
+          "source": "Living Errata v1.1 p148"
+        }
+      },
+      {
+        "name": "Astartes Lascannon",
+        "req": 30,
+        "renown": "Respected",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 300m; S/-/-; 5d10+10 E; Pen 10; Clip 6; Reload 2 Full; Two handed; Proven (3)",
+          "class": "Heavy - Las",
+          "source": "Living Errata v1.1 p149"
+        }
+      },
+      {
+        "name": "Astartes Lightning Claw",
+        "req": 30,
+        "renown": "Distinguished",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "1d10+6 E; Pen 8; Power Field, Proven (4)",
+          "class": "One-Handed Melee - Power",
+          "source": "Living Errata v1.1 p154"
+        }
+      },
+      {
+        "name": "Astartes Meltagun-Vulkan",
+        "req": 20,
+        "renown": "Respected",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 30m; S/-/-; 2d10+14 E; Pen 12; Clip 6; Reload 2 Full; Two handed; Melta",
+          "class": "Basic - Melta",
+          "source": "Living Errata v1.1 p148"
+        }
+      },
+      {
+        "name": "Astartes Missile Launcher-Soundstrike",
+        "req": 10,
+        "renown": "Any",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 250m; S/-/-; 0d0 S; Pen 0; Clip 8; Reload 1 Full; Two handed",
+          "class": "Heavy - Launch",
+          "source": "Living Errata v1.1 p152"
+        }
+      },
+      {
+        "name": "Astartes Multi-Melta - Maxima",
+        "req": 35,
+        "renown": "Respected",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 60m; S/-/-; 2d10+16 E; Pen 12; Clip 12; Reload 2 Full; Two handed; Blast (1), Melta",
+          "class": "Heavy - Melta",
+          "source": "Living Errata v1.1 p148"
+        }
+      },
+      {
+        "name": "Astartes Plasma Cannon",
+        "req": 30,
+        "renown": "Distinguished",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 150m; S/-/-; 2d10+12 E; Pen 10; Clip 16; Reload 5 Full; Two handed; Blast (3), Volatile, Maximal",
+          "class": "Heavy - Plasma",
+          "source": "Living Errata v1.1 p147"
+        }
+      },
+      {
+        "name": "Astartes Plasma Gun -Ragefire",
+        "req": 20,
+        "renown": "Respected",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 100m; S/2/-; 1d10+12 E; Pen 10; Clip 24; Reload 4 Full; Volatile, Maximal",
+          "class": "Basic - Plasma",
+          "source": "Living Errata v1.1 p148"
+        }
+      },
+      {
+        "name": "Astartes Plasma Pistol",
+        "req": 25,
+        "renown": "Respected",
+        "category": "Ranged Weapon",
+        "stats": {
+          "damage": "Range 30m; S/2/-; 1d10+10 E; Pen 8; Clip 12; Reload 3 Full; Volatile, Maximal",
+          "class": "Pistol - Plasma",
+          "source": "Living Errata v1.1 p148"
         }
       }
     ],
@@ -162,20 +339,9 @@
         }
       },
       {
-        "name": "Astartes Chainfist",
-        "req": 40,
-        "renown": "Hero",
-        "category": "Melee Weapon",
-        "stats": {
-          "damage": "2d10+\"2*SB\" E; Pen 10; Power Field, Tearing, Unwieldy",
-          "class": "One-Handed Melee - Power",
-          "source": "Living Errata v1.1 p154"
-        }
-      },
-      {
         "name": "Astartes Chainsword",
         "req": 5,
-        "renown": "None",
+        "renown": "Any",
         "category": "Melee Weapon",
         "stats": {
           "damage": "1d10+3 R; Pen 3; Balanced, Tearing",
@@ -186,10 +352,10 @@
       {
         "name": "Astartes Combat Knife",
         "req": 3,
-        "renown": "None",
+        "renown": "Any",
         "category": "Melee Weapon",
         "stats": {
-          "damage": "1d10 R; Pen 2;",
+          "damage": "1d10 R; Pen 2",
           "class": "One-Handed Melee - Primitive",
           "source": "Living Errata v1.1 p155"
         }
@@ -204,13 +370,101 @@
           "class": "One-Handed Melee - Primitive",
           "source": "Living Errata v1.1 p166"
         }
+      },
+      {
+        "name": "Astartes Power Axe",
+        "req": 20,
+        "renown": "Respected",
+        "category": "Melee Weapon",
+        "stats": {
+          "damage": "1d10+8 E; Pen 7; Power Field, Unbalanced",
+          "class": "One-Handed Melee - Power",
+          "source": "Living Errata v1.1 p155"
+        }
+      },
+      {
+        "name": "Astartes Power Claymore",
+        "req": 15,
+        "renown": "Distinguished",
+        "category": "Melee Weapon",
+        "stats": {
+          "damage": "1d10+11 E; Pen 8; Two handed; Power Field, Unwieldy, Devastating (1)",
+          "class": "Two-Handed Melee - Power",
+          "source": "Living Errata v1.1 p139"
+        }
+      },
+      {
+        "name": "Astartes Power Falchion",
+        "req": 25,
+        "renown": "Distinguished",
+        "category": "Melee Weapon",
+        "stats": {
+          "damage": "1d10+4 E; Pen 6; Two handed; Power Field, Razor Sharp",
+          "class": "One-Handed Melee - Power",
+          "source": "Living Errata v1.1 p139"
+        }
+      },
+      {
+        "name": "Astartes Power Fist",
+        "req": 30,
+        "renown": "Distinguished",
+        "category": "Melee Weapon",
+        "stats": {
+          "damage": "2d10+2*SB E; Pen 9; Power Field, Unwieldy",
+          "class": "One-Handed Melee - Power",
+          "source": "Living Errata v1.1 p155"
+        }
+      },
+      {
+        "name": "Astartes Power Spear",
+        "req": 15,
+        "renown": "Distinguished",
+        "category": "Melee Weapon",
+        "stats": {
+          "damage": "1d10+6 E; Pen 7; Two handed; Power Field",
+          "class": "Two-Handed Melee - Power",
+          "source": "Living Errata v1.1 p139"
+        }
+      },
+      {
+        "name": "Astartes Power Sword",
+        "req": 20,
+        "renown": "Respected",
+        "category": "Melee Weapon",
+        "stats": {
+          "damage": "1d10+6 E; Pen 6; Balanced, Power Field",
+          "class": "One-Handed Melee - Power",
+          "source": "Living Errata v1.1 p155"
+        }
+      },
+      {
+        "name": "Astartes Force Staff",
+        "req": 25,
+        "renown": "Respected",
+        "category": "Melee Weapon",
+        "stats": {
+          "damage": "1d10+1+PR+SB S; Pen PR; Balanced",
+          "class": "One-Handed Melee - Primitive",
+          "source": "Living Errata v1.1 p155"
+        }
+      },
+      {
+        "name": "Astartes Force Sword",
+        "req": 25,
+        "renown": "Respected",
+        "category": "Melee Weapon",
+        "stats": {
+          "damage": "1d10+2+PR+SB S; Pen 2+PR; Balanced",
+          "class": "One-Handed Melee - Primitive",
+          "source": "Living Errata v1.1 p156"
+        }
       }
     ],
     "grenades": [
       {
         "name": "Astartes Anti-Plant Grenade",
         "req": 18,
-        "renown": "None",
+        "renown": "Any",
         "category": "Grenade",
         "stats": {
           "damage": "3d10 E; Pen 0; Blast (3)",
@@ -221,12 +475,78 @@
       {
         "name": "Astartes Blind Grenade",
         "req": 10,
-        "renown": "None",
+        "renown": "Any",
         "category": "Grenade",
         "stats": {
           "damage": "0d0 S; Pen 0; Smoke (10)",
           "class": "Thrown - Grenade",
           "source": "Living Errata v1.1 p150"
+        }
+      },
+      {
+        "name": "Astartes Frag Grenade",
+        "req": 1,
+        "renown": "Any",
+        "category": "Grenade",
+        "stats": {
+          "damage": "2d10+2 X; Pen 0; Blast (4)",
+          "class": "Thrown - Grenade",
+          "source": "Living Errata v1.1 p150"
+        }
+      },
+      {
+        "name": "Astartes Incendiary Grenade",
+        "req": 15,
+        "renown": "Any",
+        "category": "Grenade",
+        "stats": {
+          "damage": "1d10+4 E; Pen 0; Blast (3)",
+          "class": "Thrown - Grenade",
+          "source": "Living Errata v1.1 p150"
+        }
+      },
+      {
+        "name": "Astartes Krak Grenade",
+        "req": 1,
+        "renown": "Any",
+        "category": "Grenade",
+        "stats": {
+          "damage": "3d10+4 X; Pen 6",
+          "class": "Thrown - Grenade",
+          "source": "Living Errata v1.1 p150"
+        }
+      },
+      {
+        "name": "Astartes Nova Grenade",
+        "req": 15,
+        "renown": "Any",
+        "category": "Grenade",
+        "stats": {
+          "damage": "1d10 E; Pen 0; Blast (3)",
+          "class": "Thrown - Grenade",
+          "source": "Living Errata v1.1 p151"
+        }
+      },
+      {
+        "name": "Astartes Photon Flash Grenade",
+        "req": 5,
+        "renown": "Any",
+        "category": "Grenade",
+        "stats": {
+          "damage": "0d0 S; Pen 0",
+          "class": "Thrown - Grenade",
+          "source": "Living Errata v1.1 p151"
+        }
+      },
+      {
+        "name": "Astartes Plasma Grenade",
+        "req": 20,
+        "renown": "Distinguished",
+        "category": "Grenade",
+        "stats": {
+          "damage": "1d10+12 E; Pen 8; Blast (3)",
+          "class": "Thrown - Grenade",
+          "source": "Living Errata v1.1 p151"
         }
       }
     ],
@@ -234,12 +554,45 @@
       {
         "name": "Argrax Clawed Hooves",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Other",
         "stats": {
-          "damage": "1d10 I; Pen 0;",
+          "damage": "1d10 I; Pen 0",
           "class": "Natural - Primitive",
           "source": "The Emperor Protects p46"
+        }
+      },
+      {
+        "name": "Assault Cannon-Samech",
+        "req": 0,
+        "renown": "Any",
+        "category": "Other",
+        "stats": {
+          "damage": "Range 120m; -/-/10; 3d10+6 I; Pen 5; Clip 200; Reload 2 Full; Tearing",
+          "class": "Mounted - Solid Projectile",
+          "source": "The Emperor Protects p120"
+        }
+      },
+      {
+        "name": "Astartes Servo-Arm",
+        "req": 30,
+        "renown": "Any",
+        "category": "Other",
+        "stats": {
+          "damage": "2d10+14 I; Pen 10",
+          "class": "Mounted - Primitive",
+          "source": "Living Errata v1.1 p177"
+        }
+      },
+      {
+        "name": "Astartes Servo-Arm Exceptional",
+        "req": 30,
+        "renown": "Any",
+        "category": "Other",
+        "stats": {
+          "damage": "2d10+16 I; Pen 10",
+          "class": "Mounted - Primitive",
+          "source": "Deathwatch Core Rulebook p177"
         }
       }
     ],
@@ -247,7 +600,7 @@
       {
         "name": "Armour of the Remorseless Crusader",
         "req": 70,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -279,7 +632,7 @@
       {
         "name": "Astartes Mk 1 Thunder Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -295,7 +648,7 @@
       {
         "name": "Astartes Mk 2 Crusade Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -311,7 +664,7 @@
       {
         "name": "Astartes Mk 3 Iron Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -327,7 +680,7 @@
       {
         "name": "Astartes Mk 4 Maximus Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -343,7 +696,7 @@
       {
         "name": "Astartes Mk 5 Heresy Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -359,7 +712,7 @@
       {
         "name": "Astartes Mk 6 Corvus Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -375,7 +728,7 @@
       {
         "name": "Astartes Mk 7 Aquilla Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -391,7 +744,7 @@
       {
         "name": "Astartes Mk 8 Errant Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -405,137 +758,9 @@
         }
       },
       {
-        "name": "Astartes Mk1 Power Armour Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 6,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p151"
-        }
-      },
-      {
-        "name": "Astartes Mk2 Power Armour Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 7,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p151"
-        }
-      },
-      {
-        "name": "Astartes Mk3 Power Armour Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 9,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p151"
-        }
-      },
-      {
-        "name": "Astartes Mk4 Power Armour Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 7,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p151"
-        }
-      },
-      {
-        "name": "Astartes Mk5 Power Armour Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 8,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p151"
-        }
-      },
-      {
-        "name": "Astartes Mk6 Power Armour Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 8,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p151"
-        }
-      },
-      {
-        "name": "Astartes Mk7 Power Armour Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 8,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p151"
-        }
-      },
-      {
-        "name": "Astartes Mk8 Power Armour Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 8,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p151"
-        }
-      },
-      {
         "name": "Astartes Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -549,25 +774,9 @@
         }
       },
       {
-        "name": "Astartes Power Armour Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 8,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Deathwatch Core Rulebook p160"
-        }
-      },
-      {
         "name": "Astartes Tactical Dreadnaught-Terminator Armour",
         "req": 100,
-        "renown": "Hero",
+        "renown": "Famed",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -581,25 +790,9 @@
         }
       },
       {
-        "name": "Astartes Tactical Dreadnaught-Terminator Armour Helm",
-        "req": 100,
-        "renown": "Hero",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 14,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Deathwatch Core Rulebook p164"
-        }
-      },
-      {
         "name": "Astartes Terminator Armour",
         "req": 100,
-        "renown": "Hero",
+        "renown": "Famed",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -615,7 +808,7 @@
       {
         "name": "CM Power Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -629,25 +822,9 @@
         }
       },
       {
-        "name": "Diagnostor Helmet",
-        "req": 15,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 8,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Deathwatch Core Rulebook p165"
-        }
-      },
-      {
         "name": "Dmn Armour of Chaos",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -661,41 +838,9 @@
         }
       },
       {
-        "name": "Fenris Pattern Wolf Helm",
-        "req": 0,
-        "renown": "Respected",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 8,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p143"
-        }
-      },
-      {
-        "name": "Skull Helm",
-        "req": 0,
-        "renown": "None",
-        "category": "Power Armor",
-        "stats": {
-          "type": "Power",
-          "protection": {
-            "head": 9,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Rites of Battle p143"
-        }
-      },
-      {
         "name": "Tau XV-8 Crisis Battlesuit",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -711,7 +856,7 @@
       {
         "name": "Tau XV-88 Broadside Battlesuit",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -727,7 +872,7 @@
       {
         "name": "Tau XV15 Stealth Suit (Limbs)",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -743,7 +888,7 @@
       {
         "name": "Tau XV15 Stealth Suit (Top)",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -759,7 +904,7 @@
       {
         "name": "Tau XV8 Crisis Suit",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Power Armor",
         "stats": {
           "type": "Power",
@@ -773,11 +918,221 @@
         }
       }
     ],
+    "powerArmorHelms": [
+      {
+        "name": "Astartes Mk1 Power Armour Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 6,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p151"
+        }
+      },
+      {
+        "name": "Astartes Mk2 Power Armour Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 7,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p151"
+        }
+      },
+      {
+        "name": "Astartes Mk3 Power Armour Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 9,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p151"
+        }
+      },
+      {
+        "name": "Astartes Mk4 Power Armour Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 7,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p151"
+        }
+      },
+      {
+        "name": "Astartes Mk5 Power Armour Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 8,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p151"
+        }
+      },
+      {
+        "name": "Astartes Mk6 Power Armour Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 8,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p151"
+        }
+      },
+      {
+        "name": "Astartes Mk7 Power Armour Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 8,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p151"
+        }
+      },
+      {
+        "name": "Astartes Mk8 Power Armour Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 8,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p151"
+        }
+      },
+      {
+        "name": "Astartes Power Armour Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 8,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Deathwatch Core Rulebook p160"
+        }
+      },
+      {
+        "name": "Astartes Tactical Dreadnaught-Terminator Armour Helm",
+        "req": 100,
+        "renown": "Famed",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 14,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Deathwatch Core Rulebook p164"
+        }
+      },
+      {
+        "name": "Diagnostor Helmet",
+        "req": 15,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 8,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Deathwatch Core Rulebook p165"
+        }
+      },
+      {
+        "name": "Fenris Pattern Wolf Helm",
+        "req": 0,
+        "renown": "Respected",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 8,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p143"
+        }
+      },
+      {
+        "name": "Skull Helm",
+        "req": 0,
+        "renown": "Any",
+        "category": "Power Armor Helm",
+        "stats": {
+          "type": "Power",
+          "protection": {
+            "head": 9,
+            "arms": 0,
+            "body": 0,
+            "legs": 0
+          },
+          "source": "Rites of Battle p143"
+        }
+      }
+    ],
     "carapaceArmor": [
       {
         "name": "Astartes Scout Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Carapace Armor",
         "stats": {
           "type": "Carapace",
@@ -793,7 +1148,7 @@
       {
         "name": "Chaos Flak Robes and Brazen Carapace",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Carapace Armor",
         "stats": {
           "type": "Carapace",
@@ -809,7 +1164,7 @@
       {
         "name": "Deathwatch Scout Armor",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Carapace Armor",
         "stats": {
           "type": "Carapace",
@@ -825,7 +1180,7 @@
       {
         "name": "Tau Fire Warrior Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Carapace Armor",
         "stats": {
           "type": "Carapace",
@@ -841,7 +1196,7 @@
       {
         "name": "Tau Pathfinder Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Carapace Armor",
         "stats": {
           "type": "Carapace",
@@ -855,77 +1210,11 @@
         }
       }
     ],
-    "primitiveArmor": [
-      {
-        "name": "Auran Golden Saurian Scale Armour",
-        "req": 0,
-        "renown": "None",
-        "category": "Primitive Armor",
-        "stats": {
-          "type": "Primitive",
-          "protection": {
-            "head": 6,
-            "arms": 6,
-            "body": 6,
-            "legs": 6
-          },
-          "source": "The Emperor Protects p48"
-        }
-      },
-      {
-        "name": "Auran Saurian Scale Armour",
-        "req": 0,
-        "renown": "None",
-        "category": "Primitive Armor",
-        "stats": {
-          "type": "Primitive",
-          "protection": {
-            "head": 4,
-            "arms": 4,
-            "body": 4,
-            "legs": 4
-          },
-          "source": "The Emperor Protects p46"
-        }
-      },
-      {
-        "name": "Scales",
-        "req": 0,
-        "renown": "None",
-        "category": "Primitive Armor",
-        "stats": {
-          "type": "Primitive",
-          "protection": {
-            "head": 2,
-            "arms": 2,
-            "body": 2,
-            "legs": 2
-          },
-          "source": "The Emperor Protects p50"
-        }
-      },
-      {
-        "name": "Scaly Hide",
-        "req": 0,
-        "renown": "None",
-        "category": "Primitive Armor",
-        "stats": {
-          "type": "Primitive",
-          "protection": {
-            "head": 4,
-            "arms": 4,
-            "body": 4,
-            "legs": 4
-          },
-          "source": "The Emperor Protects p46"
-        }
-      }
-    ],
     "naturalArmor": [
       {
         "name": "Tau Gun Drone Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -941,7 +1230,7 @@
       {
         "name": "Tyr Bonded Exoskeleton",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -957,7 +1246,7 @@
       {
         "name": "Tyr Chitinous Carapace",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -971,9 +1260,25 @@
         }
       },
       {
+        "name": "Tyr Reinforced Chitin",
+        "req": 0,
+        "renown": "Any",
+        "category": "Natural Armor",
+        "stats": {
+          "type": "Natural",
+          "protection": {
+            "head": 8,
+            "arms": 8,
+            "body": 8,
+            "legs": 8
+          },
+          "source": "Deathwatch Core Rulebook p371"
+        }
+      },
+      {
         "name": "Tyr Exoskeleton",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -989,7 +1294,7 @@
       {
         "name": "Tyr Hardened Carapace",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -1005,7 +1310,7 @@
       {
         "name": "Tyr Light Reinforced Chitin",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -1021,7 +1326,7 @@
       {
         "name": "Tyr Medium Reinforced Chitin",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -1035,25 +1340,9 @@
         }
       },
       {
-        "name": "Tyr Reinforced Chitin",
-        "req": 0,
-        "renown": "None",
-        "category": "Natural Armor",
-        "stats": {
-          "type": "Natural",
-          "protection": {
-            "head": 8,
-            "arms": 8,
-            "body": 8,
-            "legs": 8
-          },
-          "source": "Deathwatch Core Rulebook p371"
-        }
-      },
-      {
         "name": "Tyr Thickened Scales",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -1069,7 +1358,7 @@
       {
         "name": "Vespid Chitin",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -1085,7 +1374,7 @@
       {
         "name": "Xenos Hardened Hide",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -1101,7 +1390,7 @@
       {
         "name": "Xenos Scaly Hide",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -1117,7 +1406,7 @@
       {
         "name": "Xenos Slimey Hide",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -1133,7 +1422,7 @@
       {
         "name": "Xenos Thick Scales",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Natural Armor",
         "stats": {
           "type": "Natural",
@@ -1147,11 +1436,77 @@
         }
       }
     ],
+    "primitiveArmor": [
+      {
+        "name": "Auran Golden Saurian Scale Armour",
+        "req": 0,
+        "renown": "Any",
+        "category": "Primitive Armor",
+        "stats": {
+          "type": "Primitive",
+          "protection": {
+            "head": 6,
+            "arms": 6,
+            "body": 6,
+            "legs": 6
+          },
+          "source": "The Emperor Protects p48"
+        }
+      },
+      {
+        "name": "Auran Saurian Scale Armour",
+        "req": 0,
+        "renown": "Any",
+        "category": "Primitive Armor",
+        "stats": {
+          "type": "Primitive",
+          "protection": {
+            "head": 4,
+            "arms": 4,
+            "body": 4,
+            "legs": 4
+          },
+          "source": "The Emperor Protects p46"
+        }
+      },
+      {
+        "name": "Scales",
+        "req": 0,
+        "renown": "Any",
+        "category": "Primitive Armor",
+        "stats": {
+          "type": "Primitive",
+          "protection": {
+            "head": 2,
+            "arms": 2,
+            "body": 2,
+            "legs": 2
+          },
+          "source": "The Emperor Protects p50"
+        }
+      },
+      {
+        "name": "Scaly Hide",
+        "req": 0,
+        "renown": "Any",
+        "category": "Primitive Armor",
+        "stats": {
+          "type": "Primitive",
+          "protection": {
+            "head": 4,
+            "arms": 4,
+            "body": 4,
+            "legs": 4
+          },
+          "source": "The Emperor Protects p46"
+        }
+      }
+    ],
     "xenosArmor": [
       {
         "name": "Nec Metallic Exoskeleton",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Xenos Armor",
         "stats": {
           "type": "Necron",
@@ -1167,7 +1522,7 @@
       {
         "name": "Nec Metallic Shell",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Xenos Armor",
         "stats": {
           "type": "Necron",
@@ -1183,7 +1538,7 @@
       {
         "name": "Ork Eavy Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Xenos Armor",
         "stats": {
           "type": "Ork",
@@ -1199,7 +1554,7 @@
       {
         "name": "Ork Flak Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Xenos Armor",
         "stats": {
           "type": "Ork",
@@ -1215,7 +1570,7 @@
       {
         "name": "Ork Mega Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Xenos Armor",
         "stats": {
           "type": "Ork",
@@ -1234,12 +1589,12 @@
         "name": "Astartes Storm Shield - Protective",
         "req": 35,
         "renown": "Distinguished",
-        "category": "Shields",
+        "category": "Shield",
         "stats": {
           "type": "Shield",
           "protection": {
             "head": 0,
-            "arms": 0,
+            "arms": "0LA 4RA",
             "body": 4,
             "legs": 0
           },
@@ -1249,25 +1604,9 @@
     ],
     "otherArmor": [
       {
-        "name": "Name",
-        "req": 0,
-        "renown": "Distinguished",
-        "category": "Other Armor",
-        "stats": {
-          "type": "Type",
-          "protection": {
-            "head": 0,
-            "arms": 0,
-            "body": 0,
-            "legs": 0
-          },
-          "source": "Book pPage No."
-        }
-      },
-      {
         "name": "Chaos Armour Plating",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Other Armor",
         "stats": {
           "type": "Other",
@@ -1283,7 +1622,7 @@
       {
         "name": "Chaos Bones of Subersion",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Other Armor",
         "stats": {
           "type": "Other",
@@ -1299,7 +1638,7 @@
       {
         "name": "Chaos Slinnar Obsidian Shell",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Other Armor",
         "stats": {
           "type": "Other",
@@ -1315,7 +1654,7 @@
       {
         "name": "Chaos Warded Adamantine Shell",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Other Armor",
         "stats": {
           "type": "Other",
@@ -1331,7 +1670,7 @@
       {
         "name": "Daemon Iron Hide",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Other Armor",
         "stats": {
           "type": "Other",
@@ -1347,7 +1686,7 @@
       {
         "name": "Dmn Brazen Chaos Armour",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Other Armor",
         "stats": {
           "type": "Other",
@@ -1363,7 +1702,7 @@
       {
         "name": "Obliterator Warped Mechnical Flesh",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Other Armor",
         "stats": {
           "type": "Other",
@@ -1379,7 +1718,7 @@
       {
         "name": "Rad Corrupted Mechnical Flesh",
         "req": 0,
-        "renown": "None",
+        "renown": "Any",
         "category": "Other Armor",
         "stats": {
           "type": "Other",
