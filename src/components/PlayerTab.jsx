@@ -40,7 +40,10 @@ const SKILLS = [
 ]
 
 // Updated PlayerTab to clear data unless logged in and maintain session across all tabs
-function PlayerTab({ authedPlayer, sessionId }) {
+function PlayerTab({ 
+  authedPlayer, 
+  sessionId
+}) {
   // helpers to read shop state
   function getShopAuthed() {
     return safeGet(STORAGE_SHOP_AUTHED) || '';
@@ -50,7 +53,9 @@ function PlayerTab({ authedPlayer, sessionId }) {
   const [charName, setCharName] = useState('');
   const [playerName, setPlayerName] = useState('');
   const [saveMsg, setSaveMsg] = useState('');
+  const [gmOpen, setGmOpen] = useState(false);
 
+  // Character sheet state
   const [gear, setGear] = useState([]);
   const [chapter, setChapter] = useState('');
   const [demeanour, setDemeanour] = useState('');
@@ -76,8 +81,19 @@ function PlayerTab({ authedPlayer, sessionId }) {
   const [xpSpent, setXpSpent] = useState(0);
   const [notes, setNotes] = useState('');
 
-  // Always start with empty array, and fill from backend
+  // State management
   const [players, setPlayers] = useState([]);
+
+  // Debug state
+  const [showLogs, setShowLogs] = useState(false);
+  const [logs, setLogs] = useState([]);
+  
+  // Initialize GM state is now handled in App.js
+
+  // Debug log handling
+  useEffect(() => {
+    if (showLogs) setLogs(logger.getLogs({ limit: 200 }));
+  }, [showLogs]);
 
   // Remove localStorage cache for players except after backend fetch
 
@@ -134,7 +150,7 @@ function PlayerTab({ authedPlayer, sessionId }) {
     setPlayerName(currentPlayer.name || '');
     setGear(tabInfo.gear || []);
     setChapter(tabInfo.chapter || '');
-    setDemeour(tabInfo.demeanour || '');
+    setDemeanour(tabInfo.demeanour || '');
     setSpeciality(tabInfo.speciality || '');
     setRank(tabInfo.rank || '');
     setPowerArmour(tabInfo.powerArmour || '');
@@ -232,17 +248,52 @@ function PlayerTab({ authedPlayer, sessionId }) {
       }
     }
     fetchPlayers();
+  // Add buildHeaders to dependencies since it's used in fetchPlayers
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId, gmOpen]);
-
-  // On mount, validate sessionId if present
-  // Sync login state with localStorage/sessionId on mount, tab switch, and storage changes
-  // No per-tab session sync; handled globally
 
   // Update player data in the database
   async function updatePlayerData(updatedPlayer) {
     try {
       logApiCall('PlayerTab', 'PUT', `/api/players/${updatedPlayer.playerName}`, updatedPlayer);
-      await axios.put(`/api/players/${updatedPlayer.playerName}`, { ...updatedPlayer }, { headers: buildHeaders() });
+      
+      // Ensure we preserve existing tabInfo structure and merge new data correctly
+      const existingPlayer = players.find(p => p.name === updatedPlayer.playerName);
+      const tabInfo = {
+        ...(existingPlayer?.tabInfo || {}),
+        charName: updatedPlayer.charName,
+        gear: updatedPlayer.gear,
+        chapter: updatedPlayer.chapter,
+        demeanour: updatedPlayer.demeanour,
+        speciality: updatedPlayer.speciality,
+        rank: updatedPlayer.rank,
+        powerArmour: updatedPlayer.powerArmour,
+        description: updatedPlayer.description,
+        pastEvent: updatedPlayer.pastEvent,
+        personalDemeanour: updatedPlayer.personalDemeanour,
+        characteristics: updatedPlayer.characteristics,
+        skills: updatedPlayer.skills,
+        weapons: updatedPlayer.weapons,
+        armour: updatedPlayer.armour,
+        talents: updatedPlayer.talents,
+        psychic: updatedPlayer.psychic,
+        wounds: updatedPlayer.wounds,
+        insanity: updatedPlayer.insanity,
+        movement: updatedPlayer.movement,
+        fate: updatedPlayer.fate,
+        corruption: updatedPlayer.corruption,
+        renown: updatedPlayer.renown,
+        xp: updatedPlayer.xp,
+        xpSpent: updatedPlayer.xpSpent,
+        notes: updatedPlayer.notes,
+        rp: updatedPlayer.rp
+      };
+
+      await axios.put(`/api/players/${updatedPlayer.playerName}`, { 
+        name: updatedPlayer.playerName,
+        tabInfo
+      }, { headers: buildHeaders() });
+      
       // Refetch players after update to get fresh data
       const response = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(response.data);
@@ -311,38 +362,20 @@ function PlayerTab({ authedPlayer, sessionId }) {
 
   // No per-tab logout; handled globally
 
-  // Added GM Panel button and Requisition Points display
-  const [gmOpen, setGmOpen] = useState(!!safeGet('dw:gm:session'));
-  const [gmPassInput, setGmPassInput] = useState('');
-
   // Define shopAuthed for use in the component
   const shopAuthed = getShopAuthed();
 
   function isGMOrShopAuthed() {
-    return gmOpen || authedPlayer;
+    return isGMLoggedIn() || authedPlayer;
   }
 
   function isGMLoggedIn() {
-    return gmOpen;
+    return authedPlayer === 'gm';
   }
 
-  useEffect(() => {
-    safeSet('dw:gm:session', gmOpen);
-  }, [gmOpen]);
+  // GM session is now managed in App.js
 
-  // GM unlock handler (simple client-side check)
-  function handleGmUnlock() {
-    console.log('PlayerTab: handleGmUnlock called', { input: gmPassInput });
-    if ((gmPassInput || '').trim() === GM_PASSWORD) {
-      setGmOpen(true);
-      flash('GM unlocked');
-      console.log('PlayerTab: GM unlocked');
-    } else {
-      flash('Bad GM password');
-      console.log('PlayerTab: GM unlock failed');
-    }
-    setGmPassInput('');
-  }
+  // GM unlock is now handled in App.js
 
   // GM delete handler
   async function gmDeletePlayer(name) {
@@ -368,21 +401,7 @@ function PlayerTab({ authedPlayer, sessionId }) {
             <p className="text-slate-400">Please log in to access player data</p>
           </div>
 
-          {/* Small GM login panel under global login */}
-          <div className="mx-auto max-w-md bg-white/5 rounded-xl p-4 border border-white/10">
-            <div className="text-sm font-medium mb-2">GM Login</div>
-            <div className="flex gap-2">
-              <input
-                type="password"
-                className="flex-1 rounded border border-white/10 bg-white/10 px-2 py-1"
-                placeholder="GM Password"
-                value={gmPassInput}
-                onChange={e => setGmPassInput(e.target.value)}
-              />
-              <button onClick={handleGmUnlock} className="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500">Unlock</button>
-            </div>
-            <div className="text-xs opacity-70 mt-2">GM can create/delete users, set RP and reset passwords.</div>
-          </div>
+
 
         </div>
       </section>
@@ -455,9 +474,28 @@ function PlayerTab({ authedPlayer, sessionId }) {
   async function gmSetRP(name, rp) {
     console.log('PlayerTab: gmSetRP', { name, rp });
     try {
-      logApiCall('PlayerTab', 'PUT', `/api/players/${name}/rp`)
+      logApiCall('PlayerTab', 'PUT', `/api/players/${name}/rp`);
       const headers = buildHeaders();
-      await axios.put(`/api/players/${name}`, { rp }, { headers });
+      
+      // Get existing player data
+      const existingPlayer = players.find(p => p.name === name);
+      if (!existingPlayer) {
+        throw new Error('Player not found');
+      }
+      
+      // Create updated player data
+      const playerData = {
+        name: name,
+        tabInfo: {
+          ...(existingPlayer.tabInfo || {}),
+          rp: parseInt(rp) || 0
+        }
+      };
+      
+      console.log('Updating player with:', playerData);
+      await axios.put(`/api/players/${name}`, playerData, { headers });
+      
+      // Refetch players after update
       const res = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(res.data);
       flash('RP updated');
@@ -500,30 +538,25 @@ function PlayerTab({ authedPlayer, sessionId }) {
 
   const RANK_ORDER = ['None','Respected','Distinguished','Famed','Hero']
   function normalizeRank(r) { const s = String(r||'').trim(); const found = RANK_ORDER.find(x=>x.toLowerCase()===s.toLowerCase()); return found || (s? s : 'None') }
-  function renownClass(r) { const rr = normalizeRank(r); if (rr==='Respected') return 'bg-emerald-700'; if (rr==='Distinguished') return 'bg-indigo-700'; if (rr==='Famed') return 'bg-purple-700'; if (rr==='Hero') return 'bg-rose-700'; return 'bg-slate-700' }
+
 
   // Added: helper to build request headers (session + GM secret when GM unlocked)
   function buildHeaders(extra = {}) {
     const headers = { 'x-session-id': sessionId || '' , ...extra };
-    if (gmOpen) {
+    if (isGMLoggedIn()) {
+      // Use the same GM_PASSWORD constant as in App.js
       headers['x-gm-secret'] = GM_PASSWORD;
     }
     return headers;
   }
 
-  // In-app debug log panel state
-  const [showLogs, setShowLogs] = useState(false);
-  const [logs, setLogs] = useState([]);
-  useEffect(() => {
-    if (showLogs) setLogs(logger.getLogs({ limit: 200 }));
-  }, [showLogs]);
   function refreshLogs() { setLogs(logger.getLogs({ limit: 200 })); }
   function clearLogs() { logger.clearLogs(); setLogs([]); }
 
   // No per-tab login/logout; handled globally
 
   // Early return if not authenticated
-  if (!authedPlayer && !gmOpen) {
+  if (!authedPlayer) {
     return (
       <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8">
         <div className="mx-auto max-w-7xl space-y-6">
@@ -531,23 +564,6 @@ function PlayerTab({ authedPlayer, sessionId }) {
             <h1 className="text-2xl font-bold mb-4">Player Tab</h1>
             <p className="text-slate-400">Please log in to access player data</p>
           </div>
-
-          {/* Small GM login panel under global login */}
-          <div className="mx-auto max-w-md bg-white/5 rounded-xl p-4 border border-white/10">
-            <div className="text-sm font-medium mb-2">GM Login</div>
-            <div className="flex gap-2">
-              <input
-                type="password"
-                className="flex-1 rounded border border-white/10 bg-white/10 px-2 py-1"
-                placeholder="GM Password"
-                value={gmPassInput}
-                onChange={e => setGmPassInput(e.target.value)}
-              />
-              <button onClick={handleGmUnlock} className="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500">Unlock</button>
-            </div>
-            <div className="text-xs opacity-70 mt-2">GM can create/delete users, set RP and reset passwords.</div>
-          </div>
-
         </div>
       </section>
     );
@@ -556,24 +572,6 @@ function PlayerTab({ authedPlayer, sessionId }) {
   return (
     <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-
-        {/* Small GM login panel (visible under global header) */}
-        {!gmOpen && (
-          <div className="mx-auto max-w-md bg-white/5 rounded-xl p-4 border border-white/10">
-            <div className="text-sm font-medium mb-2">GM Login</div>
-            <div className="flex gap-2">
-              <input
-                type="password"
-                className="flex-1 rounded border border-white/10 bg-white/10 px-2 py-1"
-                placeholder="GM Password"
-                value={gmPassInput}
-                onChange={e => setGmPassInput(e.target.value)}
-              />
-              <button onClick={handleGmUnlock} className="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500">Unlock</button>
-            </div>
-            <div className="text-xs opacity-70 mt-2">GM can create/delete users, set RP and reset passwords.</div>
-          </div>
-        )}
 
         {/* Character Name & Player Name */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white/5 rounded-xl p-3 border border-white/10">
@@ -686,20 +684,62 @@ function PlayerTab({ authedPlayer, sessionId }) {
               disabled={!(shopAuthed || gmOpen)}
             />
           </div>
-          <div className="col-span-4 flex justify-end mt-4">
-            <button
-              onClick={() => setGmOpen(!gmOpen)}
-              className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 border border-white/10 text-sm"
-            >
-              {gmOpen ? 'Close GM Panel' : 'Open GM Panel'}
-            </button>
-          </div>
+          {/* GM Panel toggle only shown for GM user */}
+          {isGMLoggedIn() && (
+            <div className="col-span-4 flex justify-end mt-4">
+              <button
+                onClick={() => setGmOpen(!gmOpen)}
+                className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 border border-white/10 text-sm"
+              >
+                {gmOpen ? 'Close GM Panel' : 'Open GM Panel'}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Requisition Points Display */}
         <div className="rounded-xl border border-white/10 bg-black/20 p-3 space-y-2">
-          <div className="text-sm font-medium">Requisition Points</div>
-          <div className="text-xs opacity-70">Current RP: <span className="font-semibold">{currentPlayer?.tabInfo?.rp || 'N/A'}</span></div>
+          <div className="text-lg font-medium">Requisition Points</div>
+          <div className="text-base">
+            Current RP: <span className="font-semibold text-xl text-amber-400">{currentPlayer?.tabInfo?.rp || '0'}</span>
+          </div>
+          {/* Only show for GMs */}
+          {isGMLoggedIn() && (
+            <div className="mt-4">
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  className="w-24 rounded border border-white/10 bg-white/10 px-2 py-1"
+                  placeholder="RP"
+                  defaultValue={currentPlayer?.tabInfo?.rp || 0}
+                  onChange={(e) => {
+                    const newRP = parseInt(e.target.value || '0', 10);
+                    gmSetRP(currentPlayer.name, newRP);
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    const currentRP = currentPlayer?.tabInfo?.rp || 0;
+                    gmSetRP(currentPlayer.name, currentRP + 1);
+                  }}
+                  className="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500"
+                >
+                  +1 RP
+                </button>
+                <button
+                  onClick={() => {
+                    const currentRP = currentPlayer?.tabInfo?.rp || 0;
+                    if (currentRP > 0) {
+                      gmSetRP(currentPlayer.name, currentRP - 1);
+                    }
+                  }}
+                  className="px-3 py-1 rounded bg-rose-600 hover:bg-rose-500"
+                >
+                  -1 RP
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Characteristics */}
@@ -740,43 +780,93 @@ function PlayerTab({ authedPlayer, sessionId }) {
 
         {/* Gear Section */}
         <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-          <div className="font-semibold text-lg mb-4">Gear</div>
+          <div className="font-semibold text-lg mb-4 flex items-center justify-between">
+            <span>Assigned Gear</span>
+            {isGMOrShopAuthed() && (
+              <button
+                className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm"
+                onClick={() => addGearItem('')}
+              >
+                Add New Item
+              </button>
+            )}
+          </div>
           <div className="space-y-4 max-h-[600px] overflow-y-auto pr-4">
+            {/* Column Headers */}
+            <div className="grid grid-cols-12 gap-4 text-sm font-medium text-slate-400 pb-2 border-b border-white/10">
+              <div className="col-span-5">Item Name</div>
+              <div className="col-span-2">Quantity</div>
+              <div className="col-span-3">Notes</div>
+              <div className="col-span-2">Actions</div>
+            </div>
+            
+            {/* Gear Items */}
             {gear.map((item, index) => (
-              <div key={index} className="flex items-center gap-6">
+              <div key={index} className="grid grid-cols-12 gap-4 items-center bg-white/5 rounded-lg p-2">
                 <input
-                  className="rounded-xl border border-white/10 bg-white/10 px-4 py-3 flex-1"
-                  value={item.name}
+                  className="col-span-5 rounded border border-white/10 bg-white/10 px-3 py-2"
+                  placeholder="Item name"
+                  value={item.name || ''}
+                  onChange={(e) => updateGear(item.id, { name: e.target.value })}
                   disabled={!isGMOrShopAuthed()}
                 />
                 <input
                   type="number"
-                  className="rounded-xl border border-white/10 bg-white/10 px-4 py-3 w-24"
+                  className="col-span-2 rounded border border-white/10 bg-white/10 px-3 py-2"
+                  placeholder="Qty"
                   value={item.qty || 1}
+                  onChange={(e) => updateGear(item.id, { qty: parseInt(e.target.value) || 1 })}
                   disabled={!isGMOrShopAuthed()}
+                  min="1"
                 />
                 <input
-                  className="rounded-xl border border-white/10 bg-white/10 px-4 py-3 flex-1"
-                  placeholder="Note"
+                  className="col-span-3 rounded border border-white/10 bg-white/10 px-3 py-2"
+                  placeholder="Add notes..."
                   value={item.note || ''}
                   onChange={(e) => updateGear(item.id, { note: e.target.value })}
                   disabled={!isGMOrShopAuthed()}
                 />
-                <button
-                  className="rounded-xl px-4 py-3 bg-rose-600 hover:bg-rose-500"
-                  onClick={() => deleteGear(item.id)}
-                >
-                  Remove
-                </button>
+                <div className="col-span-2 flex gap-2">
+                  <button
+                    className="rounded px-3 py-2 bg-amber-600 hover:bg-amber-500 flex-1"
+                    onClick={() => updateGear(item.id, { qty: (item.qty || 1) + 1 })}
+                    disabled={!isGMOrShopAuthed()}
+                  >
+                    +
+                  </button>
+                  <button
+                    className="rounded px-3 py-2 bg-rose-600 hover:bg-rose-500 flex-1"
+                    onClick={() => {
+                      const newQty = (item.qty || 1) - 1;
+                      if (newQty <= 0) {
+                        deleteGear(item.id);
+                      } else {
+                        updateGear(item.id, { qty: newQty });
+                      }
+                    }}
+                    disabled={!isGMOrShopAuthed()}
+                  >
+                    -
+                  </button>
+                </div>
               </div>
             ))}
-            {isGMLoggedIn() && (
-              <button
-                className="rounded-xl px-4 py-3 bg-blue-600 hover:bg-blue-500"
-                onClick={() => addGearItem('')}
-              >
-                Add gear
-              </button>
+            
+            {/* Empty State */}
+            {gear.length === 0 && (
+              <div className="text-center py-8 text-slate-400">
+                No gear assigned yet.
+                {isGMOrShopAuthed() && (
+                  <div className="mt-2">
+                    <button
+                      className="px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-sm"
+                      onClick={() => addGearItem('')}
+                    >
+                      Add First Item
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -880,7 +970,7 @@ function PlayerTab({ authedPlayer, sessionId }) {
         </div>
 
         {/* GM Panel - Player Management */}
-        {gmOpen && (
+        {isGMLoggedIn() && (
           <div className="bg-white/5 rounded-xl p-4 border border-white/10 mt-4">
             <div className="font-semibold text-lg mb-4">Player Management</div>
             

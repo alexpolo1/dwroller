@@ -1,67 +1,60 @@
 jest.setTimeout(20000);
+const { execSync } = require('child_process');
 
 describe('Player flow (login, update sheet, gear/spend RP)', () => {
   const name = 'christoffer';
-  const baseURL = process.env.API_BASE || 'http://127.0.0.1:5000';
+  const baseURL = process.env.API_BASE || 'http://localhost:5000';
   let sessionId;
 
-  // Node-compatible HTTP request helper (no fetch dependency)
-  const http = require('http');
-  const https = require('https');
+  const curl = (method, url, data = null, headers = '') => {
+    const command = `curl -X ${method} ${headers} -H "Content-Type: application/json" ${data ? `-d '${JSON.stringify(data)}'` : ''} ${url}`;
+    try {
+      const result = execSync(command, { encoding: 'utf-8' });
+      console.log(`Curl Command: ${command}`);
+      console.log(`Curl Output: ${result}`);
+      const parsedResult = JSON.parse(result);
+      return {
+        status: parsedResult.error ? 500 : (method === 'POST' && !url.endsWith('/login') ? 201 : 200),
+        data: parsedResult.error ? null : parsedResult
+      };
+    } catch (error) {
+      console.error(`Curl Error: ${error.message}`);
+      console.error(`Curl Command: ${command}`);
+      if (error.stdout) {
+        console.error(`Curl Error Output: ${error.stdout}`);
+      }
+      throw error;
+    }
+  };
 
-  async function request(method, path, body, headers = {}) {
-    const url = new URL(path, baseURL);
-    const lib = url.protocol === 'https:' ? https : http;
-    const opts = {
-      method,
-      hostname: url.hostname,
-      port: url.port || (url.protocol === 'https:' ? 443 : 80),
-      path: url.pathname + url.search,
-      headers: { 'Content-Type': 'application/json', ...headers }
-    };
-    return new Promise((resolve, reject) => {
-      const req = lib.request(opts, (res) => {
-        let data = '';
-        res.on('data', (chunk) => { data += chunk.toString(); });
-        res.on('end', () => {
-          let json = null;
-          try { json = JSON.parse(data); } catch (e) { json = null; }
-          resolve({ status: res.statusCode, data: json, raw: data });
-        });
-      });
-      req.on('error', reject);
-      if (body) req.write(typeof body === 'string' ? body : JSON.stringify(body));
-      req.end();
-    });
-  }
+  test('should login, update sheet, and manage gear/RP', () => {
+    // login as player
+    const login = curl('POST', `${baseURL}/api/players/login`, { name, password: '1234' });
+    expect(login.status).toBe(200);
+    expect(login.data.sessionId).toBeTruthy();
+    sessionId = login.data.sessionId;
 
-  test('login as player and get session', async () => {
-    const res = await request('POST', '/api/players/login', { name, password: '1234' });
-    expect(res.status).toBe(200);
-    expect(res.data.sessionId).toBeTruthy();
-    sessionId = res.data.sessionId;
-  });
+    // spend RP and add gear
+    const sessionHeader = `-H "x-session-id: ${sessionId}"`;
+    const upd1 = curl('PUT', `${baseURL}/api/players/${name}`, { 
+      tabInfo: { rp: 5, gear: [{ name: 'Test Knife', qty: 1 }] } 
+    }, sessionHeader);
+    expect(upd1.status).toBe(200);
+    expect(upd1.data.tabInfo && upd1.data.tabInfo.rp).toBe(5);
+    expect(Array.isArray(upd1.data.tabInfo.gear)).toBe(true);
 
-  test('spend RP and add gear', async () => {
-    const headers = { 'x-session-id': sessionId };
-    const upd = await request('PUT', `/api/players/${name}`, { tabInfo: { rp: 5, gear: [{ name: 'Test Knife', qty: 1 }] } }, headers);
-    expect(upd.status).toBe(200);
-    expect(upd.data.tabInfo && upd.data.tabInfo.rp).toBe(5);
-    expect(Array.isArray(upd.data.tabInfo.gear)).toBe(true);
-  });
-
-  test('update many sheet fields including skills', async () => {
-    const headers = { 'x-session-id': sessionId };
-    const body = {
-      playerName: 'Chris',
-      charName: 'Brother-1',
-      skills: ['Acrobatics (Ag)', 'Awareness (Per)', 'Medicae (Int)'],
-      characteristics: { WS: 35, BS: 40 },
-      rp: 4
-    };
-    const upd = await request('PUT', `/api/players/${name}`, body, headers);
-    expect(upd.status).toBe(200);
-    expect(Array.isArray(upd.data.tabInfo.skills)).toBe(true);
-    expect(upd.data.tabInfo.playerName).toBe('Chris');
+    // update many sheet fields including skills
+    const upd2 = curl('PUT', `${baseURL}/api/players/${name}`, {
+      tabInfo: {
+        playerName: 'Chris',
+        charName: 'Brother-1',
+        skills: ['Acrobatics (Ag)', 'Awareness (Per)', 'Medicae (Int)'],
+        characteristics: { WS: 35, BS: 40 },
+        rp: 4
+      }
+    }, sessionHeader);
+    expect(upd2.status).toBe(200);
+    expect(Array.isArray(upd2.data.tabInfo.skills)).toBe(true);
+    expect(upd2.data.tabInfo.playerName).toBe('Chris');
   });
 });

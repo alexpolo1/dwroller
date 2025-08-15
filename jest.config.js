@@ -11,10 +11,12 @@ module.exports = {
       configFile: './babel.config.js',
     },
   },
-  // Restrict Jest to only run tests under the top-level tests/ folder to avoid
-  // parsing ESM/React source files in src/ during CI runs of backend tests.
-  testMatch: ['**/tests/**/*.test.js'],
+  testMatch: ['**/tests/**/*.test.js', '**/src/tests/**/*.test.js'],
   testEnvironmentOptions: {
     node: true
-  }
+  },
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(axios)/)',
+  ],
 };

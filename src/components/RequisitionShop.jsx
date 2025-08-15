@@ -1,27 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import * as React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 
-function safeGet(key) {
-  try {
-    if (typeof window === 'undefined' || !('localStorage' in window)) return null
-    const raw = window.localStorage.getItem(key)
-    return raw ? JSON.parse(raw) : null
-  } catch { return null }
-}
 
-async function sha256Hex(str) {
-  try {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str))
-    const arr = Array.from(new Uint8Array(buf))
-    return arr.map(b => b.toString(16).padStart(2, '0')).join('')
-  } catch {
-    return str
-  }
-}
-
-
-const GM_PASSWORD = 'bongo'
-const STORAGE_SHOP_SESSION = 'dw:shop:sessionId'
 
 const RANK_ORDER = ['None','Respected','Distinguished','Famed','Hero']
 function normalizeRank(r) {
@@ -56,17 +37,8 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
   const [items, setItems] = useState([])
   const [players, setPlayers] = useState([]);
   // authedPlayer and sessionId come from props
-  const [gmOpen, setGmOpen] = useState(false)
-  const [gmPassInput, setGmPassInput] = useState('')
-  const [gmUnlocked, setGmUnlocked] = useState(false)
-
   const [search, setSearch] = useState('')
   
-  // Define flash function
-  function flash(msg) {
-    console.log(msg); // Since saveMsg is not being displayed, just log it
-  }
-
   const categories = useMemo(()=>{
     const set = new Set()
     for (const it of items) { if (it && it.category) set.add(String(it.category)) }
@@ -81,13 +53,18 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
   useEffect(() => {
     async function fetchPlayers() {
       try {
+        console.log('Fetching players with sessionId:', sessionId);
         const response = await axios.get('/api/players', { headers: { 'x-session-id': sessionId || '' } });
+        console.log('Fetched players:', response.data);
         setPlayers(response.data);
       } catch (error) {
+        console.error('Error fetching players:', error);
         setPlayers([]);
       }
     }
-    fetchPlayers();
+    if (sessionId) {
+      fetchPlayers();
+    }
   }, [sessionId]);
 
   // On mount, validate sessionId if present
@@ -112,7 +89,15 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
   const currentPlayer = useMemo(() => {
     const p = players.find(p => p.name === authedPlayer);
     if (!p) return null;
-    return p.tabInfo ? { ...p, ...p.tabInfo } : p;
+    // Ensure tabInfo exists and has proper structure
+    const tabInfo = p.tabInfo || {};
+    return {
+      ...p,
+      ...tabInfo,
+      rp: Number(tabInfo.rp || 0),
+      gear: Array.isArray(tabInfo.gear) ? tabInfo.gear : [],
+      transactions: Array.isArray(tabInfo.transactions) ? tabInfo.transactions : [],
+    };
   }, [players, authedPlayer]);
   const filteredItems = useMemo(()=>{
     const q = search.trim().toLowerCase()
@@ -123,136 +108,99 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
     })
   },[items, search, categoryFilter])
 
-  // Ensure GM Panel login functionality works correctly
-  async function handleGmUnlock() {
-    if (gmPassInput === GM_PASSWORD) {
-      setGmUnlocked(true);
-      flash('GM Panel unlocked');
-    } else {
-      flash('Incorrect GM password');
-    }
-  }
-  // Ensure player login functionality is consistent
-  // No per-tab login/logout; handled globally
-
   // Updated purchaseItem to subtract requisition points from the player
   async function purchaseItem(item) {
-    if (!currentPlayer) return;
-    // Update tabInfo only
-    const updatedTabInfo = {
-      ...currentPlayer,
-      rp: (currentPlayer.rp || 0) - (item.cost || 0),
-      inventory: [...(currentPlayer.inventory || []), item],
-      transactions: [...(currentPlayer.transactions || []), { item, date: new Date() }],
-    };
-    try {
-  const sid = safeGet(STORAGE_SHOP_SESSION);
-  await axios.put(`/api/players/${currentPlayer.name}`, updatedTabInfo, { headers: { 'x-session-id': sid || '' } });
-  // Refetch players after update
-  const response = await axios.get('/api/players', { headers: { 'x-session-id': sid || '' } });
-  setPlayers(response.data);
-    } catch (error) {
-      console.error('Failed to update player:', error);
-    }
-  }
-
-  async function addPlayer(name, rp, pw) {
-    const nm = String(name||'').trim();
-    if (!nm) return;
-    const h = await sha256Hex(String(pw||'').trim());
-    const playerDoc = {
-      name: nm,
-      tabInfo: {
-        rp: Math.max(0, Number.isFinite(+rp)? +rp : 0),
-        inventory: [],
-        renown: 'None',
-      },
-      pw: pw,
-      pwHash: h
-    };
-    try {
-  const sid = safeGet(STORAGE_SHOP_SESSION);
-  await axios.post('/api/players', playerDoc, { headers: { 'x-session-id': sid || '' } });
-  // Refetch players after creation
-  const response = await axios.get('/api/players', { headers: { 'x-session-id': sid || '' } });
-  setPlayers(response.data);
-    } catch (error) {
-      console.error('Failed to create player:', error);
-    }
-  }
-  async function setPlayerRP(name, rp) {
-    const nm = String(name||'').trim();
-    const player = players.find(p => p.name === nm);
-    if (!player) return;
-    const updatedTabInfo = { ...player.tabInfo, rp: Math.max(0, Number.isFinite(+rp)? +rp : 0) };
-    try {
-    const sid = safeGet(STORAGE_SHOP_SESSION);
-    await axios.put(`/api/players/${nm}`, { tabInfo: updatedTabInfo }, { headers: { 'x-session-id': sid || '' } });
-  const response = await axios.get('/api/players', { headers: { 'x-session-id': sid || '' } });
-  setPlayers(response.data);
-    } catch (error) {
-      console.error('Failed to update RP:', error);
-    }
-  }
-  async function setPlayerRenown(name, renown) {
-    const nm = String(name||'').trim();
-    const player = players.find(p => p.name === nm);
-    if (!player) return;
-    const updatedTabInfo = { ...player.tabInfo, renown: normalizeRank(renown) };
-    try {
-    const sid = safeGet(STORAGE_SHOP_SESSION);
-    await axios.put(`/api/players/${nm}`, { tabInfo: updatedTabInfo }, { headers: { 'x-session-id': sid || '' } });
-  const response = await axios.get('/api/players', { headers: { 'x-session-id': sid || '' } });
-  setPlayers(response.data);
-    } catch (error) {
-      console.error('Failed to update renown:', error);
-    }
-  }
-  async function resetPlayerPw(name, pw) {
-    const nm = String(name || '').trim();
-    if (!nm) {
-      flash('Player name is required');
+    if (!currentPlayer) {
+      setErrorMsg('No player logged in');
       return;
     }
-    const h = await sha256Hex(String(pw || '').trim());
-    const player = players.find(p => p.name === nm);
-    if (!player) return;
-    try {
-  const sid = safeGet(STORAGE_SHOP_SESSION);
-  await axios.put(`/api/players/${nm}`, { ...player, pw: pw, pwHash: h }, { headers: { 'x-session-id': sid || '' } });
-  const response = await axios.get('/api/players', { headers: { 'x-session-id': sid || '' } });
-  setPlayers(response.data);
-      flash(`Password reset for ${nm}`);
-    } catch (error) {
-      console.error('Failed to reset password:', error);
+    if (!sessionId) {
+      setErrorMsg('Session expired. Please log in again.');
+      return;
     }
-  }
-  async function deletePlayer(name) {
-    const nm = String(name||'').trim();
+
+    // Check if player has enough RP
+    if ((currentPlayer.rp || 0) < (item.cost || 0)) {
+      setErrorMsg(`Not enough Requisition Points. Need ${item.cost} RP but only have ${currentPlayer.rp || 0} RP.`);
+      return;
+    }
+
+    // Calculate new values
+    const newRp = Math.max(0, (currentPlayer.rp || 0) - (item.cost || 0));
+    const newGear = [...(currentPlayer.tabInfo?.gear || []), {
+      ...item,
+      id: Date.now(),
+      qty: 1
+    }];
+    const newTransactions = [...(currentPlayer.transactions || []), {
+      item,
+      cost: item.cost,
+      date: new Date().toISOString(),
+      previousRp: currentPlayer.rp || 0,
+      newRp: newRp
+    }];
+    
+    // Update player data including all existing fields
+    const updatedTabInfo = {
+      ...currentPlayer.tabInfo, // Preserve all existing tabInfo fields
+      rp: newRp,
+      gear: newGear,
+      transactions: newTransactions,
+      renown: currentPlayer.renown || 'None',
+    };
+
     try {
-  const sid = safeGet(STORAGE_SHOP_SESSION);
-  await axios.delete(`/api/players/${nm}`, { headers: { 'x-session-id': sid || '' } });
-  const response = await axios.get('/api/players', { headers: { 'x-session-id': sid || '' } });
-  setPlayers(response.data);
+      console.log('Updating player with:', currentPlayer.name, updatedTabInfo);
+      console.log('Sending update:', {
+        name: currentPlayer.name,
+        tabInfo: updatedTabInfo
+      });
+      
+      await axios.put(
+        `/api/players/${currentPlayer.name}`, 
+        {
+          name: currentPlayer.name,
+          tabInfo: {
+            ...currentPlayer.tabInfo,
+            gear: updatedTabInfo.gear,
+            rp: updatedTabInfo.rp,
+            transactions: updatedTabInfo.transactions,
+            renown: updatedTabInfo.renown
+          }
+        },
+        { headers: { 'x-session-id': sessionId } }
+      );
+      // Refetch players after update
+      const response = await axios.get('/api/players', { headers: { 'x-session-id': sessionId } });
+      setPlayers(response.data);
+      setErrorMsg(`Successfully purchased ${item.name} for ${item.cost} RP`);
     } catch (error) {
-      console.error('Failed to delete player:', error);
+      console.error('Failed to update player:', error);
+      setErrorMsg(error.response?.data?.error || 'Failed to make purchase');
     }
   }
 
-  function setItemMeta(id, req, renown) {
-    setItems(prev => prev.map(it => it.id===id ? { ...it, req: Math.max(0, Number.isFinite(+req)? +req : (it.req||0)), cost: Math.max(0, Number.isFinite(+req)? +req : (it.cost||0)), renown: normalizeRank(renown||it.renown) } : it))
-  }
-
-  function setGmPassword(newPw) {
-    // This is just for demo - password changes aren't persisted
-    console.log('GM password changed to:', newPw);
-  }
 
   // Display saveMsg in the UI
+  const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    if (errorMsg) {
+      const timer = setTimeout(() => setErrorMsg(''), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMsg]);
+
   return (
     <div className="rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-5 shadow-xl space-y-4">
       <div className="text-2xl font-bold">Requisition Shop</div>
       
+      {errorMsg && (
+        <div className="p-3 rounded-lg bg-red-900/20 border border-red-500/30">
+          <p className="text-red-300">{errorMsg}</p>
+        </div>
+      )}
+
       {!authedPlayer ? (
         <div className="p-4 rounded-lg bg-amber-900/20 border border-amber-500/30">
           <p className="text-amber-300">Please log in using the header above to access the shop.</p>
@@ -314,11 +262,6 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
                     </button>
                   )}
                 </div>
-                {gmUnlocked && (
-                  <div className="mt-2 pt-2 border-t border-white/10">
-                    <GmEditItemMeta item={item} onSet={setItemMeta} />
-                  </div>
-                )}
               </div>
             ))}
           </div>
