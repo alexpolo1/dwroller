@@ -50,28 +50,37 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Fetch players
+        // Fetch players (for admin/GM functionality)
         console.log('Fetching players with sessionId:', sessionId);
-        const playersResponse = await axios.get('/api/players', { 
-          headers: { 'x-session-id': sessionId || '' }
-        });
-        console.log('Fetched players:', playersResponse.data);
-        setPlayers(playersResponse.data);
-
-        // Fetch shop items from the new database
-        console.log('Fetching shop items');
         try {
-          const itemsResponse = await axios.get('/api/shop/items', {
+          const playersResponse = await axios.get('/api/players', { 
             headers: { 'x-session-id': sessionId || '' }
           });
-          console.log('Fetched shop items:', itemsResponse.data);
-          
-          if (!itemsResponse.data || itemsResponse.data.length === 0) {
-            console.log('Warning: Shop items response was empty, falling back to JSON');
-            throw new Error('Empty shop items');
+          console.log('Fetched players:', playersResponse.data);
+          setPlayers(playersResponse.data);
+        } catch (playerError) {
+          console.log('Could not fetch full player data (likely not GM), using basic names:', playerError.message);
+          // Fall back to public player names if full player data is not available
+          try {
+            const playersResponse = await axios.get('/api/players/names');
+            setPlayers(playersResponse.data);
+          } catch (e) {
+            console.error('Failed to fetch even basic player names:', e);
+            setPlayers([]);
           }
-          
-          const normalizedItems = itemsResponse.data.map(item => ({
+        }
+
+        // Fetch shop items from the new database (public endpoint, no session needed)
+        console.log('Fetching shop items');
+        const itemsResponse = await axios.get('/api/shop/items');
+        console.log('Fetched shop items:', itemsResponse.data);
+        
+        if (!itemsResponse.data || itemsResponse.data.length === 0) {
+          console.log('Warning: Shop items response was empty, falling back to JSON');
+          throw new Error('Empty shop items');
+        }
+        
+        const normalizedItems = itemsResponse.data.map(item => ({
           id: item.id,
           name: item.name,
           category: item.category,

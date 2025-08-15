@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const playerRoutes = require('./routes/playerRoutes-sqlite');
 const sessionRoutes = require('./routes/sessionRoutes-sqlite');
+const shopRoutes = require('./routes/shopRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -47,6 +48,7 @@ app.get('/api/health', (req, res) => {
 // Use routes
 app.use('/api/players', playerRoutes);
 app.use('/api/sessions', sessionRoutes);
+app.use('/api/shop', shopRoutes);
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
