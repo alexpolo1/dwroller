@@ -1,0 +1,45 @@
+{
+  "exportDate": "2025-08-15T07:12:29.894Z",
+  "playerCount": 3,
+  "players": [
+    {
+      "name": "christoffer",
+      "rollerInfo": {},
+      "shopInfo": {},
+      "tabInfo": {
+        "rp": 10,
+        "inventory": [],
+        "renown": "None"
+      },
+      "pw": "1234",
+      "pwHash": "1234",
+      "mongoId": "689e8ba7f8623eb2e1049cea"
+    },
+    {
+      "name": "claes",
+      "rollerInfo": {},
+      "shopInfo": {},
+      "tabInfo": {
+        "rp": 10,
+        "inventory": [],
+        "renown": "None"
+      },
+      "pw": "1234",
+      "pwHash": "1234",
+      "mongoId": "689e8ba8f8623eb2e1049cec"
+    },
+    {
+      "name": "phillip",
+      "rollerInfo": {},
+      "shopInfo": {},
+      "tabInfo": {
+        "rp": 10,
+        "inventory": [],
+        "renown": "None"
+      },
+      "pw": "1234",
+      "pwHash": "1234",
+      "mongoId": "689e8ba9f8623eb2e1049cee"
+    }
+  ]
+}

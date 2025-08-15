@@ -6,6 +6,11 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.11.0",
+    "better-sqlite3": "^12.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongoose": "^8.17.1",
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^4.8.69",
     "react": "^18.2.0",
@@ -19,7 +24,12 @@
     "test": "jest",
     "eject": "react-scripts eject",
     "serve": "serve -s build",
-    "extract:armoury": "node scripts/extract-armoury.js \"$PWD/Deathwatch-Core-Rulebook.pdf\" public/deathwatch-armoury.json"
+    "extract:armoury": "node scripts/extract-armoury.js \"$PWD/Deathwatch-Core-Rulebook.pdf\" public/deathwatch-armoury.json",
+    "server": "cd database && node server.js",
+    "db:migrate": "cd database && node migrate-to-sqlite.js",
+    "db:export": "cd database && node migrate-to-sqlite.js --export-only",
+    "db:sqlite": "cd database && ./switch-db.sh sqlite",
+    "db:mongo": "cd database && ./switch-db.sh mongo"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +54,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
     "autoprefixer": "^10.4.14",
     "babel-loader": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
     "html-webpack-plugin": "^5.6.4",
     "postcss": "^8.4.23",
     "prettier-eslint": "^16.4.2",
