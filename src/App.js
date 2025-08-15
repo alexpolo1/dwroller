@@ -23,7 +23,7 @@ function App() {
   async function fetchPlayers() {
     try {
       setPlayersError('')
-      const res = await axios.get('/api/players');
+      const res = await axios.get('/api/players/names');
       setPlayers(res.data || []);
     } catch (err) {
       console.error('fetchPlayers failed', err);

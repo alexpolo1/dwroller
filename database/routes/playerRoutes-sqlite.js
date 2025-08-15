@@ -32,6 +32,64 @@ router.get('/shop', (req, res) => {
   }
 });
 
+// Get player names for login dropdown (public - no session required)
+router.get('/names', (req, res) => {
+  try {
+    console.log('Player names endpoint hit');
+    const players = playerHelpers.getAll();
+    // Only return names for the login dropdown, not full player data
+    const playerNames = players.map(p => ({ name: p.name }));
+    res.json(playerNames);
+  } catch (error) {
+    console.error('Player names error:', error);
+    logToFile('API: Failed to get player names', error);
+    res.status(500).json({ error: String(error) });
+  }
+});
+
+// Login endpoint - create a server session so x-session-id can be used (public - no session required)
+router.post('/login', async (req, res) => {
+  try {
+    const { name, password } = req.body;
+
+    if (!name || !password) {
+      return res.status(400).json({ error: 'Name and password are required' });
+    }
+
+    const player = playerHelpers.getByName(name);
+    if (!player) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Check password using safeCompare
+    const isValidPassword = await safeCompare(password, player.pwHash);
+    if (!isValidPassword) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Create session and store it in sessions table
+    const sessionId = require('crypto').randomBytes(32).toString('hex');
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(); // 24h
+    sessionHelpers.create(sessionId, { playerName: player.name }, expiresAt);
+
+    logToFile('API: Player login', name, sessionId);
+    res.json({ 
+      message: 'Login successful', 
+      sessionId,
+      expiresAt,
+      player: {
+        name: player.name,
+        rollerInfo: player.rollerInfo,
+        shopInfo: player.shopInfo,
+        tabInfo: player.tabInfo
+      }
+    });
+  } catch (error) {
+    logToFile('API: Login failed', req.body.name, error && error.stack ? error.stack : error);
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
 // Apply session middleware to all routes EXCEPT those above this line
 router.use(requireSession);
 
@@ -242,49 +300,6 @@ router.delete('/:name', requireSession, async (req, res) => {
   } catch (error) {
     logToFile('API: Failed to delete player', req.params.name, error);
     res.status(500).json({ error: 'Failed to delete player' });
-  }
-});
-
-// Login endpoint - create a server session so x-session-id can be used
-router.post('/login', async (req, res) => {
-  try {
-    const { name, password } = req.body;
-
-    if (!name || !password) {
-      return res.status(400).json({ error: 'Name and password are required' });
-    }
-
-    const player = playerHelpers.getByName(name);
-    if (!player) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    // Check password using safeCompare
-    const isValidPassword = await safeCompare(password, player.pwHash);
-    if (!isValidPassword) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    // Create session and store it in sessions table
-    const sessionId = require('crypto').randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(); // 24h
-    sessionHelpers.create(sessionId, { playerName: player.name }, expiresAt);
-
-    logToFile('API: Player login', name, sessionId);
-    res.json({ 
-      message: 'Login successful', 
-      sessionId,
-      expiresAt,
-      player: {
-        name: player.name,
-        rollerInfo: player.rollerInfo,
-        shopInfo: player.shopInfo,
-        tabInfo: player.tabInfo
-      }
-    });
-  } catch (error) {
-    logToFile('API: Login failed', req.body.name, error && error.stack ? error.stack : error);
-    res.status(500).json({ error: 'Login failed' });
   }
 });
 
