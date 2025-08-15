@@ -1,0 +1,57 @@
+{
+  "pistols": [],
+  "basicWeapons": [
+    {
+      "name": "Angelus Bolter",
+      "req": 25,
+      "renown": "Respected",
+      "category": "basic Weapons",
+      "stats": {
+        "damage": "Range 50m; S/3/-; 1d10+9 X; Pen 6; Clip 36; Reload 2 Full; Tearing",
+        "class": "Basic - Bolt",
+        "source": "First Founding p97"
+      }
+    }
+  ],
+  "heavyWeapons": [],
+  "mountedWeapons": [],
+  "meleeWeapons": [
+    {
+      "name": "Armour of the Remorseless Crusader (Forearm Sword)",
+      "req": 70,
+      "renown": "Hero",
+      "category": "melee Weapons",
+      "stats": {
+        "damage": "1d10+8 R; Pen 6; +10 to hit; Sanctified",
+        "class": "One-Handed Melee - Primitive",
+        "source": "Deathwatch Core Rulebook p167"
+      }
+    },
+    {
+      "name": "Artificer Omnissian Axe",
+      "req": 25,
+      "renown": "Distinguished",
+      "category": "melee Weapons",
+      "stats": {
+        "damage": "1d10+9 E; Pen 7; Power Field, Unbalanced",
+        "class": "One-Handed Melee - Power",
+        "source": "First Founding p99"
+      }
+    }
+  ],
+  "grenades": [],
+  "naturalWeapons": [
+    {
+      "name": "Argrax Clawed Hooves",
+      "req": 0,
+      "renown": "None",
+      "category": "natural Weapons",
+      "stats": {
+        "damage": "1d10 I; Pen 0;",
+        "class": "Natural - Primitive",
+        "source": "The Emperor Protects p46"
+      }
+    }
+  ],
+  "otherWeapons": []
+}
