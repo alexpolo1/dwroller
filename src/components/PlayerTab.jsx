@@ -233,6 +233,37 @@ function PlayerTab({
   useEffect(() => {
     async function fetchPlayers() {
       try {
+        console.log('DEBUG: fetchPlayers called, isGMLoggedIn():', isGMLoggedIn(), 'authedPlayer:', authedPlayer);
+        
+        // If GM is logged in, always fetch all players from API
+        if (isGMLoggedIn()) {
+          console.log('DEBUG: GM is logged in, fetching all players from API');
+          logApiCall('PlayerTab', 'GET', '/api/players');
+          const response = await axios.get('/api/players', { headers: buildHeaders() });
+          const data = response.data;
+          console.log('DEBUG: GM API response:', data.length, 'players');
+          if (!Array.isArray(data)) {
+            warn('PlayerTab', '/api/players did not return an array', data);
+            setPlayers([]);
+          } else {
+            info('PlayerTab', `Fetched ${data.length} players`);
+            setPlayers(data);
+            safeSet(STORAGE_SHOP_PLAYERS, data);
+          }
+          return;
+        }
+
+        console.log('DEBUG: Not GM, checking stored data');
+        // For regular players, try to get stored player data from login first
+        const storedPlayerData = safeGet('dw:shop:playerData');
+        if (storedPlayerData && authedPlayer) {
+          console.log('DEBUG: Using stored player data for regular user');
+          // If we have stored player data and user is logged in, use it
+          setPlayers([storedPlayerData]);
+          return;
+        }
+
+        console.log('DEBUG: Fetching from API for regular user');
         logApiCall('PlayerTab', 'GET', '/api/players');
         const response = await axios.get('/api/players', { headers: buildHeaders() });
         const data = response.data;
@@ -245,14 +276,21 @@ function PlayerTab({
           safeSet(STORAGE_SHOP_PLAYERS, data);
         }
       } catch (apiError) {
+        console.log('DEBUG: API error:', apiError);
         logApiError('PlayerTab', 'GET', '/api/players', apiError);
-        setPlayers([]);
+        // If API fails but we have stored player data, use that
+        const storedPlayerData = safeGet('dw:shop:playerData');
+        if (storedPlayerData && authedPlayer) {
+          setPlayers([storedPlayerData]);
+        } else {
+          setPlayers([]);
+        }
       }
     }
     fetchPlayers();
   // Add buildHeaders to dependencies since it's used in fetchPlayers
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId, gmOpen]);
+  }, [sessionId, gmOpen, authedPlayer]);
 
   // Update player data in the database
   async function updatePlayerData(updatedPlayer) {
