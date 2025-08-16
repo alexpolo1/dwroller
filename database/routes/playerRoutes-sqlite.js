@@ -217,21 +217,22 @@ router.post('/', async (req, res) => {
       return res.status(409).json({ error: 'Player already exists' });
     }
 
-    // Validate and normalize incoming player object
-    const { valid, errors, normalized } = validatePlayer({ name, pw, ...otherData });
-    if (!valid) {
-      return res.status(400).json({ error: 'Validation failed', details: errors });
-    }
-
-    // Create password hash if password provided (use safeHash)
+    // If a plain password was provided, hash it first so validation won't reject plaintext
     let pwHash = '';
     if (pw) {
       pwHash = await safeHash(pw);
     }
 
+    // Validate and normalize incoming player object. Pass pwHash instead of plaintext pw.
+    const { valid, errors, normalized } = validatePlayer({ name, pwHash, ...otherData });
+    if (!valid) {
+      return res.status(400).json({ error: 'Validation failed', details: errors });
+    }
+
     const newPlayer = playerHelpers.create({
       name: normalized.name,
-      pw: pw || '',
+      // Do NOT store plaintext pw to avoid validation rejecting records later
+      pw: '',
       pwHash,
       rollerInfo: normalized.rollerInfo || {},
       shopInfo: normalized.shopInfo || {},
@@ -262,6 +263,9 @@ router.put('/:name', requireSession, async (req, res) => {
     // Handle password update if provided using safeHash
     if (updateData.pw) {
       updateData.pwHash = await safeHash(updateData.pw);
+      // Do not pass plaintext pw into validation; validation requires pwHash only
+      // We'll store an empty pw field (frontend may still use pw for temporary purposes)
+      updateData.pw = '';
     }
 
     // Merge the data properly
@@ -269,7 +273,8 @@ router.put('/:name', requireSession, async (req, res) => {
       rollerInfo: { ...existingPlayer.rollerInfo, ...updateData.rollerInfo },
       shopInfo: { ...existingPlayer.shopInfo, ...updateData.shopInfo },
       tabInfo: { ...existingPlayer.tabInfo, ...updateData.tabInfo },
-      pw: updateData.pw || existingPlayer.pw,
+      // Never carry forward plaintext pw into validation; keep pw empty and use pwHash
+      pw: '',
       pwHash: updateData.pwHash || existingPlayer.pwHash
     };
 
@@ -378,7 +383,8 @@ router.post('/:name/avatar', requireSession, async (req, res) => {
       rollerInfo: { ...existingPlayer.rollerInfo },
       shopInfo: { ...existingPlayer.shopInfo },
       tabInfo: { ...(existingPlayer.tabInfo || {}), picture: avatarUrl },
-      pw: existingPlayer.pw,
+      // Do not include plaintext pw when validating/updating avatar
+      pw: '',
       pwHash: existingPlayer.pwHash
     };
 
