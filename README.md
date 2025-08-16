@@ -8,7 +8,6 @@ Deathwatch Roller is a React-based application designed to assist players and Ga
 - Player management
 - Requisition shop for items
 - Session tracking
-- Integration with MongoDB for data persistence
 
 ## Setup Instructions
 1. Clone the repository:
