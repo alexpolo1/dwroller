@@ -109,7 +109,7 @@ function PlayerTab({
   const player = players.find(p => p.name === lookupName) || null;
   debug('PlayerTab', 'currentPlayer computed', { authedPlayer, playerName, lookupName, playerFound: !!player });
     return player;
-  }, [players, authedPlayer]);
+  }, [players, authedPlayer, playerName, isGMLoggedIn]);
 
   useEffect(() => {
     debug('PlayerTab', 'Data loading effect triggered', { authedPlayer, hasCurrentPlayer: !!currentPlayer });
