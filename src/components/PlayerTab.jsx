@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import logger, { debug, info, warn, logApiCall, logApiError, logUserAction } from '../utils/logger';
+import { Tooltip } from './DeathwatchRoller';
 
 const STORAGE_SHOP_AUTHED = 'dw:shop:authedPlayer';
 const STORAGE_SHOP_PLAYERS = 'dw:shop:players:v1';
@@ -28,6 +29,8 @@ const CHARACTERISTICS = [
   { key: 'wp', label: 'Will Power (WP)' },
   { key: 'fel', label: 'Fellowship (Fel)' },
 ]
+
+  
 
 // Updated default skills to Space Marine skills
 const SKILLS = [
@@ -67,7 +70,7 @@ function PlayerTab({
   const [pastEvent, setPastEvent] = useState('');
   const [personalDemeanour, setPersonalDemeanour] = useState('');
   const [characteristics, setCharacteristics] = useState({});
-  const [skills, setSkills] = useState([]);
+  const [skills, setSkills] = useState({});
   const [weapons, setWeapons] = useState([]);
   const [armour, setArmour] = useState({});
   const [talents, setTalents] = useState('');
@@ -89,6 +92,37 @@ function PlayerTab({
   // Debug state
   const [showLogs, setShowLogs] = useState(false);
   const [logs, setLogs] = useState([]);
+
+  // Ability descriptions (used as hover tooltips)
+  const SPACE_MARINE_ABILITIES = [
+    { name: 'Secondary Heart', desc: 'Once per long rest, when reduced to 0 Wounds you remain at 1 Wound instead of falling unconscious (stunned 1 round).' },
+    { name: "Larraman's Organ", desc: 'When stabilised or treated with basic medicae, regain an extra 1–3 Wounds (GM roll) or gain +10 to recovery checks.' },
+    { name: 'Catalepsean Node', desc: 'Ignore penalties from lack of sleep for ~48 hours and reduce exhaustion effects; can grant allies advantage on vigilance checks during extended watches.' },
+    { name: 'Preomnor', desc: 'Strong bonus to toxin-resistance tests (GM: auto-success or +20) and halve duration/effect of ingested poisons.' },
+    { name: 'Omophagea', desc: 'On consuming a biological sample (GM permission), gain a one-time clue or +10 to lore/identification checks related to that subject.' },
+    { name: 'Multi-lung', desc: 'Ignore breathing penalties in toxic/low-oxygen environments and avoid short-term inhalation damage.' },
+    { name: 'Sus-an Membrane', desc: 'Can enter suspended animation to avoid bleeding out when gravely wounded; buys time for evacuation/treatment.' },
+    { name: 'Oolitic Kidney', desc: 'Reduce toxin damage/effects by half once per exposure or gain advantage on resisting chemical effects.' },
+    { name: 'Neuroglottis', desc: 'Automatic/strong bonus to checks identifying substances by taste; +10 to Tracking vs a target you have tasted.' },
+    { name: 'Mucranoid', desc: 'Small resistance to disease and contaminants; +10 on disease-resistance and recovery rolls.' },
+    { name: "Betcher's Gland", desc: 'One-use close toxin/venom attack per rest or apply a minor toxin effect on a successful melee strike (GM adjudication).' },
+    { name: 'Progenoid Glands', desc: 'Store genetic material for Chapter preservation; may enable long-term resurrection rituals (GM process).' },
+    { name: 'Melanochrome', desc: '+10 or advantage to perception in varied lighting and camouflage detection.' },
+    { name: 'Occulobe', desc: 'Ignore low-light penalties; see in darkness to short range.' },
+    { name: "Lyman's Ear", desc: 'Advantage on hearing/perception checks and ability to detect faint sounds.' }
+  ];
+
+  const POWER_ARMOUR_ABILITIES = [
+    { name: 'Servo-Augmented Musculature', desc: '+20 Strength while wearing Power Armour.' },
+    { name: 'Auto-senses', desc: 'Dark sight; immune to Photon Flash and Stun Grenades; Called Shots are Half Actions; +10 to sight and hearing Awareness Tests (stacks with Heightened Senses).' },
+    { name: 'Built-in Vox Link', desc: 'Integrated communications — no external vox gear required.' },
+    { name: 'Built-in Magboots', desc: 'Grip in zero-G or slippery conditions; avoid slipping/falling penalties.' },
+    { name: 'Nutrient Recycling', desc: 'Operate up to two weeks without resupply.' },
+    { name: 'Recoil Suppression', desc: 'May fire Basic weapons one-handed without penalty while in Power Armour.' },
+    { name: 'Black Carapace / Size: Hulking', desc: 'Large frame, but Black Carapace prevents enemies gaining a size-based bonus to hit you while in Power Armour.' },
+    { name: 'Poor Manual Dexterity', desc: 'Delicate tasks suffer a −10 penalty unless using Space Marine-specific tools.' },
+    { name: 'Osmotic Gill Life Sustainer', desc: 'Extended underwater/contaminated atmosphere operation support.' }
+  ];
   
   // Initialize GM state is now handled in App.js
 
@@ -96,6 +130,10 @@ function PlayerTab({
   useEffect(() => {
     if (showLogs) setLogs(logger.getLogs({ limit: 200 }));
   }, [showLogs]);
+
+  // GM helpers (define early so hooks using them can call safely)
+  const isGMLoggedIn = useCallback(() => authedPlayer === 'gm', [authedPlayer]);
+  const isGMOrShopAuthed = useCallback(() => isGMLoggedIn() || !!authedPlayer, [isGMLoggedIn, authedPlayer]);
 
   // Remove localStorage cache for players except after backend fetch
 
@@ -129,7 +167,7 @@ function PlayerTab({
       setPastEvent('');
       setPersonalDemeanour('');
       setCharacteristics({});
-      setSkills([]);
+  setSkills({});
       setWeapons([]);
       setArmour({});
       setTalents('');
@@ -162,7 +200,7 @@ function PlayerTab({
     setPastEvent(tabInfo.pastEvent || '');
     setPersonalDemeanour(tabInfo.personalDemeanour || '');
     setCharacteristics(tabInfo.characteristics || {});
-    setSkills(tabInfo.skills || []);
+  setSkills(normalizeIncomingSkills(tabInfo.skills || []));
     setWeapons(tabInfo.weapons || []);
     setArmour(tabInfo.armour || {});
   setPicture(tabInfo.picture || tabInfo.avatar || '');
@@ -337,7 +375,7 @@ function PlayerTab({
         pastEvent: updatedPlayer.pastEvent,
         personalDemeanour: updatedPlayer.personalDemeanour,
         characteristics: updatedPlayer.characteristics,
-        skills: updatedPlayer.skills,
+  skills: serializeSkillsForSave(updatedPlayer.skills),
         weapons: updatedPlayer.weapons,
         armour: updatedPlayer.armour,
         talents: updatedPlayer.talents,
@@ -432,9 +470,7 @@ function PlayerTab({
   // Define shopAuthed for use in the component
   const shopAuthed = getShopAuthed();
 
-  // Stable callbacks so hooks depending on them don't change each render
-  const isGMLoggedIn = useCallback(() => authedPlayer === 'gm', [authedPlayer]);
-  const isGMOrShopAuthed = useCallback(() => isGMLoggedIn() || !!authedPlayer, [isGMLoggedIn, authedPlayer]);
+  // Stable callbacks defined earlier
 
   // GM session is now managed in App.js
 
@@ -695,6 +731,33 @@ function PlayerTab({
     return headers;
   }
 
+  // Skills normalization helpers
+  function normalizeIncomingSkills(raw) {
+    // Backend stores skills as array of names; frontend expects an object map
+    if (Array.isArray(raw)) {
+      const obj = {};
+      for (const s of raw) {
+        if (!s) continue;
+        obj[s] = { trained: true, plus10: false, plus20: false };
+      }
+      return obj;
+    }
+    if (raw && typeof raw === 'object') return raw;
+    return {};
+  }
+
+  function serializeSkillsForSave(skillsObj) {
+    // Convert frontend skills object back to an array of skill names for backend
+    if (Array.isArray(skillsObj)) return skillsObj.filter(Boolean);
+    if (!skillsObj || typeof skillsObj !== 'object') return [];
+    const out = [];
+    for (const [k, v] of Object.entries(skillsObj)) {
+      if (!k) continue;
+      if (v && (v.trained || v.plus10 || v.plus20)) out.push(k);
+    }
+    return out;
+  }
+
   function refreshLogs() { setLogs(logger.getLogs({ limit: 200 })); }
   function clearLogs() { logger.clearLogs(); setLogs([]); }
 
@@ -901,11 +964,29 @@ function PlayerTab({
           </div>
         </div>
 
-        {/* Space Marine Abilities */}
+        {/* Space Marine Abilities - hover tooltips */}
         <div className="bg-white/5 rounded-xl p-3 border border-white/10">
           <div className="font-semibold mb-2">Space Marine Abilities</div>
-          <div className="text-xs opacity-80">
-            Secondary Heart, Larraman’s Organ, Catalepsean Node, Preomnor, Omophagea, Multi-lung, Sus-an Membrane, Oolitic Kidney, Neuroglottis, Mucranoid, Betcher’s Gland, Progenoid Glands, Melanochrome, Occulobe, Lyman’s Ear
+            <div className="text-xs opacity-80 grid grid-cols-2 md:grid-cols-3 gap-2">
+            {SPACE_MARINE_ABILITIES.map(a => (
+              <div key={a.name} className="p-2 bg-white/3 rounded flex items-center justify-between">
+                <span className="mr-2">{a.name}</span>
+                <Tooltip text={a.desc}><span className="inline-block w-5 h-5 text-center text-black bg-white rounded-full text-xs leading-5">?</span></Tooltip>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Power Armour Abilities - hover tooltips */}
+        <div className="bg-white/5 rounded-xl p-3 border border-white/10 mt-4">
+          <div className="font-semibold mb-2">Power Armour Abilities (standard)</div>
+          <div className="text-xs opacity-80 grid grid-cols-2 md:grid-cols-3 gap-2">
+            {POWER_ARMOUR_ABILITIES.map(a => (
+              <div key={a.name} className="p-2 bg-white/3 rounded flex items-center justify-between">
+                <span className="mr-2">{a.name}</span>
+                <Tooltip text={a.desc}><span className="inline-block w-5 h-5 text-center text-black bg-white rounded-full text-xs leading-5">?</span></Tooltip>
+              </div>
+            ))}
           </div>
         </div>
 
