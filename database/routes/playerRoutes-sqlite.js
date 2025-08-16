@@ -252,7 +252,8 @@ router.post('/', async (req, res) => {
 router.put('/:name', requireSession, async (req, res) => {
   try {
     const { name } = req.params;
-    const updateData = req.body;
+    // Ensure updateData is an object to avoid runtime TypeErrors when fields are missing
+    const updateData = req.body || {};
 
     // Check if player exists
     const existingPlayer = playerHelpers.getByName(name);
@@ -270,9 +271,9 @@ router.put('/:name', requireSession, async (req, res) => {
 
     // Merge the data properly
     const mergedData = {
-      rollerInfo: { ...existingPlayer.rollerInfo, ...updateData.rollerInfo },
-      shopInfo: { ...existingPlayer.shopInfo, ...updateData.shopInfo },
-      tabInfo: { ...existingPlayer.tabInfo, ...updateData.tabInfo },
+      rollerInfo: { ...existingPlayer.rollerInfo, ...(updateData.rollerInfo || {}) },
+      shopInfo: { ...existingPlayer.shopInfo, ...(updateData.shopInfo || {}) },
+      tabInfo: { ...existingPlayer.tabInfo, ...(updateData.tabInfo || {}) },
       // Never carry forward plaintext pw into validation; keep pw empty and use pwHash
       pw: '',
       pwHash: updateData.pwHash || existingPlayer.pwHash

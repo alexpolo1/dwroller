@@ -1122,3 +1122,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export default DeathwatchRoller;
+
+// Named export for reuse in other components
+export { Tooltip };
