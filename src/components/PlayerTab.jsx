@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import logger, { debug, info, warn, logApiCall, logApiError, logUserAction } from '../utils/logger';
 
@@ -432,13 +432,9 @@ function PlayerTab({
   // Define shopAuthed for use in the component
   const shopAuthed = getShopAuthed();
 
-  function isGMOrShopAuthed() {
-    return isGMLoggedIn() || authedPlayer;
-  }
-
-  function isGMLoggedIn() {
-    return authedPlayer === 'gm';
-  }
+  // Stable callbacks so hooks depending on them don't change each render
+  const isGMLoggedIn = useCallback(() => authedPlayer === 'gm', [authedPlayer]);
+  const isGMOrShopAuthed = useCallback(() => isGMLoggedIn() || !!authedPlayer, [isGMLoggedIn, authedPlayer]);
 
   // GM session is now managed in App.js
 

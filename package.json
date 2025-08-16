@@ -10,7 +10,6 @@
     "better-sqlite3": "^12.2.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "mongoose": "^8.17.1",
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^4.8.69",
     "react": "^18.2.0",
@@ -28,11 +27,12 @@
     "extract:armoury": "node scripts/extract-armoury.js \"$PWD/Deathwatch-Core-Rulebook.pdf\" public/deathwatch-armoury.json",
     "server": "npm test && cd database && node server.js",
     "server:notest": "cd database && node server.js",
-    "db:migrate": "cd database && node migrate-to-sqlite.js",
-    "db:export": "cd database && node migrate-to-sqlite.js --export-only",
     "db:sqlite": "cd database && ./switch-db.sh sqlite",
-  "prestart": "",
-  "preserver": ""
+  "pm2:start": "cd database && pm2 start pm2.config.js --env production --update-env",
+  "pm2:stop": "pm2 stop deathwatch-server || true",
+  "pm2:reload": "cd database && pm2 reload pm2.config.js --env production --update-env",
+    "prestart": "",
+    "preserver": ""
   },
   "eslintConfig": {
     "extends": [
@@ -66,6 +66,7 @@
     "prettier-eslint": "^16.4.2",
     "react-scripts": "^5.0.1",
     "tailwindcss": "^3.3.2",
-    "webpack-dev-server": "^5.2.2"
+  "webpack-dev-server": "^5.2.2",
+  "pm2": "^5.2.0"
   }
 }
