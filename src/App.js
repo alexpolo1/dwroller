@@ -2,6 +2,7 @@ import './App.css';
 import DeathwatchRoller from './components/DeathwatchRoller';
 import RequisitionShop from './components/RequisitionShop';
 import PlayerTab from './components/PlayerTab';
+import RulesTab from './components/RulesTab';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { debug, info, warn, error, logApiCall, logApiError, logUserAction } from './utils/logger';
@@ -208,6 +209,12 @@ function App() {
             >
               Character Sheet
             </button>
+            <button 
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${tab==='rules' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-700/50 text-slate-200 hover:bg-slate-600/50'}`} 
+              onClick={()=>{logUserAction('navigation', 'Tab switch', { from: tab, to: 'rules' }); setTab('rules')}}
+            >
+              Rules
+            </button>
           </div>
         </div>
       </div>
@@ -245,7 +252,7 @@ function App() {
           </div>
         )}
         
-        {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : <PlayerTab 
+        {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : tab==='rules' ? <RulesTab authedPlayer={authedPlayer} sessionId={sessionId} /> : <PlayerTab 
           authedPlayer={authedPlayer} 
           sessionId={sessionId}
         />}

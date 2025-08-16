@@ -1,0 +1,422 @@
+{
+  "rules": [
+    {
+      "id": "rule_sample_1",
+      "title": "Attack Roll",
+      "content": "To make an attack, roll 1d100 and compare to your Weapon Skill (for melee) or Ballistic Skill (for ranged). If the result is equal to or less than your skill, you hit. Apply modifiers for difficulty, range, and circumstances.",
+      "page": 45,
+      "source": "Core Rulebook",
+      "sourceAbbr": "CR",
+      "category": "combat",
+      "examples": "Brother Marcus has WS 40. Rolling 35 succeeds, rolling 45 fails.",
+      "relatedRules": [
+        "Damage Roll",
+        "Critical Hit",
+        "Dodge"
+      ]
+    },
+    {
+      "id": "rule_sample_2",
+      "title": "Damage Roll",
+      "content": "When you successfully hit, roll damage using the weapon's damage dice plus your Strength Bonus (for melee) or the weapon's damage value (for ranged). Compare to the target's Toughness and armor.",
+      "page": 48,
+      "source": "Core Rulebook",
+      "sourceAbbr": "CR",
+      "category": "combat",
+      "examples": "Chainsword deals 1d10+3 damage. With SB 4, total damage is 1d10+7.",
+      "relatedRules": [
+        "Attack Roll",
+        "Armor",
+        "Critical Hit"
+      ]
+    },
+    {
+      "id": "rule_sample_3",
+      "title": "Power Armor",
+      "content": "Astartes Power Armor provides 8 points of armor to all locations and includes built-in systems like auto-senses, vox communications, and life support. It also provides immunity to environmental hazards.",
+      "page": 150,
+      "source": "Core Rulebook",
+      "sourceAbbr": "CR",
+      "category": "armor",
+      "examples": "An attack dealing 12 damage is reduced to 4 damage (12-8=4).",
+      "relatedRules": [
+        "Armor",
+        "Equipment",
+        "Requisition"
+      ]
+    },
+    {
+      "id": "rule_sample_4",
+      "title": "Full Auto",
+      "content": "Weapons with Full Auto can fire multiple shots in a single attack. Roll to hit as normal. For every 2 degrees of success, score one additional hit (maximum of half the weapon's Rate of Fire).",
+      "page": 52,
+      "source": "Core Rulebook",
+      "sourceAbbr": "CR",
+      "category": "weapons",
+      "examples": "Bolter RoF 4, hitting by 20 (2 degrees) scores 2 hits total.",
+      "relatedRules": [
+        "Attack Roll",
+        "Semi Auto",
+        "Jamming"
+      ]
+    },
+    {
+      "id": "rule_sample_5",
+      "title": "Requisition",
+      "content": "Space Marines acquire equipment through the Requisition system using Requisition Points. Standard equipment costs 1-5 points, rare items cost more. Points are awarded for mission success and renewed each mission.",
+      "page": 130,
+      "source": "Core Rulebook",
+      "sourceAbbr": "CR",
+      "category": "equipment",
+      "examples": "Bolter costs 1 RP, Heavy Bolter costs 15 RP.",
+      "relatedRules": [
+        "Equipment",
+        "Renown",
+        "Supply"
+      ]
+    },
+    {
+      "id": "rule_sample_6",
+      "title": "Squad Mode",
+      "content": "When Battle-Brothers maintain Cohesion, they can enter Squad Mode and use special abilities. Each round in Squad Mode, generate Cohesion points based on squad leadership and spend them on Squad Mode abilities.",
+      "page": 210,
+      "source": "Core Rulebook",
+      "sourceAbbr": "CR",
+      "category": "squad",
+      "examples": "A 5-man squad generates 2 Cohesion points per round.",
+      "relatedRules": [
+        "Cohesion",
+        "Leadership",
+        "Tactics"
+      ]
+    }
+  ],
+  "searchIndex": {
+    "attack": [
+      0,
+      3
+    ],
+    "roll": [
+      0,
+      1,
+      3
+    ],
+    "make": [
+      0
+    ],
+    "1d100": [
+      0
+    ],
+    "compare": [
+      0,
+      1
+    ],
+    "your": [
+      0,
+      1
+    ],
+    "weapon": [
+      0
+    ],
+    "skill": [
+      0
+    ],
+    "melee": [
+      0,
+      1
+    ],
+    "ballistic": [
+      0
+    ],
+    "ranged": [
+      0,
+      1
+    ],
+    "result": [
+      0
+    ],
+    "equal": [
+      0
+    ],
+    "less": [
+      0
+    ],
+    "than": [
+      0
+    ],
+    "apply": [
+      0
+    ],
+    "modifiers": [
+      0
+    ],
+    "difficulty": [
+      0
+    ],
+    "range": [
+      0
+    ],
+    "circumstances": [
+      0
+    ],
+    "damage": [
+      1
+    ],
+    "when": [
+      1,
+      5
+    ],
+    "successfully": [
+      1
+    ],
+    "using": [
+      1,
+      4
+    ],
+    "weapons": [
+      1,
+      3
+    ],
+    "dice": [
+      1
+    ],
+    "plus": [
+      1
+    ],
+    "strength": [
+      1
+    ],
+    "bonus": [
+      1
+    ],
+    "value": [
+      1
+    ],
+    "targets": [
+      1
+    ],
+    "toughness": [
+      1
+    ],
+    "armor": [
+      1,
+      2
+    ],
+    "power": [
+      2
+    ],
+    "astartes": [
+      2
+    ],
+    "provides": [
+      2
+    ],
+    "points": [
+      2,
+      4,
+      5
+    ],
+    "locations": [
+      2
+    ],
+    "includes": [
+      2
+    ],
+    "builtin": [
+      2
+    ],
+    "systems": [
+      2
+    ],
+    "like": [
+      2
+    ],
+    "autosenses": [
+      2
+    ],
+    "communications": [
+      2
+    ],
+    "life": [
+      2
+    ],
+    "support": [
+      2
+    ],
+    "also": [
+      2
+    ],
+    "immunity": [
+      2
+    ],
+    "environmental": [
+      2
+    ],
+    "hazards": [
+      2
+    ],
+    "full": [
+      3
+    ],
+    "auto": [
+      3
+    ],
+    "with": [
+      3
+    ],
+    "fire": [
+      3
+    ],
+    "multiple": [
+      3
+    ],
+    "shots": [
+      3
+    ],
+    "single": [
+      3
+    ],
+    "normal": [
+      3
+    ],
+    "every": [
+      3
+    ],
+    "degrees": [
+      3
+    ],
+    "success": [
+      3,
+      4
+    ],
+    "score": [
+      3
+    ],
+    "additional": [
+      3
+    ],
+    "maximum": [
+      3
+    ],
+    "half": [
+      3
+    ],
+    "rate": [
+      3
+    ],
+    "requisition": [
+      4
+    ],
+    "space": [
+      4
+    ],
+    "marines": [
+      4
+    ],
+    "acquire": [
+      4
+    ],
+    "equipment": [
+      4
+    ],
+    "through": [
+      4
+    ],
+    "system": [
+      4
+    ],
+    "standard": [
+      4
+    ],
+    "costs": [
+      4
+    ],
+    "rare": [
+      4
+    ],
+    "items": [
+      4
+    ],
+    "cost": [
+      4
+    ],
+    "more": [
+      4
+    ],
+    "awarded": [
+      4
+    ],
+    "mission": [
+      4
+    ],
+    "renewed": [
+      4
+    ],
+    "each": [
+      4,
+      5
+    ],
+    "squad": [
+      5
+    ],
+    "mode": [
+      5
+    ],
+    "battlebrothers": [
+      5
+    ],
+    "maintain": [
+      5
+    ],
+    "cohesion": [
+      5
+    ],
+    "they": [
+      5
+    ],
+    "enter": [
+      5
+    ],
+    "special": [
+      5
+    ],
+    "abilities": [
+      5
+    ],
+    "round": [
+      5
+    ],
+    "generate": [
+      5
+    ],
+    "based": [
+      5
+    ],
+    "leadership": [
+      5
+    ],
+    "spend": [
+      5
+    ],
+    "them": [
+      5
+    ]
+  },
+  "metadata": {
+    "totalRules": 6,
+    "sources": [
+      {
+        "name": "Sample Rules",
+        "abbr": "SAMPLE"
+      }
+    ],
+    "categories": [
+      "combat",
+      "armor",
+      "weapons",
+      "equipment",
+      "squad"
+    ],
+    "lastUpdated": "2025-08-16T06:04:01.692Z"
+  }
+}

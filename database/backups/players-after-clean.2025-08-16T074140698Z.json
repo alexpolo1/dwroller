@@ -1,0 +1,204 @@
+[
+  {
+    "name": "anders",
+    "rollerInfo": {},
+    "shopInfo": {},
+    "tabInfo": {
+      "rp": 2,
+      "xp": 0,
+      "xpSpent": 0,
+      "charName": "char1",
+      "gear": [],
+      "chapter": "blood angels",
+      "demeanour": "",
+      "speciality": "devastator",
+      "rank": "1",
+      "powerArmour": "",
+      "description": "marine",
+      "pastEvent": "",
+      "personalDemeanour": "calculating",
+      "characteristics": {},
+      "skills": [],
+      "weapons": [],
+      "armour": {},
+      "talents": "",
+      "psychic": "",
+      "wounds": 0,
+      "insanity": {},
+      "movement": 0,
+      "fate": {},
+      "corruption": 0,
+      "renown": "None",
+      "notes": ""
+    },
+    "pw": "",
+    "pwHash": "$2b$10$jJB9rqzxJaOtG9ucVM4JGeTFujBAa/3X1CERBIBYYuH5OtIgl/l.m",
+    "_id": 38,
+    "createdAt": "2025-08-15 12:26:31",
+    "updatedAt": "2025-08-16 07:39:29"
+  },
+  {
+    "name": "christoffer",
+    "rollerInfo": {},
+    "shopInfo": {},
+    "tabInfo": {
+      "rp": 2,
+      "inventory": [],
+      "renown": "Hero",
+      "gear": [
+        {
+          "name": "Test Knife",
+          "qty": 1
+        }
+      ],
+      "playerName": "Chris",
+      "charName": "Brother-1",
+      "chapter": "Iron Hands",
+      "demeanour": "Stoic",
+      "speciality": "Demolitions",
+      "rank": "Veteran",
+      "powerArmour": true,
+      "description": "A hard as nails veteran",
+      "pastEvent": "Saved the squad",
+      "personalDemeanour": "Grim",
+      "characteristics": {
+        "WS": 35,
+        "BS": 40
+      },
+      "skills": [
+        "Acrobatics (Ag)",
+        "Awareness (Per)",
+        "Medicae (Int)"
+      ],
+      "weapons": [
+        {
+          "name": "Bolt Pistol",
+          "range": "12m"
+        }
+      ],
+      "armour": [
+        "Power Armour"
+      ],
+      "talents": [
+        "Toughness"
+      ],
+      "psychic": [],
+      "wounds": 5,
+      "movement": 6,
+      "fate": 1,
+      "xp": 500,
+      "xpSpent": 0,
+      "notes": "Test update of full sheet"
+    },
+    "pw": "",
+    "pwHash": "$2b$10$uiNlG0w2Jbg3R2UJiXBil.buZWdUXsThi10HMBz8ynk2sbxiH7HKG",
+    "_id": 1,
+    "createdAt": "2025-08-15 07:12:29",
+    "updatedAt": "2025-08-16 07:39:29"
+  },
+  {
+    "name": "claes",
+    "rollerInfo": {},
+    "shopInfo": {},
+    "tabInfo": {
+      "rp": 2,
+      "inventory": [],
+      "renown": "None",
+      "xp": 500,
+      "xpSpent": 0
+    },
+    "pw": "",
+    "pwHash": "$2b$10$8uyVTTz02wLLPMmxJurT7.1EDh.F92OI91N93eVpgDG.7Li1LjhqC",
+    "_id": 2,
+    "createdAt": "2025-08-15 07:12:29",
+    "updatedAt": "2025-08-16 07:39:29"
+  },
+  {
+    "name": "gm",
+    "rollerInfo": {},
+    "shopInfo": {},
+    "tabInfo": {
+      "rp": 999996,
+      "inventory": [],
+      "renown": "None",
+      "charName": "gm",
+      "gear": [],
+      "chapter": "gm",
+      "demeanour": "gm",
+      "speciality": "gm",
+      "rank": "1",
+      "powerArmour": "",
+      "description": "gm",
+      "pastEvent": "",
+      "personalDemeanour": "",
+      "characteristics": {
+        "ws": 1,
+        "bs": 10,
+        "s": 1,
+        "t": 1,
+        "ag": 1,
+        "int": 1,
+        "per": 1,
+        "wp": 1,
+        "fel": 1
+      },
+      "skills": [],
+      "weapons": [],
+      "armour": {},
+      "talents": "",
+      "psychic": "",
+      "wounds": 0,
+      "insanity": {},
+      "movement": 0,
+      "fate": {},
+      "corruption": 0,
+      "xp": 0,
+      "xpSpent": 0,
+      "notes": ""
+    },
+    "pw": "",
+    "pwHash": "$2b$10$qtM1IF3cZJWRW/gKJh8Kxejd5PzQc/bcDRGftiLVVdh/Q.XggKem2",
+    "_id": 24,
+    "createdAt": "2025-08-15 11:33:16",
+    "updatedAt": "2025-08-16 07:39:29"
+  },
+  {
+    "name": "phillip",
+    "rollerInfo": {},
+    "shopInfo": {},
+    "tabInfo": {
+      "rp": 2,
+      "inventory": [],
+      "renown": "None",
+      "playerName": "phillip",
+      "charName": "test1",
+      "gear": [],
+      "characteristics": {
+        "ws": 1,
+        "bs": 1,
+        "s": 1,
+        "t": 1,
+        "ag": 1,
+        "int": 1,
+        "per": 1,
+        "wp": 1,
+        "fel": 1
+      },
+      "skills": [],
+      "weapons": [],
+      "armour": {},
+      "wounds": 0,
+      "insanity": {},
+      "movement": 0,
+      "fate": {},
+      "demeanour": "test11222",
+      "xp": 500,
+      "xpSpent": 0
+    },
+    "pw": "",
+    "pwHash": "$2b$10$luaCFHf/zNjZGeMHZei2ZO1E.vBb4UkYeWOCcy9FQSY52P5Rq7nT.",
+    "_id": 3,
+    "createdAt": "2025-08-15 07:12:29",
+    "updatedAt": "2025-08-16 07:39:29"
+  }
+]

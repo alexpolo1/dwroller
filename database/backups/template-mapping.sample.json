@@ -1,0 +1,16 @@
+{
+  "players": [
+    {
+      "name": "christoffer",
+      "setCharacteristics": { "WS": 35, "BS": 40 },
+      "addItems": ["Bolt Pistol"],
+      "setRenown": "Respected"
+    },
+    {
+      "name": "anders",
+      "setCharacteristics": { "ws": 4, "bs": 4 },
+      "addItems": ["Combat Knife"],
+      "setRenown": "None"
+    }
+  ]
+}
