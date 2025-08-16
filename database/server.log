@@ -1,0 +1,18 @@
+nohup: ignoring input
+SQLite tables created successfully
+Loading rules routes...
+Loaded 288 rules from database
+Rules routes registered
+Routes loaded: {
+  playerRoutes: 'function',
+  sessionRoutes: 'function',
+  shopRoutes: 'function',
+  rulesRoutes: 'function'
+}
+Registering API routes...
+Players routes registered
+Sessions routes registered
+Shop routes registered
+Rules routes registered
+Server running on http://0.0.0.0:5000
+Using SQLite database

@@ -13,6 +13,7 @@ function logToFile(...args) {
 }
 
 const requireSession = require('../requireSession');
+const { validatePlayer } = require('../validate');
 const router = express.Router();
 
 // PUBLIC ROUTES - before session middleware
@@ -128,6 +129,19 @@ router.get('/admin/list', async (req, res) => {
   }
 });
 
+// Expose pre-generated Space Marine names for GM use
+router.get('/admin/pregens', async (req, res) => {
+  try {
+    const filePath = path.join(__dirname, '..', 'pregen_names.json');
+    if (!fs.existsSync(filePath)) return res.json([]);
+    const names = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    res.json(names);
+  } catch (error) {
+    logToFile('API: Failed to get pregens', error);
+    res.status(500).json({ error: 'Failed to get pregens' });
+  }
+});
+
 // Shop endpoint already defined above
 
 // TEMP ADMIN: Delete test users (name contains 'test' or 'Test')
@@ -203,6 +217,12 @@ router.post('/', async (req, res) => {
       return res.status(409).json({ error: 'Player already exists' });
     }
 
+    // Validate and normalize incoming player object
+    const { valid, errors, normalized } = validatePlayer({ name, pw, ...otherData });
+    if (!valid) {
+      return res.status(400).json({ error: 'Validation failed', details: errors });
+    }
+
     // Create password hash if password provided (use safeHash)
     let pwHash = '';
     if (pw) {
@@ -210,12 +230,12 @@ router.post('/', async (req, res) => {
     }
 
     const newPlayer = playerHelpers.create({
-      name,
+      name: normalized.name,
       pw: pw || '',
       pwHash,
-      rollerInfo: otherData.rollerInfo || {},
-      shopInfo: otherData.shopInfo || {},
-      tabInfo: otherData.tabInfo || {}
+      rollerInfo: normalized.rollerInfo || {},
+      shopInfo: normalized.shopInfo || {},
+      tabInfo: normalized.tabInfo || {}
     });
 
     logToFile('API: Created player', name);
@@ -269,7 +289,13 @@ router.put('/:name', requireSession, async (req, res) => {
       }
     }
 
-    const updated = playerHelpers.update(name, mergedData);
+    // Validate merged data before applying
+    const { valid: v2, errors: e2, normalized: normalized2 } = validatePlayer(Object.assign({ name }, mergedData));
+    if (!v2) {
+      return res.status(400).json({ error: 'Validation failed', details: e2 });
+    }
+
+    const updated = playerHelpers.update(name, normalized2);
     
     if (!updated) {
       return res.status(500).json({ error: 'Failed to update player' });
@@ -300,6 +326,75 @@ router.delete('/:name', requireSession, async (req, res) => {
   } catch (error) {
     logToFile('API: Failed to delete player', req.params.name, error);
     res.status(500).json({ error: 'Failed to delete player' });
+  }
+});
+
+// Upload avatar (base64 JSON payload) - saves to public/avatars and updates tabInfo.picture
+router.post('/:name/avatar', requireSession, async (req, res) => {
+  try {
+    const { name } = req.params;
+    const { filename, data } = req.body || {};
+
+    if (!filename || !data) return res.status(400).json({ error: 'filename and data required' });
+
+    const existingPlayer = playerHelpers.getByName(name);
+    if (!existingPlayer) return res.status(404).json({ error: 'Player not found' });
+
+    // Extract base64 payload if data URL provided
+    const match = String(data).match(/^data:(image\/(png|jpeg|jpg|gif));base64,(.*)$/i);
+    let mimeType = null;
+    let base64 = null;
+    if (match) {
+      mimeType = match[1];
+      base64 = match[3];
+    } else {
+      // Assume raw base64 and try to infer extension from filename
+      base64 = String(data).replace(/^\s+|\s+$/g, '');
+    }
+
+    // Validate size (limit to 200KB)
+    let buffer;
+    try {
+      buffer = Buffer.from(base64, 'base64');
+    } catch (err) {
+      return res.status(400).json({ error: 'Invalid base64 data' });
+    }
+    const MAX_BYTES = 200 * 1024;
+    if (buffer.length > MAX_BYTES) return res.status(413).json({ error: 'File too large' });
+
+    // Sanitize filename and ensure extension
+    const ext = path.extname(filename).toLowerCase() || (mimeType ? `.${mimeType.split('/')[1]}` : '.png');
+    const safeName = `${existingPlayer.name.replace(/[^a-z0-9_-]/gi, '_')}_${Date.now()}${ext}`;
+    const avatarsDir = path.join(__dirname, '..', '..', 'public', 'avatars');
+    if (!fs.existsSync(avatarsDir)) fs.mkdirSync(avatarsDir, { recursive: true });
+
+    const outPath = path.join(avatarsDir, safeName);
+    fs.writeFileSync(outPath, buffer);
+
+    // Update player's tabInfo.picture to public URL path
+    const avatarUrl = `/avatars/${safeName}`;
+
+    const mergedData = {
+      rollerInfo: { ...existingPlayer.rollerInfo },
+      shopInfo: { ...existingPlayer.shopInfo },
+      tabInfo: { ...(existingPlayer.tabInfo || {}), picture: avatarUrl },
+      pw: existingPlayer.pw,
+      pwHash: existingPlayer.pwHash
+    };
+
+    // Validate then update
+    const { valid, errors, normalized } = validatePlayer(Object.assign({ name }, mergedData));
+    if (!valid) return res.status(400).json({ error: 'Validation failed', details: errors });
+
+    const ok = playerHelpers.update(name, normalized);
+    if (!ok) return res.status(500).json({ error: 'Failed to update player with avatar' });
+
+    const updated = playerHelpers.getByName(name);
+    logToFile('API: Uploaded avatar for', name, avatarUrl);
+    res.json(updated);
+  } catch (error) {
+    logToFile('API: Avatar upload failed', req.params.name, error && error.stack ? error.stack : error);
+    res.status(500).json({ error: 'Avatar upload failed' });
   }
 });
 

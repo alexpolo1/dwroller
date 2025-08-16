@@ -31,9 +31,8 @@
     "db:migrate": "cd database && node migrate-to-sqlite.js",
     "db:export": "cd database && node migrate-to-sqlite.js --export-only",
     "db:sqlite": "cd database && ./switch-db.sh sqlite",
-    "db:mongo": "cd database && ./switch-db.sh mongo",
-    "prestart": "npm run db:sqlite",
-    "preserver": "npm run db:sqlite"
+  "prestart": "",
+  "preserver": ""
   },
   "eslintConfig": {
     "extends": [

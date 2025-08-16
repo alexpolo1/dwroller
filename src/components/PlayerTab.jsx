@@ -19,7 +19,6 @@ function safeGet(key) {
 function safeSet(key, val) { try { if (typeof window !== 'undefined' && 'localStorage' in window) window.localStorage.setItem(key, JSON.stringify(val)) } catch {} }
 
 const CHARACTERISTICS = [
-  { key: 'ws', label: 'Weapon Skill (WS)' },
   { key: 'bs', label: 'Ballistic Skill (BS)' },
   { key: 's', label: 'Strength (S)' },
   { key: 't', label: 'Toughness (T)' },
@@ -73,6 +72,7 @@ function PlayerTab({
   const [armour, setArmour] = useState({});
   const [talents, setTalents] = useState('');
   const [psychic, setPsychic] = useState('');
+  const [picture, setPicture] = useState('');
   const [wounds, setWounds] = useState({});
   const [insanity, setInsanity] = useState({});
   const [movement, setMovement] = useState({});
@@ -104,8 +104,10 @@ function PlayerTab({
       warn('PlayerTab', 'players is not an array', players);
       return null;
     }
-    const player = players.find(p => p.name === authedPlayer) || null;
-    debug('PlayerTab', 'currentPlayer computed', { authedPlayer, playerFound: !!player });
+  // If GM panel is open and a playerName is provided, show that player's sheet.
+  const lookupName = (isGMLoggedIn() && playerName) ? playerName : authedPlayer;
+  const player = players.find(p => p.name === lookupName) || null;
+  debug('PlayerTab', 'currentPlayer computed', { authedPlayer, playerName, lookupName, playerFound: !!player });
     return player;
   }, [players, authedPlayer]);
 
@@ -163,6 +165,7 @@ function PlayerTab({
     setSkills(tabInfo.skills || []);
     setWeapons(tabInfo.weapons || []);
     setArmour(tabInfo.armour || {});
+  setPicture(tabInfo.picture || tabInfo.avatar || '');
     setTalents(tabInfo.talents || '');
     setPsychic(tabInfo.psychic || '');
     setWounds(tabInfo.wounds || {});
@@ -216,6 +219,30 @@ function PlayerTab({
     setGear(prev => prev.map(item => (item.id === id ? { ...item, ...updates } : item)));
   }
 
+  async function uploadAvatarFile(file) {
+    if (!file) return;
+    // limit size on client too (200KB)
+    const MAX_BYTES = 200 * 1024;
+    if (file.size > MAX_BYTES) { flash('File too large (max 200KB)'); return; }
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const dataUrl = e.target.result;
+      try {
+        const resp = await axios.post(`/api/players/${currentPlayer.name}/avatar`, { filename: file.name, data: dataUrl }, { headers: buildHeaders({'Content-Type':'application/json'}) });
+        // Update players list with returned data
+        const updated = resp.data;
+        setPlayers(prev => prev.map(p => p.name === updated.name ? updated : p));
+        setPicture(updated.tabInfo?.picture || '');
+        flash('Avatar uploaded');
+      } catch (err) {
+        console.error('Avatar upload failed', err.response?.data || err.message);
+        flash('Avatar upload failed');
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
   function deleteGear(id) {
     setGear(prev => prev.filter(item => item.id !== id));
   }
@@ -240,15 +267,14 @@ function PlayerTab({
           console.log('DEBUG: GM is logged in, fetching all players from API');
           logApiCall('PlayerTab', 'GET', '/api/players');
           const response = await axios.get('/api/players', { headers: buildHeaders() });
-          const data = response.data;
-          console.log('DEBUG: GM API response:', data.length, 'players');
-          if (!Array.isArray(data)) {
-            warn('PlayerTab', '/api/players did not return an array', data);
+          console.log('DEBUG: GM API response:', response.data.length, 'players');
+          if (!Array.isArray(response.data)) {
+            warn('PlayerTab', '/api/players did not return an array', response.data);
             setPlayers([]);
           } else {
-            info('PlayerTab', `Fetched ${data.length} players`);
-            setPlayers(data);
-            safeSet(STORAGE_SHOP_PLAYERS, data);
+            info('PlayerTab', `Fetched ${response.data.length} players`);
+            setPlayers(response.data);
+            safeSet(STORAGE_SHOP_PLAYERS, response.data);
           }
           return;
         }
@@ -266,14 +292,13 @@ function PlayerTab({
         console.log('DEBUG: Fetching from API for regular user');
         logApiCall('PlayerTab', 'GET', '/api/players');
         const response = await axios.get('/api/players', { headers: buildHeaders() });
-        const data = response.data;
-        if (!Array.isArray(data)) {
-          warn('PlayerTab', '/api/players did not return an array', data);
+        if (!Array.isArray(response.data)) {
+          warn('PlayerTab', '/api/players did not return an array', response.data);
           setPlayers([]);
         } else {
-          info('PlayerTab', `Fetched ${data.length} players`);
-          setPlayers(data);
-          safeSet(STORAGE_SHOP_PLAYERS, data);
+          info('PlayerTab', `Fetched ${response.data.length} players`);
+          setPlayers(response.data);
+          safeSet(STORAGE_SHOP_PLAYERS, response.data);
         }
       } catch (apiError) {
         console.log('DEBUG: API error:', apiError);
@@ -326,6 +351,7 @@ function PlayerTab({
         xp: updatedPlayer.xp,
         xpSpent: updatedPlayer.xpSpent,
         notes: updatedPlayer.notes,
+  picture: updatedPlayer.picture,
         rp: updatedPlayer.rp
       };
 
@@ -392,6 +418,7 @@ function PlayerTab({
       xp,
       xpSpent,
       notes,
+  picture,
       rp: (currentPlayer?.tabInfo?.rp) || 0,
     };
     
@@ -453,9 +480,28 @@ function PlayerTab({
     const [name, setName] = useState('')
     const [rp, setRp] = useState(10)
     const [pw, setPw] = useState('')
+    const [pregens, setPregens] = useState([])
+    const [usePregen, setUsePregen] = useState(false)
+
+    useEffect(()=>{
+      (async ()=>{
+        try {
+          const res = await axios.get('/api/players/admin/pregens', { headers: buildHeaders() });
+          setPregens(res.data || []);
+        } catch (e) {
+          console.warn('Failed to load pregens', e);
+        }
+      })();
+    },[])
     return (
       <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
-        <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" placeholder="Player name" value={name} onChange={e=>setName(e.target.value)} />
+        <div className="flex gap-2">
+          <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 flex-1" placeholder="Player name" value={name} onChange={e=>setName(e.target.value)} />
+          <select className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={usePregen ? name : ''} onChange={e=>{ setUsePregen(!!e.target.value); setName(e.target.value); }}>
+            <option value="">-- pregens --</option>
+            {pregens.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </div>
         <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} value={rp} onChange={e=>setRp(parseInt(e.target.value||'0'))} />
         <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="password" placeholder="Password" value={pw} onChange={e=>setPw(e.target.value)} />
         <button onClick={()=>{ onAdd(name, rp, pw); setName(''); setRp(10); setPw('') }} className="rounded-xl px-3 py-2 bg-amber-600 hover:bg-amber-500">Add/Update</button>
@@ -524,9 +570,9 @@ function PlayerTab({
       return
     }
     try {
-      const { data } = await axios.put(`/api/players/${name}`, {
+      await axios.put(`/api/players/${name}`, {
         tabInfo: { ...player.tabInfo, xp }
-      }, { headers: buildHeaders() })
+      }, { headers: buildHeaders() });
       
       const res = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(res.data);
@@ -546,9 +592,9 @@ function PlayerTab({
       return
     }
     try {
-      const { data } = await axios.put(`/api/players/${name}`, {
+      await axios.put(`/api/players/${name}`, {
         tabInfo: { ...player.tabInfo, xpSpent }
-      }, { headers: buildHeaders() })
+      }, { headers: buildHeaders() });
       
       const res = await axios.get('/api/players', { headers: buildHeaders() });
       setPlayers(res.data);
@@ -656,44 +702,30 @@ function PlayerTab({
   function refreshLogs() { setLogs(logger.getLogs({ limit: 200 })); }
   function clearLogs() { logger.clearLogs(); setLogs([]); }
 
-  // No per-tab login/logout; handled globally
-
-  // Early return if not authenticated
-  if (!authedPlayer) {
-    return (
-      <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8">
-        <div className="mx-auto max-w-7xl space-y-6">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Player Tab</h1>
-            <p className="text-slate-400">Please log in to access player data</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
 
-        {/* Character Name & Player Name */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white/5 rounded-xl p-3 border border-white/10">
-          <div>
-            <label className="text-xs uppercase opacity-70">Character Name</label>
-            <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
-              value={charName}
-              onChange={(e) => setCharName(e.target.value)}
-            />
+        {/* Avatar header (standalone) */}
+        <div className="flex flex-col items-center bg-white/5 rounded-xl p-4 border border-white/10">
+          <div className="w-full flex justify-center">
+            <img src={picture || '/logo192.png'} alt="avatar" className="w-36 h-36 md:w-48 md:h-48 rounded-full object-cover border-4 border-white/10 shadow-lg" />
           </div>
-          <div>
-            <label className="text-xs uppercase opacity-70">Player Name</label>
-            <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
-            />
+          <div className="mt-3 text-center">
+            <div className="text-lg font-semibold">{charName || currentPlayer?.tabInfo?.charName || 'Unknown'}</div>
+            <div className="text-sm text-slate-400">{playerName || currentPlayer?.name}</div>
           </div>
+          {(isGMOrShopAuthed() || authedPlayer === currentPlayer?.name) && (
+            <div className="mt-3 text-xs text-slate-400 text-center">
+              <div className="flex flex-col items-center">
+                <input type="file" accept="image/*" onChange={e=>uploadAvatarFile(e.target.files?.[0])} />
+                <div className="mt-1">Max 200KB. Supported: png/jpg/gif</div>
+                <input className="w-64 md:w-96 mx-auto mt-2 rounded border border-white/10 bg-white/10 px-2 py-1" value={picture} onChange={e=>setPicture(e.target.value)} placeholder="Or paste image URL" />
+              </div>
+            </div>
+          )}
+        </div>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
           <div className="text-sm opacity-80">
             {/* Login status now handled globally in header */}
@@ -1145,6 +1177,12 @@ function PlayerTab({
           </div>
         )}
 
+        {/* Player record timestamps */}
+        <div className="mt-4 text-sm text-slate-400">
+          <div>Created: <span className="text-xs text-slate-300">{currentPlayer?.createdAt ? new Date(currentPlayer.createdAt).toLocaleString() : '—'}</span></div>
+          <div>Updated: <span className="text-xs text-slate-300">{currentPlayer?.updatedAt ? new Date(currentPlayer.updatedAt).toLocaleString() : '—'}</span></div>
+        </div>
+
         {/* In-app log panel */}
         {showLogs && (
           <div className="mt-4 bg-white/5 rounded-xl p-3 border border-white/10">
@@ -1166,10 +1204,9 @@ function PlayerTab({
               ))}
             </div>
           </div>
-        )}
-      </div>
-    </section>
-  );
+          )}
+      </section>
+    );
 }
 
 export default PlayerTab;

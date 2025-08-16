@@ -1,0 +1,465 @@
+{
+  "name": "christoffer",
+  "rollerInfo": {},
+  "shopInfo": {},
+  "tabInfo": {
+    "rp": 2,
+    "inventory": [
+      {
+        "name": "Astartes Frag Grenade",
+        "count": 3
+      },
+      {
+        "name": "Astartes Krak Grenade",
+        "count": 3
+      }
+    ],
+    "renown": "Rank 1",
+    "gear": [
+      {
+        "name": "Test Knife",
+        "qty": 1
+      },
+      {
+        "name": "Astartes Frag Grenade",
+        "qty": 3
+      },
+      {
+        "name": "Astartes Krak Grenade",
+        "qty": 3
+      },
+      {
+        "name": "Sacris Claymore",
+        "qty": 1
+      },
+      {
+        "name": "Astartes Power Armour",
+        "qty": 1
+      },
+      {
+        "name": "Astartes Frag Grenade",
+        "qty": 3
+      },
+      {
+        "name": "Astartes Krak Grenade",
+        "qty": 3
+      },
+      {
+        "name": "Sacris Claymore",
+        "qty": 1
+      },
+      {
+        "name": "Astartes Power Armour",
+        "qty": 1
+      }
+    ],
+    "playerName": "Chris",
+    "charName": "Brother Gregor",
+    "chapter": "Iron Hands",
+    "demeanour": "Stoic",
+    "speciality": "Demolitions",
+    "rank": "Veteran",
+    "powerArmour": true,
+    "description": "A hard as nails veteran",
+    "pastEvent": "Saved the squad",
+    "personalDemeanour": "Grim",
+    "characteristics": {
+      "ws": 42,
+      "bs": 42,
+      "s": 42,
+      "t": 41,
+      "ag": 40,
+      "int": 41,
+      "per": 46,
+      "wp": 42,
+      "fel": 43
+    },
+    "skills": {
+      "Acrobatics (Ag)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Awareness (Per)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Charm (Fel)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Climb (S)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Command (Fel)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Common Lore (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Deathwatch": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Imperium": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "War": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Dodge (Ag)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Forbidden Lore (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Xenos": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Intimidate (S)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Literacy (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Medicae (Int)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Navigation (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Pilot (Ag)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Scholastic Lore (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Codex Astartes": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Scrutiny (Per)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Search (Per)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Silent Move (Ag)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Speak Language (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "High Gothic": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Low Gothic": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Survival (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Tactics (Int)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Tracking (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Tech-Use (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Guns (BS)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Melee (WS)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Adeptus Astartes": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Common Lore (Int) (Adeptus Astartes, Imperium, War)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Intimidate (Str)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Scholastic Lore (Int) (Codex Astartes)": {
+        "trained": true,
+        "plus10": false,
+        "plus20": false
+      },
+      "Barter (Fel)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Blather (Fel)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Carouse (Fel)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Chem-Use (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Ciphers (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Chapter Runes": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Concealment (Ag)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Contortionist (Ag)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Deceive (Fel)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Demolition (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Disguise (Fel)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Drive (Ag)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Evaluate": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Gamble (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Inquiry (Fel)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Interrogation (WP)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Invocation (WP)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Lip Reading (Per)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Logic (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Surface": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Performer (Fel)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Psyniscience (Per)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Secret Tongue (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Security (Ag)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Shadowing (Ag)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Sleight of Hand (Ag)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Swim (S)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Trade (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      },
+      "Wrangling (Int)": {
+        "trained": false,
+        "plus10": false,
+        "plus20": false
+      }
+    },
+    "weapons": [
+      {
+        "name": "Astartes Bolter-Godwyn",
+        "class": "Basic - Bolt",
+        "damage": "Range 100m; S/3/-; 1d10+9 X; Pen 4; Clip 28; Reload 1 Full; Two handed; Tearing",
+        "type": "Ranged Weapon",
+        "pen": "4",
+        "range": "100m",
+        "rof": "",
+        "clip": "28",
+        "rld": "1 Full",
+        "special": "Living Errata v1.1 p146"
+      },
+      {
+        "name": "Astartes Bolt Pistol",
+        "class": "Pistol - Bolt",
+        "damage": "Range 30m; S/2/-; 1d10+9 X; Pen 4; Clip 14; Reload 1 Full; Tearing",
+        "type": "Ranged Weapon",
+        "pen": "4",
+        "range": "30m",
+        "rof": "",
+        "clip": "14",
+        "rld": "1 Full",
+        "special": "Living Errata v1.1 p146"
+      }
+    ],
+    "armour": {
+      "body": "Astartes Power Armour",
+      "ap": 10,
+      "head": 0,
+      "ra": 8,
+      "la": 8,
+      "rl": 8,
+      "ll": 8
+    },
+    "talents": [
+      "Bolter Mastery",
+      "Deathwatch Training"
+    ],
+    "psychic": [],
+    "wounds": {
+      "total": 24,
+      "current": 24,
+      "fatigue": 0
+    },
+    "movement": {
+      "half": 5,
+      "full": 10,
+      "charge": 15,
+      "halfAction": 5,
+      "fullAction": 10,
+      "run": 30
+    },
+    "fate": {
+      "total": 2,
+      "current": 2
+    },
+    "xp": 500,
+    "xpSpent": 0,
+    "notes": "Test update of full sheet"
+  },
+  "pw": "",
+  "pwHash": "$2b$10$uiNlG0w2Jbg3R2UJiXBil.buZWdUXsThi10HMBz8ynk2sbxiH7HKG",
+  "_id": 1,
+  "createdAt": "2025-08-15 07:12:29",
+  "updatedAt": "2025-08-16 08:58:10"
+}
