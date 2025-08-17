@@ -8,6 +8,7 @@ const sessionRoutes = require('./routes/sessionRoutes-sqlite');
 const shopRoutes = require('./routes/shopRoutes');
 const rulesRoutes = require('./routes/rulesRoutes');
 const bestiaryRoutes = require('./routes/bestiaryRoutes');
+const weaponsRoutes = require('./routes/weaponsRoutes');
 // const rulesRoutes = require('./routes/rulesRoutes-simple');
 
 console.log('Routes loaded:', {
@@ -143,6 +144,9 @@ console.log('Mounted /api/rules');
 console.log('Mounting route: /api/bestiary');
 app.use('/api/bestiary', bestiaryRoutes);
 console.log('Mounted /api/bestiary');
+console.log('Mounting route: /api/weapons');
+app.use('/api/weapons', weaponsRoutes);
+console.log('Mounted /api/weapons');
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {

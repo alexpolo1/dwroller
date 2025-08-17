@@ -14,7 +14,16 @@ const shopHelpers = {
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM shop_items ORDER BY category, name', [], (err, rows) => {
         if (err) return reject(err);
-        resolve(rows);
+        // Parse stats JSON string into object when possible
+        const parsed = rows.map(r => {
+          try {
+            return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
+          } catch (e) {
+            // if parsing fails, leave as-is
+            return r;
+          }
+        });
+        resolve(parsed);
       });
     });
   },
@@ -24,7 +33,14 @@ const shopHelpers = {
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM shop_items WHERE category = ? ORDER BY name', [category], (err, rows) => {
         if (err) return reject(err);
-        resolve(rows);
+        const parsed = rows.map(r => {
+          try {
+            return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
+          } catch (e) {
+            return r;
+          }
+        });
+        resolve(parsed);
       });
     });
   },
@@ -42,7 +58,14 @@ const shopHelpers = {
         ORDER BY si.category, si.name
       `, [playerId], (err, rows) => {
         if (err) return reject(err);
-        resolve(rows);
+        const parsed = rows.map(r => {
+          try {
+            return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
+          } catch (e) {
+            return r;
+          }
+        });
+        resolve(parsed);
       });
     });
   },
@@ -125,7 +148,15 @@ const shopHelpers = {
         ORDER BY t.transaction_date DESC
       `, [playerId], (err, rows) => {
         if (err) return reject(err);
-        resolve(rows);
+        // transactions don't include full item stats, but parse if present
+        const parsed = rows.map(r => {
+          try {
+            return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
+          } catch (e) {
+            return r;
+          }
+        });
+        resolve(parsed);
       });
     });
   }

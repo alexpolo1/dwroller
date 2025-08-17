@@ -19,19 +19,7 @@ function renownClass(r) {
   return 'bg-slate-700'
 }
 
-function slugify(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') }
-
-function normalizeItem(it) {
-  const name = String(it.name||'').trim()
-  if (!name) return null
-  const id = String(it.id||slugify(name))
-  const category = String(it.category||'Gear').trim()
-  const req = Math.max(0, Number.isFinite(+it.req) ? +it.req : (Number.isFinite(+it.cost)? +it.cost : 0))
-  const cost = req
-  const desc = String(it.desc||'').trim()
-  const renown = normalizeRank(it.renown||it.Renown)
-  return { id, name, category, cost, req, renown, desc }
-}
+// ...existing code...
 
 export default function RequisitionShop({ authedPlayer, sessionId }) {
   const [items, setItems] = useState([])
@@ -69,52 +57,47 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
             setPlayers([]);
           }
         }
-
         // Fetch shop items from the new database (public endpoint, no session needed)
         console.log('Fetching shop items');
         const itemsResponse = await axios.get('/api/shop/items');
         console.log('Fetched shop items:', itemsResponse.data);
-        
+
         if (!itemsResponse.data || itemsResponse.data.length === 0) {
-          console.log('Warning: Shop items response was empty, falling back to JSON');
-          throw new Error('Empty shop items');
+          console.log('Warning: Shop items response was empty')
         }
-        
-        const normalizedItems = itemsResponse.data.map(item => ({
-          id: item.id,
-          name: item.name,
-          category: item.category,
-          cost: item.requisition_cost,
-          req: item.requisition_cost,
-          renown: item.renown_requirement,
-          desc: item.stats ? JSON.parse(item.stats).description || '' : '',
-          stats: item.stats ? JSON.parse(item.stats) : {}
-        }));
-        
+
+        // helper to safely get stats as object whether API returned string or object
+        const parseStats = s => {
+          if (!s) return {};
+          if (typeof s === 'string') {
+            try { return JSON.parse(s); } catch (e) { return { raw: s }; }
+          }
+          return s;
+        }
+
+        const normalizedItems = itemsResponse.data.map(item => {
+          const statsObj = parseStats(item.stats);
+          return {
+            id: item.id,
+            name: item.name,
+            category: item.category,
+            cost: item.requisition_cost,
+            req: item.requisition_cost,
+            renown: item.renown_requirement,
+            desc: statsObj.description || '',
+            stats: statsObj
+          };
+        });
+
         setItems(normalizedItems);
       } catch (error) {
         console.error('Error fetching data:', error);
-        if (error.response?.status === 404 && error.response?.data?.includes('shop')) {
-          // If shop API fails, fall back to JSON file
-          try {
-            const res = await fetch('/deathwatch-armoury.json', { cache: 'no-store' })
-            if (!res.ok) return;
-            const arr = await res.json()
-            const next = Array.isArray(arr) ? arr.map(normalizeItem).filter(Boolean) : []
-            if (next.length>0) {
-              setItems(next)
-            }
-          } catch (e) {
-            console.error('Failed to load fallback JSON:', e);
-          }
-        }
+        // If shop API fails, we can't load items. Keep players fallback behavior.
         setPlayers([]);
       }
     }
-    
-    if (sessionId) {
-      fetchData();
-    }
+    // Always fetch shop items; fetch players only if we have a sessionId
+    fetchData();
   }, [sessionId]);
 
   const currentPlayer = useMemo(() => {

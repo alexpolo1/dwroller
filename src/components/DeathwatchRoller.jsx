@@ -365,6 +365,39 @@ function DeathwatchRoller() {
     loadEnemiesFromAPI()
   }, [])
 
+  // Populate module-scoped built weapons from the server-side DB API so
+  // buildWeaponsList() can use database-sourced weapon entries instead of
+  // falling back to packaged JSON files at runtime.
+  useEffect(() => {
+    (async () => {
+        try {
+          const res = await fetch('/api/weapons', { cache: 'no-store' })
+          if (!res.ok) return
+          const json = await res.json()
+          // Some consumers expect the original build DB shape with keys like
+          // rangedWeapons / meleeWeapons / grenades / other. If the API returns
+          // a flat array, group by category to mimic that shape.
+          let built = json
+          if (Array.isArray(json)) {
+            const grouped = { rangedWeapons: [], meleeWeapons: [], grenades: [], other: [] }
+            for (const it of json) {
+              const cat = String(it.category || '').toLowerCase()
+              if (cat.includes('ranged') || cat.includes('ranged weapon') || cat.includes('ranged')) grouped.rangedWeapons.push(it)
+              else if (cat.includes('melee')) grouped.meleeWeapons.push(it)
+              else if (cat.includes('grenade')) grouped.grenades.push(it)
+              else grouped.other.push(it)
+            }
+            built = grouped
+          }
+          // assign to module-scoped variable used by buildWeaponsList()
+          _builtWeapons = built
+          console.info('[DW] Loaded built weapons from /api/weapons', Array.isArray(json) ? json.length : Object.keys(json || {}).length)
+      } catch (err) {
+        console.info('[DW] Failed to load built weapons from API:', err && err.message)
+      }
+    })()
+  }, [])
+
   const trackerInit = safeGet(STORAGE_TRACKER)
   const [maxWounds,setMaxWounds] = useState(() => Math.max(0, trackerInit?.maxWounds ?? 20))
   const [curWounds,setCurWounds] = useState(() => Math.max(0, Math.min(trackerInit?.curWounds ?? 20, trackerInit?.maxWounds ?? 20)))
@@ -412,35 +445,35 @@ function DeathwatchRoller() {
     (async () => {
       const stored = safeGet(STORAGE_WEAPONS)
       if ((!stored || !Array.isArray(stored) || stored.length===0)) {
-        const endpoints = ['/deathwatch-weapons.json','/public/deathwatch-weapons.json','/build/deathwatch-weapons.json']
-        let fetched = null
-        for (const ep of endpoints) {
-          try {
-            const res = await fetch(ep, { cache: 'no-store' })
-            if (!res.ok) continue
+        // Prefer server API for weapons; if unavailable, keep defaultWeapons
+        try {
+          const res = await fetch('/api/weapons', { cache: 'no-store' })
+          if (res.ok) {
             const json = await res.json()
-            const list = []
-            if (json && (json.rangedWeapons || json.meleeWeapons || json.grenades || json.other)) {
+            // Attempt mapping via existing helpers
+            let list = []
+            if (Array.isArray(json)) list = json.map(item => item.stats ? mapBuildEntryToWeapon(item) : normalizeWeapon(item))
+            else if (json && (json.rangedWeapons || json.meleeWeapons)) {
               if (Array.isArray(json.rangedWeapons)) list.push(...json.rangedWeapons.map(mapBuildEntryToWeapon))
               if (Array.isArray(json.meleeWeapons)) list.push(...json.meleeWeapons.map(mapBuildEntryToWeapon))
               if (Array.isArray(json.grenades)) list.push(...json.grenades.map(mapBuildEntryToWeapon))
               if (Array.isArray(json.other)) list.push(...json.other.map(mapBuildEntryToWeapon))
-            } else if (Array.isArray(json)) {
-              list.push(...json.map(item => item.stats ? mapBuildEntryToWeapon(item) : normalizeWeapon(item)))
             }
-            if (list.length > 0) {
-              fetched = list
-              break
-            }
-          } catch (e) {
-            console.info('[DW] first-run fetch failed for', ep, e && e.message)
+            const merged = mergeWeapons(defaultWeapons, list && list.length ? list : [])
+            setWeapons(merged)
+            safeSet(STORAGE_WEAPONS, merged)
+            if (list && list.length) setInfo('Imported weapons from database')
+          } else {
+            const merged = mergeWeapons(defaultWeapons, [])
+            setWeapons(merged)
+            safeSet(STORAGE_WEAPONS, merged)
           }
+        } catch (e) {
+          console.info('[DW] first-run weapons fetch failed', e && e.message)
+          const merged = mergeWeapons(defaultWeapons, [])
+          setWeapons(merged)
+          safeSet(STORAGE_WEAPONS, merged)
         }
-
-        const merged = mergeWeapons(defaultWeapons, fetched && fetched.length ? fetched : [])
-        setWeapons(merged)
-        safeSet(STORAGE_WEAPONS, merged)
-        if (fetched && fetched.length) setInfo('Imported weapons from database')
       }
     })()
   }, [])
@@ -515,7 +548,7 @@ function DeathwatchRoller() {
 
   async function fetchWeaponsFromServer() {
     setError(''); setInfo('')
-    const endpoints = ['/api/weapons', '/deathwatch-weapons.json', '/public/deathwatch-weapons.json']
+  const endpoints = ['/api/weapons']
     let lastErr = null
     for (const ep of endpoints) {
       try {

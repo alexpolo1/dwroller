@@ -1,30 +1,31 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { db } = require('../sqlite-db');
 const router = express.Router();
 
-const BESTIARY_PATH = path.join(__dirname, '../../database/deathwatch-bestiary-extracted.json');
-
-let bestiaryData = null;
-let lastLoaded = 0;
-
+// Read bestiary from sqlite table `bestiary`
 function loadBestiaryData() {
-  const now = Date.now();
-  // Cache for 5 minutes
-  if (bestiaryData && (now - lastLoaded) < 5 * 60 * 1000) {
-    return bestiaryData;
-  }
-
   try {
-    console.log('Loading bestiary data from:', BESTIARY_PATH);
-    const data = fs.readFileSync(BESTIARY_PATH, 'utf8');
-    const parsed = JSON.parse(data);
-    bestiaryData = parsed.results || [];
-    lastLoaded = now;
-    console.log(`Loaded ${bestiaryData.length} bestiary entries`);
-    return bestiaryData;
-  } catch (error) {
-    console.error('Failed to load bestiary data:', error);
+    const rows = db.prepare('SELECT id,name,book,page,pdf,stats,profile,snippet FROM bestiary ORDER BY name').all();
+    return rows.map(r => {
+      let stats = {};
+      try { stats = JSON.parse(r.stats || '{}'); } catch(e){}
+      let profile = {};
+      try { profile = JSON.parse(r.profile || '{}'); } catch(e){}
+      return {
+        _id: r.id,
+        bestiaryName: r.name,
+        book: r.book,
+        page: r.page,
+        pdf: r.pdf,
+        stats: stats,
+        profile: profile,
+        snippet: r.snippet
+      };
+    });
+  } catch (e) {
+    console.error('Failed to load bestiary from sqlite:', e);
     return [];
   }
 }

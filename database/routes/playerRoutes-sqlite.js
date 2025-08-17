@@ -1,10 +1,9 @@
 const express = require('express');
-const { playerHelpers, sessionHelpers } = require('../sqlite-db');
+const { playerHelpers, sessionHelpers, db } = require('../sqlite-db');
 const fs = require('fs');
 const path = require('path');
 
-// Load shop data
-const shopData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../public/deathwatch-armoury.json'), 'utf8'));
+// shop data will be read from sqlite `shop_items` table when needed
 
 // Simple file logger
 function logToFile(...args) {
@@ -21,11 +20,16 @@ const router = express.Router();
 router.get('/shop', (req, res) => {
   try {
     console.log('Shop endpoint hit');
-    const filePath = path.join(__dirname, '../../public/deathwatch-armoury.json');
-    console.log('Looking for shop data at:', filePath);
-    const shopData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    console.log('Shop data loaded:', Object.keys(shopData));
-    res.json(shopData);
+    // Query sqlite shop_items and return grouped by category
+    const items = db.prepare('SELECT id, name, category, requisition_cost as req, renown_requirement as renown, item_type, stats, source FROM shop_items ORDER BY category, name').all();
+    const grouped = items.reduce((acc, it) => {
+      acc[it.category] = acc[it.category] || [];
+      let stats = {};
+      try { stats = JSON.parse(it.stats || '{}'); } catch(e){}
+      acc[it.category].push({ id: it.id, name: it.name, req: it.req, renown: it.renown, itemType: it.item_type, stats, source: it.source });
+      return acc;
+    }, {});
+    res.json(grouped);
   } catch (error) {
     console.error('Shop error:', error);
     logToFile('API: Failed to get shop data', error);

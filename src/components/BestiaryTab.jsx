@@ -51,6 +51,8 @@ export default function BestiaryTab(){
       return arr.map(normalizeEntry)
     }catch(e){ return [] }
   })
+  // Keep a ref to the initial enemies value so we can check it in mount-only effects
+  const initialEnemies = React.useRef(enemies)
   // Database / retry UI state
   const WARNING_DISMISS_KEY = 'dw:warning-dismiss-until:v1'
   const [dbDown, setDbDown] = useState(false)
@@ -86,30 +88,11 @@ export default function BestiaryTab(){
       console.error('Database API failed:', error)
     }
 
-    // Fallback to file endpoints
-    const endpoints = ['/deathwatch-bestiary-extracted.json','/public/deathwatch-bestiary-extracted.json','/build/deathwatch-bestiary-extracted.json']
-    for(const ep of endpoints){
-      try{
-        const res = await fetch(ep + cacheParam)
-        if(res.ok){
-          const data = await res.json()
-          const arr = Array.isArray(data) ? data : (data.results || [])
-          if(arr.length>0){
-            setEnemies(arr.map(normalizeEntry))
-            localStorage.setItem(STORAGE_ENEMIES, JSON.stringify(arr))
-            setDbDown(false)
-            setIsRefreshing(false)
-            console.log(`Loaded ${arr.length} enemies from ${ep}`)
-            return
-          }
-        }
-      }catch(e){}
-    }
-
-    // If we reach here, all endpoints failed
-    setDbDown(true)
-    setIsRefreshing(false)
-    // Try reading from cache
+  // If we reach here, the database API failed to return usable data.
+  // Mark DB as down and fall back to cache/localStorage only.
+  setDbDown(true)
+  setIsRefreshing(false)
+    // Try reading from cache/localStorage
     try{
       const raw = localStorage.getItem(STORAGE_ENEMIES)
       if(raw){
@@ -122,10 +105,10 @@ export default function BestiaryTab(){
         }
       }
     }catch(e){}
-    
+
     // No data available
     setEnemies([])
-    console.log('No enemy data available')
+    console.log('No enemy data available — DB and cache are empty')
   }
 
   async function updateFromDatabase() {
@@ -155,7 +138,8 @@ export default function BestiaryTab(){
 
   useEffect(()=>{
     // Only attempt network load on mount if we have no cached enemies.
-    if(enemies && enemies.length>0) return
+    // Use the initialEnemies ref to avoid creating a dependency on `enemies`.
+    if(initialEnemies.current && initialEnemies.current.length>0) return
     loadData().catch(()=>{})
     return ()=>{ if(retryRef.current){ clearInterval(retryRef.current); retryRef.current = null } }
   },[])
