@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2025-08-16T17:19:36.234Z",
+  "matches": [
+    {
+      "pdf": "Deathwatch - The Emperor Protects.pdf",
+      "pageIndex": 0,
+      "pageNumber": 1,
+      "snippet": "™ PERILOUS MISSIONS OF DUTY AND HONOUR Inside this tome are three adventures set amongst the war-torn front lines of an Imperial Crusade. The Price of Hubris—The Kill-team travels to the Feral World of Aurum to win over a fierce and",
+      "stats": {
+        "profile": {
+          "ws": 55,
+          "bs": 32,
+          "s": 50,
+          "t": 45,
+          "ag": 48,
+          "int": 46,
+          "per": 52,
+          "wp": 45,
+          "fel": 44
+        },
+        "movement": "4/8/12/24",
+        "wounds": 26,
+        "toughness": null,
+        "skills": null,
+        "talents": null,
+        "traits": null,
+        "armour": null,
+        "weapons": null,
+        "gear": null,
+        "snippet": "™ PERILOUS MISSIONS OF DUTY AND HONOUR Inside this tome are three adventures set amongst the war-torn front lines of an Imperial Crusade. The Price of Hubris—The Kill-team travels to the Feral World of Aurum to win over a fierce and",
+        "chosenPageIndex": 0,
+        "chosenPageNumberApprox": 1,
+        "chosenOffset": 0
+      }
+    }
+  ]
+}

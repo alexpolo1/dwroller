@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "name": "caele Rylus Darkscourge",
+    "page": 49,
+    "stats": {
+      "ws": 68,
+      "bs": 48,
+      "s": 66,
+      "t": 65,
+      "ag": 55,
+      "int": 48,
+      "per": 45,
+      "wp": 52,
+      "fel": 50
+    },
+    "movement": "5/10/15/30 Wounds: 35",
+    "wounds": 35,
+    "skills": "Awareness (Per) +10, Climb (S), Command (Fel) +20,",
+    "weapons": "",
+    "armour": "",
+    "talents": "Air of Authority, Ambidextrous, Blademaster, Basic (Technomat) +10."
+  },
+  {
+    "id": 2,
+    "name": "Father Marius",
+    "page": 50,
+    "stats": {
+      "ws": 38,
+      "bs": 28,
+      "s": 40,
+      "t": 35,
+      "ag": 42,
+      "int": 31,
+      "per": 45,
+      "wp": 48,
+      "fel": 50
+    },
+    "movement": "4/8/12/24 Wounds: 22",
+    "wounds": 22,
+    "skills": "Awareness (Per), Charm (Fel), Common Lore (Imperial",
+    "weapons": "",
+    "armour": "",
+    "talents": "Basic Weapon Training (Universal), Cleanse and"
+  },
+  {
+    "id": 3,
+    "name": "Infected Auran warrior",
+    "page": 51,
+    "stats": {
+      "ws": 48,
+      "bs": 41,
+      "s": 58,
+      "t": 48,
+      "ag": 42,
+      "int": 35,
+      "per": 40,
+      "wp": 32,
+      "fel": 35
+    },
+    "movement": "4/8/12/24 Wounds: 28 Movement: 5/10/15/30 Wounds: 20",
+    "wounds": 28,
+    "skills": "Awareness (Per) +10, Climb (S), Concealment (Ag), Skills: Awareness (Per) +20, Concealment (Ag), Silent Move",
+    "weapons": "Talons (1d10+5 R; Pen 4; Tearing).",
+    "armour": "Scales (All 3).",
+    "talents": "Furious Assault, Heightened Senses (Hearing, Sight,"
+  },
+  {
+    "id": 4,
+    "name": "Feynir Surbryte",
+    "page": 91,
+    "stats": {
+      "ws": 38,
+      "bs": 38,
+      "s": 35,
+      "t": 35,
+      "ag": 35,
+      "int": 25,
+      "per": 35,
+      "wp": 38,
+      "fel": 25
+    },
+    "movement": "",
+    "wounds": 0,
+    "skills": "",
+    "weapons": "",
+    "armour": "",
+    "talents": ""
+  },
+  {
+    "id": 5,
+    "name": "Arcus Dyre",
+    "page": 134,
+    "stats": {
+      "ws": 40,
+      "bs": 35,
+      "s": 32,
+      "t": 40,
+      "ag": 44,
+      "int": 50,
+      "per": 35,
+      "wp": 55,
+      "fel": 45
+    },
+    "movement": "4/8/12/24 Wounds: 18",
+    "wounds": 18,
+    "skills": "Awareness (Per), Carousing (T) +10, Charm (Fel)",
+    "weapons": "",
+    "armour": "",
+    "talents": "†Psychic Alacrity, Favoured by the Warp, Jaded, Common Lore (Technology) (Int), Psyniscience (Per), Speak"
+  }
+]

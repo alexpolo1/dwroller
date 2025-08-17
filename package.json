@@ -11,7 +11,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "pdf-parse": "^1.1.1",
-    "pdfjs-dist": "^4.8.69",
+    "pdfjs-dist": "^3.9.179",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sqlite3": "^5.1.7",
@@ -20,12 +20,12 @@
   "scripts": {
     "start": "npm test && react-scripts start",
     "dev": "npm test && react-scripts start",
-  "build": "npm run test:unit && npm run test:integration && react-scripts build && npm run test:unit",
-  "test-build-test": "npm run test:unit && npm run test:integration && npm run build && npm run test:unit",
-  "test": "jest --runInBand --passWithNoTests",
-  "test:unit": "jest --runInBand --passWithNoTests --testPathPattern=src/tests",
-  "test:integration": "npm run pm2:start && sleep 1 && jest --runInBand --passWithNoTests --testPathPattern=tests && npm run pm2:stop",
-  "deploy:build": "npm run build && npm run pm2:start && npm run pm2:reload",
+    "build": "npm run test:unit && npm run test:integration && react-scripts build && npm run pm2:start",
+    "test-build-test": "npm run test:unit && npm run test:integration && npm run build && npm run test:unit",
+    "test": "jest --runInBand --passWithNoTests",
+    "test:unit": "jest --runInBand --passWithNoTests --testPathPattern=src/tests",
+    "test:integration": "npm run pm2:start && sleep 1 && jest --runInBand --passWithNoTests --testPathPattern=tests && npm run pm2:stop",
+    "deploy:build": "npm run build && npm run pm2:start && npm run pm2:reload",
     "eject": "react-scripts eject",
     "serve": "npm test && serve -s build",
     "extract:armoury": "node scripts/extract-armoury.js \"$PWD/Deathwatch-Core-Rulebook.pdf\" public/deathwatch-armoury.json",
@@ -66,11 +66,11 @@
     "eslint-config-prettier": "^10.1.8",
     "html-webpack-plugin": "^5.6.4",
     "node-fetch": "^2.7.0",
+    "pm2": "^5.2.0",
     "postcss": "^8.4.23",
     "prettier-eslint": "^16.4.2",
     "react-scripts": "^5.0.1",
     "tailwindcss": "^3.3.2",
-  "webpack-dev-server": "^5.2.2",
-  "pm2": "^5.2.0"
+    "webpack-dev-server": "^5.2.2"
   }
 }

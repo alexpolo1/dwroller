@@ -101,6 +101,139 @@ const STORAGE_TRACKER = 'dw:tracker:v1'
 
 const BODY_PARTS = ['Head','Body','Left Arm','Right Arm','Left Leg','Right Leg']
 
+// Note: don't require files outside `src/` (CRA will fail the production build).
+// We'll attempt to fetch any packaged JSON at runtime from known public paths.
+let _builtWeapons = null
+
+function mapBuildEntryToWeapon(entry) {
+  const name = String(entry.name || '').trim()
+  const stats = entry.stats || {}
+  const dmgText = String(stats.damage || '')
+  const rawDamage = dmgText
+  // Extract first dice expression like 2d10+5
+  const diceMatch = dmgText.match(/(\d+d\d+(?:\+\d+)?)/i)
+  const damage = diceMatch ? diceMatch[1] : '1d10'
+  const tearing = /tearing/i.test(dmgText) || /tearing/i.test(stats.source || '')
+  const reliable = /reliable/i.test(dmgText) || /reliable/i.test(stats.source || '')
+  const penMatch = dmgText.match(/Pen\s*([0-9]+)/i)
+  const pen = penMatch ? Math.max(0, parseInt(penMatch[1], 10)) : 0
+  // Try to extract RoF from explicit token, otherwise approximate from Clip
+  let rof = 1
+  const rofMatch = dmgText.match(/RoF\s*[:\s]*([0-9]+)/i) || dmgText.match(/rof\s*[:\s]*([0-9]+)/i)
+  if (rofMatch) rof = Math.max(1, parseInt(rofMatch[1], 10))
+  else {
+    const clipMatch = dmgText.match(/Clip\s*([0-9]+)/i)
+    if (clipMatch) {
+      const clip = Math.max(0, parseInt(clipMatch[1], 10))
+      if (clip >= 100) rof = 10
+      else if (clip >= 30) rof = 4
+      else if (clip >= 14) rof = 3
+      else if (clip >= 6) rof = 2
+      else rof = 1
+    }
+  }
+
+  // Map class string into roller classes
+  const clsText = String(stats.class || entry.category || '').toLowerCase()
+  let cls = 'other'
+  if (clsText.includes('melee')) cls = 'melee'
+  else if (clsText.includes('pistol')) cls = 'pistol'
+  else if (clsText.includes('basic')) cls = 'basic'
+  else if (clsText.includes('heavy')) cls = 'heavy'
+
+  // Derive modes from class heuristics
+  let modes = []
+  if (cls === 'melee') modes = ['single']
+  else if (cls === 'pistol') modes = ['single','semi']
+  else if (cls === 'basic') modes = ['single','semi','full']
+  else if (cls === 'heavy') modes = ['full']
+  else modes = ['single']
+
+  return {
+    name,
+    class: cls,
+    damage,
+  rawDamage,
+    pen,
+    rof,
+    modes,
+    tearing,
+    reliable
+  }
+}
+
+// Normalize bestiary entry shapes (same logic as BestiaryTab) so different consumers get a consistent shape
+function normalizeEntry(en){
+  const stats = en && en.stats ? en.stats : {}
+  const profile = en.profile || stats.profile || null
+  const wounds = (typeof en.wounds !== 'undefined' && en.wounds !== null) ? en.wounds : (typeof stats.wounds !== 'undefined' ? stats.wounds : null)
+  return {
+    name: en.name || en.bestiaryName || (stats && (stats.bestiaryName || stats.name)) || en.pdf || '<no-name>',
+    book: en.book || en.source || en.pdf || '',
+    pdf: en.pdf || '',
+    page: en.page ?? stats.page ?? null,
+    profile,
+    wounds,
+    movement: en.movement || stats.movement || null,
+    toughness: en.toughness || stats.toughness || null,
+    armour: en.armour || stats.armour || null,
+    skills: en.skills || stats.skills || null,
+    talents: en.talents || stats.talents || null,
+    traits: en.traits || stats.traits || null,
+    weapons: en.weapons || stats.weapons || null,
+    gear: en.gear || stats.gear || null,
+    stats
+  }
+}
+
+function buildWeaponsList() {
+  if (!_builtWeapons) return []
+  const out = []
+  if (Array.isArray(_builtWeapons.rangedWeapons)) out.push(..._builtWeapons.rangedWeapons.map(mapBuildEntryToWeapon))
+  if (Array.isArray(_builtWeapons.meleeWeapons)) out.push(..._builtWeapons.meleeWeapons.map(mapBuildEntryToWeapon))
+  if (Array.isArray(_builtWeapons.grenades)) out.push(..._builtWeapons.grenades.map(mapBuildEntryToWeapon))
+  if (Array.isArray(_builtWeapons.other)) out.push(..._builtWeapons.other.map(mapBuildEntryToWeapon))
+  // Preserve additional metadata (req, renown, source) onto mapped entries when available
+  for (const cat of ['rangedWeapons','meleeWeapons','grenades','other']) {
+    if (!Array.isArray(_builtWeapons[cat])) continue
+    for (const e of _builtWeapons[cat]) {
+      const key = String(e.name || '').trim().toLowerCase()
+      const mapped = out.find(o => o.name.toLowerCase() === key)
+      if (!mapped) continue
+      if (typeof e.req !== 'undefined') mapped.req = e.req
+      if (typeof e.renown !== 'undefined') mapped.renown = e.renown
+      if (e.stats && e.stats.source) mapped.source = e.stats.source
+      else if (e.source) mapped.source = e.source
+    }
+  }
+  // Deduplicate by name (case-insensitive)
+  const byName = new Map()
+  for (const w of out) {
+    if (!w.name) continue
+    byName.set(w.name.toLowerCase(), w)
+  }
+  return Array.from(byName.values()).sort((a,b)=>a.name.localeCompare(b.name))
+}
+
+// Merge helper moved to module scope so top-level import helpers can use it
+function mergeWeapons(existing, incoming) {
+  const byName = new Map((Array.isArray(existing) ? existing : []).map(w=>[w.name.toLowerCase(), w]))
+  for (const w of (Array.isArray(incoming) ? incoming : [])) {
+    if (!w || !w.name) continue
+    byName.set(w.name.toLowerCase(), w)
+  }
+  return Array.from(byName.values()).sort((a,b)=>a.name.localeCompare(b.name))
+}
+
+// Import built DB into weapons (merge with existing)
+function importBuildWeapons(existing) {
+  const built = buildWeaponsList()
+  if (!built || built.length===0) return existing
+  // Attach metadata for display; merge preserving existing items
+  const merged = mergeWeapons(existing, built)
+  return merged
+}
+
 function safeGet(key) {
   try {
     if (typeof window === 'undefined' || !('localStorage' in window)) return null
@@ -189,7 +322,7 @@ function uid() { return Math.random().toString(36).slice(2) + Date.now().toStrin
 function DeathwatchRoller() {
   const [bs,setBS] = useState(45)
   const [ws,setWS] = useState(45)
-  const [defenderBS] = useState(45)
+  const [defenderBS, setDefenderBS] = useState(45)
   const [defenderWS, setDefenderWS] = useState(45)
   const [defenderAg, setDefenderAg] = useState(45)
   const [modifier,setModifier] = useState(0)
@@ -211,9 +344,21 @@ function DeathwatchRoller() {
   const [rfConfirm,setRfConfirm] = useState(true)
   const [targetTB,setTargetTB] = useState(4)
   const [targetArmour,setTargetArmour] = useState(5)
-  const [weapons,setWeapons] = useState(()=> safeGet(STORAGE_WEAPONS) ?? defaultWeapons)
+  const [weapons,setWeapons] = useState(()=> {
+    const stored = safeGet(STORAGE_WEAPONS)
+    if (stored && Array.isArray(stored)) return stored
+    const built = buildWeaponsList()
+    if (built && built.length) return mergeWeapons(defaultWeapons, built)
+    return defaultWeapons
+  })
   const [weaponName,setWeaponName] = useState('')
-  const [enemies] = useState(()=> safeGet(STORAGE_ENEMIES) ?? defaultEnemies)
+  const [enemies] = useState(()=> {
+    try{
+      const stored = safeGet(STORAGE_ENEMIES)
+      if (stored && Array.isArray(stored) && stored.length>0) return stored.map(normalizeEntry)
+      return defaultEnemies
+    }catch(e){ return defaultEnemies }
+  })
   const [enemyName,setEnemyName] = useState('Custom/None')
 
   const trackerInit = safeGet(STORAGE_TRACKER)
@@ -238,6 +383,8 @@ function DeathwatchRoller() {
   const [history,setHistory] = useState(()=> safeGet(STORAGE_HISTORY) ?? [])
   const [error,setError] = useState('')
   const [info,setInfo] = useState('')
+  const [progressStep, setProgressStep] = useState('idle') // idle | attack | defense | damage | wounds
+  const [lastAppliedDamage, setLastAppliedDamage] = useState(0)
   
   // Manual mode state variables
   const [manualMode, setManualMode] = useState(false)
@@ -255,6 +402,44 @@ function DeathwatchRoller() {
   useEffect(()=>{ safeSet(STORAGE_WEAPONS, weapons) },[weapons])
   useEffect(()=>{ safeSet(STORAGE_ENEMIES, enemies) },[enemies])
   useEffect(()=>{ safeSet(STORAGE_TRACKER, { maxWounds, curWounds, partDamage }) },[maxWounds, curWounds, partDamage])
+
+  // On first run, if there are no stored weapons try to fetch the packaged DB from public
+  useEffect(()=>{
+    (async () => {
+      const stored = safeGet(STORAGE_WEAPONS)
+      if ((!stored || !Array.isArray(stored) || stored.length===0)) {
+        const endpoints = ['/deathwatch-weapons.json','/public/deathwatch-weapons.json','/build/deathwatch-weapons.json']
+        let fetched = null
+        for (const ep of endpoints) {
+          try {
+            const res = await fetch(ep, { cache: 'no-store' })
+            if (!res.ok) continue
+            const json = await res.json()
+            const list = []
+            if (json && (json.rangedWeapons || json.meleeWeapons || json.grenades || json.other)) {
+              if (Array.isArray(json.rangedWeapons)) list.push(...json.rangedWeapons.map(mapBuildEntryToWeapon))
+              if (Array.isArray(json.meleeWeapons)) list.push(...json.meleeWeapons.map(mapBuildEntryToWeapon))
+              if (Array.isArray(json.grenades)) list.push(...json.grenades.map(mapBuildEntryToWeapon))
+              if (Array.isArray(json.other)) list.push(...json.other.map(mapBuildEntryToWeapon))
+            } else if (Array.isArray(json)) {
+              list.push(...json.map(item => item.stats ? mapBuildEntryToWeapon(item) : normalizeWeapon(item)))
+            }
+            if (list.length > 0) {
+              fetched = list
+              break
+            }
+          } catch (e) {
+            console.info('[DW] first-run fetch failed for', ep, e && e.message)
+          }
+        }
+
+        const merged = mergeWeapons(defaultWeapons, fetched && fetched.length ? fetched : [])
+        setWeapons(merged)
+        safeSet(STORAGE_WEAPONS, merged)
+        if (fetched && fetched.length) setInfo('Imported weapons from database')
+      }
+    })()
+  }, [])
 
   useEffect(()=>{ if (curWounds>maxWounds) setCurWounds(maxWounds) },[maxWounds, curWounds])
 
@@ -281,10 +466,37 @@ function DeathwatchRoller() {
     setEnemyName(name)
     const e = enemies.find(x=>x.name===name)
     if (!e) return
-    setTargetTB(e.tb); setTargetArmour(e.armour ?? 0)
-    if (e.armourByLoc) setArmourMap({ ...uniformArmourMap(0), ...e.armourByLoc })
-    else setArmourMap(uniformArmourMap(e.armour ?? 0))
-    if (typeof e.wounds === 'number' && e.wounds >= 0) { setMaxWounds(e.wounds); setCurWounds(e.wounds); setPartDamage({ 'Head':0, 'Body':0, 'Left Arm':0, 'Right Arm':0, 'Left Leg':0, 'Right Leg':0 }) }
+  setTargetTB(e.tb); setTargetArmour(e.armour ?? 0)
+  if (e.armourByLoc) setArmourMap({ ...uniformArmourMap(0), ...e.armourByLoc })
+  else setArmourMap(uniformArmourMap(e.armour ?? 0))
+  // Apply wounds/parts if present
+  if (typeof e.wounds === 'number' && e.wounds >= 0) { setMaxWounds(e.wounds); setCurWounds(e.wounds); setPartDamage({ 'Head':0, 'Body':0, 'Left Arm':0, 'Right Arm':0, 'Left Leg':0, 'Right Leg':0 }) }
+    // Robustly extract AG/WS/BS from common enemy shapes: top-level, .characteristics, .tabInfo.characteristics
+    function findNumeric(o, keys) {
+      if (!o || typeof o !== 'object') return undefined
+      for (const k of keys) {
+        if (typeof o[k] === 'number') return o[k]
+        // case-insensitive variants
+        const lower = k.toLowerCase()
+        for (const ok of Object.keys(o)) {
+          if (ok.toLowerCase() === lower && typeof o[ok] === 'number') return o[ok]
+        }
+      }
+      return undefined
+    }
+
+    const char = e.characteristics || (e.tabInfo && e.tabInfo.characteristics) || {}
+    const agVal = findNumeric(e, ['ag', 'Ag', 'AG']) ?? findNumeric(char, ['ag'])
+    const wsVal = findNumeric(e, ['ws', 'Ws', 'WS']) ?? findNumeric(char, ['ws'])
+    const bsVal = findNumeric(e, ['bs', 'Bs', 'BS']) ?? findNumeric(char, ['bs'])
+    if (typeof agVal === 'number') setDefenderAg(agVal)
+    if (typeof wsVal === 'number') setDefenderWS(wsVal)
+    if (typeof bsVal === 'number') setDefenderBS(bsVal)
+
+    // Apply any stored/default defender modifier (try multiple common keys)
+    const modVal = findNumeric(e, ['defenderModifier','defenderMod','defMod','defenceModifier','defenceMod']) ?? findNumeric(e, ['modifier','mod'])
+    if (typeof modVal === 'number') setDefenderModifier(modVal)
+    else setDefenderModifier(0)
   }
 
   function importFromJSONText(txt) {
@@ -295,6 +507,50 @@ function DeathwatchRoller() {
       const merged = appendMode ? mergeWeapons(weapons, next) : next
       setWeapons(merged); setWeaponsJSON(JSON.stringify(merged,null,2)); setInfo(`Loaded ${next.length} weapons`); console.info('[DW] Imported JSON weapons:', next.length)
     } catch (e) { setError('Invalid weapons JSON'); console.error('[DW] Import JSON error:', e) }
+  }
+
+  async function fetchWeaponsFromServer() {
+    setError(''); setInfo('')
+    const endpoints = ['/api/weapons', '/deathwatch-weapons.json', '/public/deathwatch-weapons.json']
+    let lastErr = null
+    for (const ep of endpoints) {
+      try {
+        const res = await fetch(ep, { cache: 'no-store' })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const json = await res.json()
+        let list = []
+        // If the server returned the same shaped build DB (with rangedWeapons/meleeWeapons), map entries
+        if (json && (json.rangedWeapons || json.meleeWeapons || json.grenades || json.other)) {
+          const items = []
+          if (Array.isArray(json.rangedWeapons)) items.push(...json.rangedWeapons.map(mapBuildEntryToWeapon))
+          if (Array.isArray(json.meleeWeapons)) items.push(...json.meleeWeapons.map(mapBuildEntryToWeapon))
+          if (Array.isArray(json.grenades)) items.push(...json.grenades.map(mapBuildEntryToWeapon))
+          if (Array.isArray(json.other)) items.push(...json.other.map(mapBuildEntryToWeapon))
+          list = items
+        } else if (Array.isArray(json)) {
+          // Server might return an already-normalized array
+          list = json.map(item => {
+            // If item looks like a build entry, map it, otherwise normalize directly
+            if (item.stats || item.damage && item.damage.includes('d')) return normalizeWeapon(mapBuildEntryToWeapon(item))
+            return normalizeWeapon(item)
+          })
+        } else {
+          throw new Error('Unexpected payload')
+        }
+
+        const merged = appendMode ? mergeWeapons(weapons, list) : list
+        setWeapons(merged)
+        setWeaponsJSON(JSON.stringify(merged,null,2))
+        setInfo(`Fetched ${list.length} weapons from ${ep}`)
+        console.info('[DW] Fetched weapons from', ep, list.length)
+        return
+      } catch (e) {
+        lastErr = e
+        console.info('[DW] fetchWeaponsFromServer failed for', ep, e && e.message)
+      }
+    }
+    setError('Failed to fetch weapons from server')
+    console.error('[DW] fetchWeaponsFromServer last error:', lastErr)
   }
 
   function importFromCSVText(txt) {
@@ -316,11 +572,7 @@ function DeathwatchRoller() {
     } catch (e) { setError('Invalid CSV'); console.error('[DW] Import CSV error:', e) }
   }
 
-  function mergeWeapons(existing, incoming) {
-    const byName = new Map(existing.map(w=>[w.name.toLowerCase(), w]))
-    for (const w of incoming) byName.set(w.name.toLowerCase(), w)
-    return Array.from(byName.values()).sort((a,b)=>a.name.localeCompare(b.name))
-  }
+  // ...existing code uses module-scope mergeWeapons helper
 
   function exportWeapons() {
     try {
@@ -342,6 +594,7 @@ function DeathwatchRoller() {
 
   function runAttack() {
     setError(''); setInfo('')
+  setProgressStep('attack')
     setReactionUsed(false) // Reset reaction for new attack
     let dmgSpec
     try { dmgSpec = parseDice(damage) } catch (e) { setError('Invalid damage expression'); return }
@@ -379,6 +632,7 @@ function DeathwatchRoller() {
         rof
       })
       setAwaitingDefense(true)
+      setProgressStep('defense')
       setInfo(`Attack hit! Roll defense to determine if damage is applied.`)
       return
     }
@@ -387,6 +641,8 @@ function DeathwatchRoller() {
     const res = { id: uid(), ts: Date.now(), attackRoll, target, success: dg.success, dos: dg.dos, dof: dg.dof, mode, rof, hits: 0, where, jammed, perHit: [], weapon: weaponName || undefined, enemy: enemyName || undefined, using: usingSkill }
     setHistory(prev => [res, ...prev].slice(0, 50))
     setInfo(`Attack missed with DoF ${dg.dof}`)
+    // Clear progress after a short delay
+    setTimeout(()=> setProgressStep('idle'), 1200)
   }
 
   function resetTracker() {
@@ -401,6 +657,7 @@ function DeathwatchRoller() {
 
   function runDefense() {
     setError(''); setInfo('')
+  setProgressStep('defense')
     if (!pendingHits) return
     
     // Check if reaction is already used
@@ -487,6 +744,9 @@ function DeathwatchRoller() {
       setAwaitingDefense(false)
       setPendingHits(null)
       setReactionUsed(true)
+  // Defense successful - no damage applied; show wounds briefly then idle
+  setProgressStep('wounds')
+  setTimeout(()=> setProgressStep('idle'), 1200)
       return
     }
 
@@ -564,12 +824,25 @@ function DeathwatchRoller() {
     }
     
     setHistory(prev => [res, ...prev].slice(0, 50))
-    if (totalApplied>0) {
+      if (totalApplied>0) {
+      const applied = Math.max(0, Math.floor(totalApplied))
       setPartDamage(nextParts)
-      setCurWounds(w => Math.max(0, w - totalApplied))
-      setInfo(`${defenseTypeName} failed with DoF (Degrees of Failure) ${dg.dof}. Applied ${totalApplied} damage to ${where}`)
+      setCurWounds(prev => {
+        const next = Math.max(0, Number(prev) - applied)
+        console.info('[DW] Applied damage', applied, '-> wounds', prev, '=>', next)
+        return next
+      })
+      setLastAppliedDamage(applied)
+      setInfo(`${defenseTypeName} failed with DoF (Degrees of Failure) ${dg.dof}. Applied ${applied} damage to ${where}`)
+      // Show damage then wounds
+      setProgressStep('damage')
+      setTimeout(()=> setProgressStep('wounds'), 250)
+      setTimeout(()=> setProgressStep('idle'), 2200)
     } else {
       setInfo(`${defenseTypeName} failed with DoF (Degrees of Failure) ${dg.dof}. No damage applied - attack completely negated by armour and toughness.`)
+      setLastAppliedDamage(0)
+      setProgressStep('wounds')
+      setTimeout(()=> setProgressStep('idle'), 1200)
     }
     
     setAwaitingDefense(false)
@@ -952,7 +1225,19 @@ function DeathwatchRoller() {
               <button onClick={runAttack} className="rounded-xl px-5 py-2.5 bg-blue-600 hover:bg-blue-500 active:scale-[.99] transition">Roll</button>
               <div className="text-sm opacity-80">Target <span className="font-semibold">{target}</span></div>
             </div>
+            {/* Progress tracker */}
+            <div className="mt-3">
+              <div className="flex items-center gap-2 text-sm">
+                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='attack' ? 'bg-blue-600 text-white animate-pulse' : 'bg-white/5 text-white/80'}`}>Attack</div>
+                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='defense' ? 'bg-amber-500 text-black animate-pulse' : 'bg-white/5 text-white/80'}`}>Defense</div>
+                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='damage' ? 'bg-rose-500 text-black animate-pulse' : 'bg-white/5 text-white/80'}`}>Damage</div>
+                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='wounds' ? 'bg-emerald-500 text-black animate-pulse' : 'bg-white/5 text-white/80'}`}>Wounds</div>
+                <div className="ml-3 text-xs opacity-70">Phase: <span className="font-semibold">{progressStep}</span></div>
+                <div className="ml-4 text-xs opacity-80">Last Applied: <span className="font-semibold">{lastAppliedDamage}</span></div>
+              </div>
+            </div>
             {manageWeapons && (
+              <>
               <div className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">Manage Weapons</div>
@@ -971,6 +1256,8 @@ function DeathwatchRoller() {
                     <textarea className="w-full h-48 rounded-xl border border-white/10 bg-black/20 px-3 py-2 font-mono text-xs" value={weaponsJSON} onChange={e=>setWeaponsJSON(e.target.value)} />
                     <div className="flex gap-2">
                       <button onClick={()=>importFromJSONText(weaponsJSON)} className="rounded-xl px-3 py-2 bg-blue-600">Import JSON</button>
+                      <button onClick={()=>{ const merged = importBuildWeapons(weapons); setWeapons(merged); setWeaponsJSON(JSON.stringify(merged,null,2)); setInfo('Imported built DB weapons') }} className="rounded-xl px-3 py-2 bg-emerald-700">Import Built DB</button>
+                      <button onClick={()=>{ fetchWeaponsFromServer() }} className="rounded-xl px-3 py-2 bg-indigo-700">Fetch from Server</button>
                       <button onClick={()=>{ setWeapons(defaultWeapons); setWeaponsJSON(JSON.stringify(defaultWeapons,null,2)); setInfo('Reset to defaults') }} className="rounded-xl px-3 py-2 bg-slate-700">Reset Defaults</button>
                     </div>
                   </>
@@ -983,6 +1270,17 @@ function DeathwatchRoller() {
                   </>
                 )}
               </div>
+              {weapons.length>0 && (
+                <div className="mt-3 text-xs">
+                  <div className="font-semibold mb-1">Weapons Loaded ({weapons.length})</div>
+                  <div className="max-h-40 overflow-auto">
+                    {weapons.slice(0,200).map(w => (
+                      <div key={w.name} className="text-xs opacity-80 mb-1">{w.name} {w.req ? `• Req ${w.req}` : ''} {w.renown ? `• ${w.renown}` : ''} {w.source ? `• ${w.source}` : ''}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              </>
             )}
             {history[0] && (
               <div className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-2">

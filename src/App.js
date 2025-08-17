@@ -3,6 +3,7 @@ import DeathwatchRoller from './components/DeathwatchRoller';
 import RequisitionShop from './components/RequisitionShop';
 import PlayerTab from './components/PlayerTab';
 import RulesTab from './components/RulesTab';
+import BestiaryTab from './components/BestiaryTab';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { debug, info, warn, error, logApiCall, logApiError, logUserAction } from './utils/logger';
@@ -215,6 +216,14 @@ function App() {
             >
               Rules
             </button>
+            {authedPlayer === 'gm' && (
+              <button 
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${tab==='bestiary' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-700/50 text-slate-200 hover:bg-slate-600/50'}`} 
+                onClick={()=>{logUserAction('navigation', 'Tab switch', { from: tab, to: 'bestiary' }); setTab('bestiary')}}
+              >
+                Bestiary
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -252,7 +261,7 @@ function App() {
           </div>
         )}
         
-        {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : tab==='rules' ? <RulesTab authedPlayer={authedPlayer} sessionId={sessionId} /> : <PlayerTab 
+        {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : tab==='rules' ? <RulesTab authedPlayer={authedPlayer} sessionId={sessionId} /> : tab==='bestiary' ? (authedPlayer === 'gm' ? <BestiaryTab /> : <div className="p-6 rounded-lg bg-red-900/20 border border-red-500/30"><h2 className="text-xl font-bold text-red-300 mb-2">Access Denied</h2><p className="text-red-200">The Bestiary is only accessible to Game Masters. Please log in with a GM account.</p></div>) : <PlayerTab 
           authedPlayer={authedPlayer} 
           sessionId={sessionId}
         />}

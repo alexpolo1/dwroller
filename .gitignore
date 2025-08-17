@@ -23,3 +23,17 @@ yarn-debug.log*
 yarn-error.log*
 Deathwatch-Core-Rulebook.pdf
 data/journal/*
+data/Deathwatch - Core Rulebook.pdf
+data/Deathwatch - Ark of Lost Souls.pdf
+data/Deathwatch Living Errata v1-1.pdf
+.gitignore
+data/Deathwatch - First Founding.pdf
+data/Deathwatch - Honour the Chapter.pdf
+data/Deathwatch - Mark of the Xenos.pdf
+data/Deathwatch - Oblivions Edge.pdf
+data/Deathwatch - Final Sanction.pdf
+data/Deathwatch - The Outer Reach.pdf
+data/Deathwatch - The Achilus Assault.pdf
+
+# Ignore all PDF files (prevent including copyrighted book PDFs)
+*.pdf

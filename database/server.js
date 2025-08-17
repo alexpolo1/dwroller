@@ -58,6 +58,22 @@ try {
   throw e;
 }
 
+// Add bestiary copy endpoint
+app.post('/api/copy-bestiary', (req, res) => {
+  try {
+    const { copyBestiaryToPublic } = require('../scripts/copy-bestiary-live');
+    const success = copyBestiaryToPublic();
+    if (success) {
+      res.json({ success: true, message: 'Bestiary files updated successfully' });
+    } else {
+      res.status(500).json({ success: false, message: 'Failed to update bestiary files' });
+    }
+  } catch (error) {
+    console.error('Error in copy-bestiary endpoint:', error);
+    res.status(500).json({ success: false, message: 'Internal server error', error: error.message });
+  }
+});
+
 // Serve static files from build directory (React app)
 const buildDir = path.join(__dirname, '..', 'build');
 app.use(express.static(buildDir));
