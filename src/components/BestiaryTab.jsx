@@ -63,31 +63,47 @@ export default function BestiaryTab(){
   // hydrate from storage on mount
   useEffect(()=>{ try{ const raw = localStorage.getItem(STORAGE_ENEMIES); if(raw){ const parsed = JSON.parse(raw); const arr = Array.isArray(parsed) ? parsed : (parsed.results || []); setEnemies(arr.map(normalizeEntry)) } }catch(e){} },[])
 
-  // loadData attempts to fetch packaged JSON; on failure it will fall back to cache and set dbDown
+    // loadData attempts to fetch from database API; on failure it will fall back to cache and set dbDown
   async function loadData(force = false){
     setIsRefreshing(true)
     const cacheParam = force ? '?_=' + Date.now() : ''
+    
+    try {
+      // Try database API first
+      const response = await fetch(`/api/bestiary/full${cacheParam}`)
+      if (response.ok) {
+        const data = await response.json()
+        if (Array.isArray(data) && data.length > 0) {
+          setEnemies(data.map(normalizeEntry))
+          localStorage.setItem(STORAGE_ENEMIES, JSON.stringify(data))
+          setDbDown(false)
+          setIsRefreshing(false)
+          console.log(`Loaded ${data.length} enemies from database API`)
+          return
+        }
+      }
+    } catch (error) {
+      console.error('Database API failed:', error)
+    }
+
+    // Fallback to file endpoints
     const endpoints = ['/deathwatch-bestiary-extracted.json','/public/deathwatch-bestiary-extracted.json','/build/deathwatch-bestiary-extracted.json']
     for(const ep of endpoints){
       try{
-        const res = await fetch(ep + cacheParam, { cache: force ? 'no-store' : 'default' })
-        if(!res.ok) throw new Error('bad')
-        const json = await res.json()
-        let list = []
-        if(Array.isArray(json)) list = json
-        else if(Array.isArray(json.results)) list = json.results
-        else continue
-        const norm = list.map(normalizeEntry)
-        setEnemies(norm)
-        try{ localStorage.setItem(STORAGE_ENEMIES, JSON.stringify(norm)) }catch(e){}
-        setDbDown(false)
-        setIsRefreshing(false)
-        // clear any retry if present
-        if(retryRef.current){ clearInterval(retryRef.current); retryRef.current = null }
-        return
-      }catch(e){
-        continue
-      }
+        const res = await fetch(ep + cacheParam)
+        if(res.ok){
+          const data = await res.json()
+          const arr = Array.isArray(data) ? data : (data.results || [])
+          if(arr.length>0){
+            setEnemies(arr.map(normalizeEntry))
+            localStorage.setItem(STORAGE_ENEMIES, JSON.stringify(arr))
+            setDbDown(false)
+            setIsRefreshing(false)
+            console.log(`Loaded ${arr.length} enemies from ${ep}`)
+            return
+          }
+        }
+      }catch(e){}
     }
 
     // If we reach here, all endpoints failed
@@ -96,31 +112,42 @@ export default function BestiaryTab(){
     // Try reading from cache
     try{
       const raw = localStorage.getItem(STORAGE_ENEMIES)
-      if(raw){ const parsed = JSON.parse(raw); const arr = Array.isArray(parsed) ? parsed : (parsed.results || []); setEnemies(arr.map(normalizeEntry)) }
+      if(raw){
+        const parsed = JSON.parse(raw)
+        const arr = Array.isArray(parsed) ? parsed : (parsed.results || [])
+        if(arr.length>0){
+          setEnemies(arr.map(normalizeEntry))
+          console.log(`Loaded ${arr.length} enemies from localStorage cache`)
+          return
+        }
+      }
     }catch(e){}
-
-    // ensure a background retry is scheduled
-    if(!retryRef.current){
-      retryRef.current = setInterval(()=>{ loadData(true).catch(()=>{}); }, 30000)
-    }
+    
+    // No data available
+    setEnemies([])
+    console.log('No enemy data available')
   }
 
   async function updateFromDatabase() {
     setIsRefreshing(true)
     try {
-      // Try to call a copy script endpoint if available
-      const response = await fetch('/api/copy-bestiary', { 
+      // First try to reload the database
+      const reloadResponse = await fetch('/api/bestiary/reload', { 
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-gm-secret': 'bongo'
+        }
       })
-      if (response.ok) {
-        // If the endpoint exists, wait a moment then refresh
-        setTimeout(() => loadData(true), 1000)
-      } else {
-        // Fallback to regular refresh
-        await loadData(true)
+      
+      if (reloadResponse.ok) {
+        console.log('Database reloaded successfully')
       }
+      
+      // Then refresh the data (force=true to bypass cache)
+      await loadData(true)
     } catch (e) {
+      console.error('Update from database failed:', e)
       // Fallback to regular refresh
       await loadData(true)
     }

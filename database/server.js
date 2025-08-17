@@ -7,13 +7,15 @@ const playerRoutes = require('./routes/playerRoutes-sqlite');
 const sessionRoutes = require('./routes/sessionRoutes-sqlite');
 const shopRoutes = require('./routes/shopRoutes');
 const rulesRoutes = require('./routes/rulesRoutes');
+const bestiaryRoutes = require('./routes/bestiaryRoutes');
 // const rulesRoutes = require('./routes/rulesRoutes-simple');
 
 console.log('Routes loaded:', {
   playerRoutes: typeof playerRoutes,
   sessionRoutes: typeof sessionRoutes,
   shopRoutes: typeof shopRoutes,
-  rulesRoutes: typeof rulesRoutes
+  rulesRoutes: typeof rulesRoutes,
+  bestiaryRoutes: typeof bestiaryRoutes
 });
 
 const app = express();
@@ -138,6 +140,9 @@ console.log('Mounted /api/sessions');
 console.log('Mounting route: /api/rules');
 app.use('/api/rules', rulesRoutes);
 console.log('Mounted /api/rules');
+console.log('Mounting route: /api/bestiary');
+app.use('/api/bestiary', bestiaryRoutes);
+console.log('Mounted /api/bestiary');
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {

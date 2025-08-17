@@ -21,6 +21,7 @@
     "start": "npm test && react-scripts start",
     "dev": "npm test && react-scripts start",
     "build": "npm run test:unit && npm run test:integration && react-scripts build && npm run pm2:start",
+    "build:fast": "react-scripts build && npm run pm2:reload",
     "test-build-test": "npm run test:unit && npm run test:integration && npm run build && npm run test:unit",
     "test": "jest --runInBand --passWithNoTests",
     "test:unit": "jest --runInBand --passWithNoTests --testPathPattern=src/tests",

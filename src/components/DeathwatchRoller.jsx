@@ -96,7 +96,6 @@ function mitigateDamage(dmg, tb, armour) { return Math.max(0, dmg - tb - armour)
 const STORAGE_PRESETS = 'dw:presets:v3'
 const STORAGE_HISTORY = 'dw:history:v2'
 const STORAGE_WEAPONS = 'dw:weapons:v3'
-const STORAGE_ENEMIES = 'dw:enemies:v1'
 const STORAGE_TRACKER = 'dw:tracker:v1'
 
 const BODY_PARTS = ['Head','Body','Left Arm','Right Arm','Left Leg','Right Leg']
@@ -163,28 +162,7 @@ function mapBuildEntryToWeapon(entry) {
 }
 
 // Normalize bestiary entry shapes (same logic as BestiaryTab) so different consumers get a consistent shape
-function normalizeEntry(en){
-  const stats = en && en.stats ? en.stats : {}
-  const profile = en.profile || stats.profile || null
-  const wounds = (typeof en.wounds !== 'undefined' && en.wounds !== null) ? en.wounds : (typeof stats.wounds !== 'undefined' ? stats.wounds : null)
-  return {
-    name: en.name || en.bestiaryName || (stats && (stats.bestiaryName || stats.name)) || en.pdf || '<no-name>',
-    book: en.book || en.source || en.pdf || '',
-    pdf: en.pdf || '',
-    page: en.page ?? stats.page ?? null,
-    profile,
-    wounds,
-    movement: en.movement || stats.movement || null,
-    toughness: en.toughness || stats.toughness || null,
-    armour: en.armour || stats.armour || null,
-    skills: en.skills || stats.skills || null,
-    talents: en.talents || stats.talents || null,
-    traits: en.traits || stats.traits || null,
-    weapons: en.weapons || stats.weapons || null,
-    gear: en.gear || stats.gear || null,
-    stats
-  }
-}
+// Removed normalizeEntry function - now using database API transformation
 
 function buildWeaponsList() {
   if (!_builtWeapons) return []
@@ -352,14 +330,40 @@ function DeathwatchRoller() {
     return defaultWeapons
   })
   const [weaponName,setWeaponName] = useState('')
-  const [enemies] = useState(()=> {
-    try{
-      const stored = safeGet(STORAGE_ENEMIES)
-      if (stored && Array.isArray(stored) && stored.length>0) return stored.map(normalizeEntry)
-      return defaultEnemies
-    }catch(e){ return defaultEnemies }
-  })
+  const [enemies,setEnemies] = useState(defaultEnemies)
+  const [enemiesLoading,setEnemiesLoading] = useState(false)
+  const [enemiesError,setEnemiesError] = useState(null)
   const [enemyName,setEnemyName] = useState('Custom/None')
+
+  // Load enemies from database API
+  async function loadEnemiesFromAPI() {
+    setEnemiesLoading(true)
+    setEnemiesError(null)
+    try {
+      const response = await fetch('/api/bestiary/enemies')
+      if (response.ok) {
+        const apiEnemies = await response.json()
+        // Add default custom entry at the top
+        const allEnemies = [defaultEnemies[0], ...apiEnemies]
+        setEnemies(allEnemies)
+        console.log(`Loaded ${apiEnemies.length} enemies from database`)
+      } else {
+        throw new Error(`HTTP ${response.status}`)
+      }
+    } catch (error) {
+      console.error('Failed to load enemies from API:', error)
+      setEnemiesError(error.message)
+      // Keep default enemies on error
+      setEnemies(defaultEnemies)
+    } finally {
+      setEnemiesLoading(false)
+    }
+  }
+
+  // Load enemies on component mount
+  useEffect(() => {
+    loadEnemiesFromAPI()
+  }, [])
 
   const trackerInit = safeGet(STORAGE_TRACKER)
   const [maxWounds,setMaxWounds] = useState(() => Math.max(0, trackerInit?.maxWounds ?? 20))
@@ -400,7 +404,7 @@ function DeathwatchRoller() {
   useEffect(()=>{ safeSet(STORAGE_HISTORY, history) },[history])
   useEffect(()=>{ safeSet(STORAGE_PRESETS, presets) },[presets])
   useEffect(()=>{ safeSet(STORAGE_WEAPONS, weapons) },[weapons])
-  useEffect(()=>{ safeSet(STORAGE_ENEMIES, enemies) },[enemies])
+  // Removed localStorage persistence - using database API instead
   useEffect(()=>{ safeSet(STORAGE_TRACKER, { maxWounds, curWounds, partDamage }) },[maxWounds, curWounds, partDamage])
 
   // On first run, if there are no stored weapons try to fetch the packaged DB from public
@@ -1052,12 +1056,26 @@ function DeathwatchRoller() {
                 </div>
               </div>
               <div className="lg:col-span-3">
-                <label className="text-xs uppercase opacity-70">Enemy</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs uppercase opacity-70">Enemy</label>
+                  <div className="flex items-center gap-2">
+                    {enemiesLoading && <span className="text-xs text-blue-400">Loading...</span>}
+                    {enemiesError && <span className="text-xs text-red-400">Error: {enemiesError}</span>}
+                    <button 
+                      onClick={loadEnemiesFromAPI}
+                      disabled={enemiesLoading}
+                      className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600 disabled:opacity-50"
+                      title="Refresh enemies from database"
+                    >
+                      ↻
+                    </button>
+                  </div>
+                </div>
                 <select className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={enemyName} onChange={e=>onSelectEnemy(e.target.value)}>
                   {enemies.map(en => (<option key={en.name} value={en.name}>{en.name}{en.name==='Custom/None' ? '' : ` (TB ${en.tb} / AR Var / W ${en.wounds??'-'})`}</option>))}
                 </select>
                 <div className="text-xs opacity-60 mt-1">
-                  <Tooltip text="Toughness Bonus">TB</Tooltip> / <Tooltip text="Armour Rating">AR</Tooltip> / <Tooltip text="Wounds">W</Tooltip>
+                  <Tooltip text="Toughness Bonus">TB</Tooltip> / <Tooltip text="Armour Rating">AR</Tooltip> / <Tooltip text="Wounds">W</Tooltip> • {enemies.length} enemies loaded
                 </div>
               </div>
               <div>
