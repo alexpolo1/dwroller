@@ -59,6 +59,16 @@ const createTables = () => {
     CREATE INDEX IF NOT EXISTS idx_players_name ON players(name);
     CREATE INDEX IF NOT EXISTS idx_sessions_session_id ON sessions(session_id);
     CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at);
+    CREATE TABLE IF NOT EXISTS rules_staging (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT,
+      content TEXT,
+      category TEXT,
+      page TEXT,
+      original_json TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE INDEX IF NOT EXISTS idx_rules_staging_category ON rules_staging(category);
   `);
 
   console.log('SQLite tables created successfully');
@@ -229,11 +239,34 @@ const sessionHelpers = {
   }
 };
 
+// Staging helpers for sanitized rules
+const stagingStatements = {
+  insertStaging: db.prepare('INSERT INTO rules_staging (title, content, category, page, original_json) VALUES (?,?,?,?,?)'),
+  listStaging: db.prepare('SELECT id, title, content, category, page, original_json, created_at FROM rules_staging ORDER BY id'),
+  deleteStagingAll: db.prepare('DELETE FROM rules_staging'),
+  getStaging: db.prepare('SELECT id, title, content, category, page, original_json, created_at FROM rules_staging WHERE id = ?')
+};
+
+const stagingHelpers = {
+  insert: (obj) => {
+    const res = stagingStatements.insertStaging.run(obj.title || '', obj.content || '', obj.category || '', obj.page || '', JSON.stringify(obj.original || {}));
+    return res.lastInsertRowid;
+  },
+  list: () => stagingStatements.listStaging.all().map(r => ({ ...r, original: JSON.parse(r.original_json || '{}') })),
+  clear: () => stagingStatements.deleteStagingAll.run(),
+  get: (id) => {
+    const row = stagingStatements.getStaging.get(id);
+    if (!row) return null;
+    return { ...row, original: JSON.parse(row.original_json || '{}') };
+  }
+};
+
 module.exports = {
   db,
   statements,
   playerHelpers,
   sessionHelpers,
+  stagingHelpers,
   close: () => db.close(),
   logToFile
 };

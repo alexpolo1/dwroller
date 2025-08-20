@@ -1,0 +1,26 @@
+TEST DIFHCULTY
+
+Difficulty
+Trivial
+Elementary
+Simple
+
+Easy
+Routine
+Ordinary
+Challenging
+Difficult
+Hard
+
+Very Hard
+Arduous
+Punishing
+Hellish
+
+Test
+Modifier
++60
++50
+
+430
+

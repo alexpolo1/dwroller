@@ -1,0 +1,136 @@
+(Basic)
+
+ligence
+
+‘character uses the Gamble Skill when participating in
+© games of chance and the countless other games popular
+"amongst soldiers across the Imperium. Each participant wagers
+
+an amount, though these are typically the same, and makes
+
+‘an Opposed Test with the Gamble Skill. The player with the
+most Degrees of Success or fewest Degrees of Failure wins
+the pot. The character may choose to lose against any player
+‘with a worse result as part of a Deceive attempt.
+
+Those with both Skills may use Sleight of Hand instead
+‘of Gamble to hide cards or alter dice rolls. Success gives this
+‘character a +20 bonus to his tests, but four or more Degrees
+‘of Failure indicates he has been caught in the act.
+
+‘Skill Use: Full Action to an entire day of gaming
+
+Inquiry (Basic, INVESTIGATION)
+
+Fellowship
+The character can use the Inquity Skill to gain information
+bby asking questions, making conversation, or simple
+‘eavesdropping, Inquiry allows the character to pick up general
+information about an area: its news, recent events, and more.
+Additional Degrees of Success reveal more detailed or more
+secretive tidings. Inquiry can also be used as an Investigation
+Skill allowing the character to hunt after a particular item of
+information from either individuals or resources, such as the
+Chapter’ librarium, This use is virtually always an Extended
+“Test, with difficulty and duration set by the GM.
+
+Skill Use: 1 hour or more
+
+INTERROGATION (ADVANCED)
+
+Willpower
+The Interrogation skill allows the character to extract
+information from an unwilling subject. The application differs
+from torture, where a subject will frequently say anything
+to stop the ordeal. Rather, interrogation represents skilled
+application of psychology, various devices, serums, and other
+techniques. The GM may modify the difficulty of the test
+according to the availability of tools, facilities, and other
+‘conditions. Interrogation is always an Opposed Test, pitting
+the characters Interrogation Skill against an opponent's
+Willpower. Ifthe interrogator wins the Opposed Test, he gets
+‘one answer plus one answer for each Degree of Success. the
+victim wins the Opposed Test, the interrogator get nothing
+
+‘of worth, Two or more Degrees of Failure inflict 1410 plus
+interrogator’s Willpower Bonus in damage against the
+and prevents any further interrogation for 145 days
+
+im takes the same damage and gains a +30 bonus to
+
+et Tests made to resist Interrogation at the hands of
+or his allies. Each Interrogation Test inflicts
+gue on the target.
+
+Invimipatz (Basic, INTERACTION)
+
+Strength
+“The character uses Intimidote Tests 40 presife indi ial
+
+to give in to his demands. The character does not make an
+
+Intimidate Test every time he makes a threat, but only when
+it involves coercion. Though Intimidate lists Strength as its
+
+associated Characteristic, the character may substitute either
+
+Intelligence or Fellowship if the threat involves more subtle
+
+‘methods than brute force, such as blackmail or humiliation. An
+
+Intimidate Test affects number of targets equal to the character's
+
+Strength, Intelligence, or Fellowship Bonus, depending on the
+
+characteristic used for the test. The targets must be able to see
+
+and hear the character cleatly, ether in person or via pict or
+
+vox-caster, and speak a common language.
+
+Skill Use: Full Action
+
+Special Uses
+
+War Cry
+
+[As part of a Charge Action a character may use the Intimidate
+skill (0 make a war ery. This is @ Free Action that targets the
+recipient or recipients of the character's charge—ic. those he
+will end up in combat with and make melee attacks against
+The character then makes an Intimidate Test, based on
+Strength, opposed by the target’s Willpower. If the character
+is successful, the target suffers ~10 to all Parry and Dodge
+tests against the charging character.
+
+Creatures immune to the effects of Fear and other mind-
+effecting psychology are immune to the effects of a war cry
+
+Invocation (ADVANCED)
+
+Willpower
+{An Invocation test is a Full Action. For the duration of the
+Round, the character clears his mind of external influence and
+focuses his will more intently. This may be through recitation
+of mantras, use of psychic foci, or meditation. A successful
+test indicates that the character's mind is ready to channel a
+greater amount of the warp than usual, while still limiting his
+exposure. On the next Round, the character adds +1 to the
+final Psy Rating of any Fettered Power Test
+
+Failure on the Invocation Test indicates that the character's
+attempts to focus have backfired, and he must take a —I
+penalty tothe final Psy Rating ofa Fettered Power Test. If this
+reduces the Psy Rating to zero, the power fails to activate.
+Skill Use: Full Action
+
+Literacy (ADVANCED)
+
+Intelligence
+The Literacy skill allows the character to read and wri
+any language he speaks. Everyday activities do not r
+Literacy Tests, but situations involving regional
+
+damaged manuscripts, archaic ese or colloquial
+necessitate a Skill Test
+Skill Use: 1 minute for I page of text, oe

@@ -1,0 +1,53 @@
+{
+  "inserted": 12,
+  "sample": [
+    {
+      "title": "Carouse (Basic)",
+      "content": "‘Toughness\n\n‘The Carouse Skill is used to resist the effects of aleohol and\nnateotics. Frequent imbibers can build up quite a tolerance to\nalcohols and other drugs, remaining clear-headed and lucid\n‘while those across the table find their judgement or capabilities\ndiminished. The character makes a Skill Test whenever he\nsuffers the effects of alcohol or similar intoxicants (naturally,\nfor Space Marines, this requires imbibing of truly prodigious\namounts or toxicity). Each time he would otherwise suffer\nfiom the effects of an intoxicant, make a Carouse Test. Failure\nindicates he gains a level of Fatigue or suffers the side effects\nof the substance. Should the character lose consciousness, he\nremains passed out for a number of hours equal to 1410 minus"
+    },
+    {
+      "title": "his Toughness Bonus (minimum 1 hour)",
+      "content": "‘Skill Use: Free Action taken whenever the character imbibes\n"
+    },
+    {
+      "title": "Perception",
+      "content": "“Awareness encompasses the character's subconscious ability\n{o react to things his conscious mind may not perceive.\nHe can use this Skill to notice threats—such as ambushes,\n‘taps oF cleverly hidden objects—or slight changes in the\nfenvironment—such as a faint vibration of a far off Ork\nSquiggoth or the foul smell of a Daemonhost. When us\n‘Awareness against an opponent, the testis always opposed.\n‘This use includes noticing ambushes, spotting taps, and\n\n‘other things involving another's actions. However, noticing\n‘environmental factors is a standard test. This use includes\nperceiving trace scents, motion, or similar things.\n\n‘Skill Use: Free Action made in reaction to something.\n"
+    },
+    {
+      "title": "Carouse (Basic)",
+      "content": "‘Toughness\n\nThe Carouse Skill is used to resist the effects of alcohol and\nnarcotics. Frequent imbibers can build up quite a tolerance to\nalcohols and other drugs, remaining clear-headed and lucid\n‘while those across the table find their judgement or capabilities\ndiminished. The character makes a Skill Test whenever he\nsuffers the effects of alcohol or similar intoxicants (naturally,\nfor Space Marines, this requires imbibing of truly prodigious\namounts or toxicity!). Each time he would otherwise suffer\nfiom the effects of an intoxicant, make a Carouse Test. Failure\nindicates he gains a level of Fatigue or suffers the side effects\nof the substance. Should the character lose consciousness, he\nremains passed out for a number of hours equal to 1410 minus"
+    },
+    {
+      "title": "his Toughness Bonus (minimum 1 hour)",
+      "content": "‘Skill Use: Free Action taken whenever the character imbibes\n\n(Basic)\n"
+    },
+    {
+      "title": "ligence",
+      "content": "‘character uses the Gamble Skill when participating in\n© games of chance and the countless other games popular\n\"amongst soldiers across the Imperium. Each participant wagers\n\nan amount, though these are typically the same, and makes\n\n‘an Opposed Test with the Gamble Skill. The player with the\nmost Degrees of Success or fewest Degrees of Failure wins\nthe pot. The character may choose to lose against any player\n‘with a worse result as part of a Deceive attempt.\n\nThose with both Skills may use Sleight of Hand instead\n‘of Gamble to hide cards or alter dice rolls. Success gives this\n‘character a +20 bonus to his tests, but four or more Degrees\n‘of Failure indicates he has been caught in the act.\n\n‘Skill Use: Full Action to an entire day of gaming\n"
+    },
+    {
+      "title": "Fellowship",
+      "content": "The character can use the Inquity Skill to gain information\nbby asking questions, making conversation, or simple\n‘eavesdropping, Inquiry allows the character to pick up general\ninformation about an area: its news, recent events, and more.\nAdditional Degrees of Success reveal more detailed or more\nsecretive tidings. Inquiry can also be used as an Investigation\nSkill allowing the character to hunt after a particular item of\ninformation from either individuals or resources, such as the\nChapter’ librarium, This use is virtually always an Extended\n“Test, with difficulty and duration set by the GM.\n\nSkill Use: 1 hour or more\n"
+    },
+    {
+      "title": "Willpower",
+      "content": "The Interrogation skill allows the character to extract\ninformation from an unwilling subject. The application differs\nfrom torture, where a subject will frequently say anything\nto stop the ordeal. Rather, interrogation represents skilled\napplication of psychology, various devices, serums, and other\ntechniques. The GM may modify the difficulty of the test\naccording to the availability of tools, facilities, and other\n‘conditions. Interrogation is always an Opposed Test, pitting\nthe characters Interrogation Skill against an opponent's\nWillpower. Ifthe interrogator wins the Opposed Test, he gets\n‘one answer plus one answer for each Degree of Success. the\nvictim wins the Opposed Test, the interrogator get nothing\n\n‘of worth, Two or more Degrees of Failure inflict 1410 plus\ninterrogator’s Willpower Bonus in damage against the\nand prevents any further interrogation for 145 days\n\nim takes the same damage and gains a +30 bonus to\n\net Tests made to resist Interrogation at the hands of\nor his allies. Each Interrogation Test inflicts\ngue on the target.\n"
+    },
+    {
+      "title": "Strength",
+      "content": "“The character uses Intimidote Tests 40 presife indi ial\n\nto give in to his demands. The character does not make an\n\nIntimidate Test every time he makes a threat, but only when\nit involves coercion. Though Intimidate lists Strength as its\n\nassociated Characteristic, the character may substitute either\n\nIntelligence or Fellowship if the threat involves more subtle\n\n‘methods than brute force, such as blackmail or humiliation. An\n\nIntimidate Test affects number of targets equal to the character's\n\nStrength, Intelligence, or Fellowship Bonus, depending on the\n\ncharacteristic used for the test. The targets must be able to see\n\nand hear the character cleatly, ether in person or via pict or\n\nvox-caster, and speak a common language.\n\nSkill Use: Full Action\n"
+    },
+    {
+      "title": "War Cry",
+      "content": "[As part of a Charge Action a character may use the Intimidate\nskill (0 make a war ery. This is @ Free Action that targets the\nrecipient or recipients of the character's charge—ic. those he\nwill end up in combat with and make melee attacks against\nThe character then makes an Intimidate Test, based on\nStrength, opposed by the target’s Willpower. If the character\nis successful, the target suffers ~10 to all Parry and Dodge\ntests against the charging character.\n\nCreatures immune to the effects of Fear and other mind-\neffecting psychology are immune to the effects of a war cry\n"
+    },
+    {
+      "title": "Willpower",
+      "content": "{An Invocation test is a Full Action. For the duration of the\nRound, the character clears his mind of external influence and\nfocuses his will more intently. This may be through recitation\nof mantras, use of psychic foci, or meditation. A successful\ntest indicates that the character's mind is ready to channel a\ngreater amount of the warp than usual, while still limiting his\nexposure. On the next Round, the character adds +1 to the\nfinal Psy Rating of any Fettered Power Test\n\nFailure on the Invocation Test indicates that the character's\nattempts to focus have backfired, and he must take a —I\npenalty tothe final Psy Rating ofa Fettered Power Test. If this\nreduces the Psy Rating to zero, the power fails to activate.\nSkill Use: Full Action\n"
+    },
+    {
+      "title": "Intelligence",
+      "content": "The Literacy skill allows the character to read and wri\nany language he speaks. Everyday activities do not r\nLiteracy Tests, but situations involving regional\n\ndamaged manuscripts, archaic ese or colloquial\nnecessitate a Skill Test\nSkill Use: 1 minute for I page of text, oe\n"
+    }
+  ]
+}

@@ -6,11 +6,37 @@ const router = express.Router();
 
 console.log('Rules routes registered (sqlite-backed)');
 
+// Helpers to clean up OCR/extracted text
+function cleanText(s) {
+  if (!s) return s;
+  // Replace Windows newlines, collapse multi-whitespace, trim
+  let out = s.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n');
+  out = out.replace(/[ \t]+/g, ' ');
+  out = out.replace(/\n\s+/g, '\n');
+  out = out.replace(/\s+\n/g, '\n');
+  // Remove weird control characters
+  out = out.replace(/[\x00-\x09\x0B\x0C\x0E-\x1F]/g, '');
+  return out.trim();
+}
+
+function cleanTitle(t) {
+  if (!t) return t;
+  let s = String(t).trim();
+  // If title is all-caps, make sentence case-ish
+  if (s === s.toUpperCase() && s.length > 1) {
+    s = s.toLowerCase();
+    s = s.charAt(0).toUpperCase() + s.slice(1);
+  }
+  // Collapse whitespace
+  s = s.replace(/\s+/g, ' ');
+  return s;
+}
+
 // We will query sqlite `rules` table on demand; helper to fetch all rules
 function getAllRules() {
   try {
-    const rows = db.prepare('SELECT id, rule_id, title, content, page, source, source_abbr, category FROM rules ORDER BY id').all();
-    return rows.map(r => ({ id: r.id, rule_id: r.rule_id, title: r.title, content: r.content, page: r.page, source: r.source, sourceAbbr: r.source_abbr, category: r.category }));
+  const rows = db.prepare('SELECT id, rule_id, title, content, page, source, source_abbr, category FROM rules ORDER BY id').all();
+  return rows.map(r => ({ id: r.id, rule_id: r.rule_id, title: cleanTitle(r.title), content: cleanText(r.content), page: r.page, source: r.source, sourceAbbr: r.source_abbr, category: r.category }));
   } catch (e) {
     console.error('Failed to read rules from sqlite:', e);
     return [];
@@ -18,8 +44,9 @@ function getAllRules() {
 }
 function getRuleById(ruleId) {
   try {
-    const row = db.prepare('SELECT rule_id as id, title, content, page, source, source_abbr as sourceAbbr, category FROM rules WHERE rule_id = ?').get(ruleId);
-    return row || null;
+  const row = db.prepare('SELECT rule_id as id, title, content, page, source, source_abbr as sourceAbbr, category FROM rules WHERE rule_id = ?').get(ruleId);
+  if (!row) return null;
+  return { id: row.id, title: cleanTitle(row.title), content: cleanText(row.content), page: row.page, source: row.source, sourceAbbr: row.sourceAbbr, category: row.category };
   } catch (e) {
     console.error('Failed to read rule by id:', e);
     return null;
@@ -29,10 +56,10 @@ function getRuleById(ruleId) {
 // Get all rule categories
 router.get('/categories', (req, res) => {
   try {
-    const rows = getAllRules();
-    const categories = [...new Set(rows.map(r => r.category).filter(Boolean))];
-    const categoryList = categories.map(cat => ({ id: cat, name: cat.charAt(0).toUpperCase() + cat.slice(1) }));
-    res.json([{ id: 'all', name: 'All Rules' }, ...categoryList]);
+  const rows = getAllRules();
+  const categories = [...new Set(rows.map(r => r.category).filter(Boolean))];
+  const categoryList = categories.map(cat => ({ id: cat, name: cleanTitle(cat) }));
+  res.json([{ id: 'all', name: 'All Rules' }, ...categoryList]);
   } catch (error) {
     console.error('Categories error:', error);
     res.status(500).json({ error: 'Failed to get categories' });
@@ -58,7 +85,9 @@ router.get('/search', (req, res) => {
     }
 
     const results = (rows || []).map(r => ({ ...r, content: r.content && r.content.length > 300 ? r.content.substring(0,300) + '...' : r.content }));
-    res.json(results);
+  // Clean text fields before returning
+  const cleaned = (results || []).map(r => ({ ...r, title: cleanTitle(r.title), content: r.content ? cleanText(r.content) : r.content }));
+  res.json(cleaned);
   } catch (error) {
     console.error('Search error:', error);
     res.status(500).json({ error: 'Search failed' });
@@ -90,7 +119,9 @@ router.get('/random', (req, res) => {
       rows = db.prepare('SELECT rule_id as id, title, content, page, source, source_abbr as sourceAbbr, category FROM rules ORDER BY RANDOM() LIMIT ?').all(max);
     }
     const randomRules = (rows || []).map(r => ({ ...r, content: r.content && r.content.length > 200 ? r.content.substring(0,200) + '...' : r.content }));
-    res.json(randomRules);
+  // Clean before responding
+  const cleaned = (randomRules || []).map(r => ({ ...r, title: cleanTitle(r.title), content: r.content ? cleanText(r.content) : r.content }));
+  res.json(cleaned);
   } catch (error) {
     console.error('Random rules error:', error);
     res.status(500).json({ error: 'Failed to get random rules' });

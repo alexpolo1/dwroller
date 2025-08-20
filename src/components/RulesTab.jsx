@@ -13,21 +13,33 @@ function RulesTab({ authedPlayer, sessionId }) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(false);
   const [selectedRule, setSelectedRule] = useState(null);
+  const [browseCount, setBrowseCount] = useState(20);
 
-  // Common rule categories for Deathwatch
-  const ruleCategories = [
-    { id: 'all', name: 'All Rules' },
-    { id: 'combat', name: 'Combat' },
-    { id: 'weapons', name: 'Weapons' },
-    { id: 'armor', name: 'Armor' },
-    { id: 'skills', name: 'Skills' },
-    { id: 'talents', name: 'Talents' },
-    { id: 'psychic', name: 'Psychic Powers' },
-    { id: 'equipment', name: 'Equipment' },
-    { id: 'vehicles', name: 'Vehicles' },
-    { id: 'enemies', name: 'Enemies' },
-    { id: 'gm', name: 'GM Rules' }
-  ];
+  // Categories - load from backend when available so users can browse
+  const [ruleCategories, setRuleCategories] = useState([
+    { id: 'all', name: 'All Rules' }
+  ]);
+
+  const buildHeaders = () => {
+    const headers = { 'x-session-id': sessionId || '' };
+    if (authedPlayer === 'gm') headers['x-gm-secret'] = 'bongo';
+    return headers;
+  };
+
+  useEffect(() => {
+    // fetch categories from backend; fallback to defaults if not available
+    (async () => {
+      try {
+        const resp = await axios.get('/api/rules/categories', { headers: buildHeaders() });
+        if (resp && Array.isArray(resp.data) && resp.data.length) {
+          setRuleCategories(resp.data);
+        }
+      } catch (e) {
+        log('Could not fetch categories, using defaults', e && e.message);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Popular/Quick access rules
   const quickRules = [
@@ -129,13 +141,22 @@ function RulesTab({ authedPlayer, sessionId }) {
     }
   };
 
-  const buildHeaders = () => {
-    const headers = { 'x-session-id': sessionId || '' };
-    if (authedPlayer === 'gm') {
-      headers['x-gm-secret'] = 'bongo';
+  // Fetch random rules for a category (shared helper)
+  const fetchRandom = async (category, count = browseCount) => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({ count: String(count), category: category !== 'all' ? category : '' });
+      const resp = await axios.get(`/api/rules/random?${params}`, { headers: buildHeaders() });
+      if (resp && Array.isArray(resp.data)) setSearchResults(resp.data);
+    } catch (e) {
+      warn('Browse failed', e && e.message);
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
     }
-    return headers;
   };
+
+  // ...existing code... (buildHeaders already declared earlier)
 
   const highlightText = (text, query) => {
     if (!query || !text) return text;
@@ -176,13 +197,33 @@ function RulesTab({ authedPlayer, sessionId }) {
                   </option>
                 ))}
               </select>
-              <button
-                type="submit"
-                disabled={loading || !searchQuery.trim()}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg font-medium transition-colors"
-              >
-                {loading ? 'Searching...' : 'Search'}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="submit"
+                  disabled={loading || !searchQuery.trim()}
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg font-medium transition-colors"
+                >
+                  {loading ? 'Searching...' : 'Search'}
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setLoading(true);
+                    try {
+                      const params = new URLSearchParams({ count: '20', category: selectedCategory !== 'all' ? selectedCategory : '' });
+                      const resp = await axios.get(`/api/rules/random?${params}`, { headers: buildHeaders() });
+                      if (resp && Array.isArray(resp.data)) setSearchResults(resp.data);
+                    } catch (e) {
+                      warn('Browse failed', e && e.message);
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
+                >
+                  Browse
+                </button>
+              </div>
             </div>
           </form>
 
@@ -197,6 +238,26 @@ function RulesTab({ authedPlayer, sessionId }) {
                   className="px-3 py-1 text-sm bg-white/10 hover:bg-white/20 rounded-md border border-white/20 transition-colors"
                 >
                   {rule}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Category Buttons - quick browse */}
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold mb-3">Browse by Category</h3>
+            <div className="flex flex-wrap gap-2">
+              {ruleCategories.map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={async () => {
+                    const cid = cat.id;
+                    setSelectedCategory(cid);
+                    await fetchRandom(cid, browseCount);
+                  }}
+                  className={`px-3 py-1 text-sm rounded-md border transition-colors ${selectedCategory === cat.id ? 'bg-blue-500 text-white border-blue-600' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+                >
+                  {cat.name}
                 </button>
               ))}
             </div>
@@ -258,6 +319,20 @@ function RulesTab({ authedPlayer, sessionId }) {
                   />
                 </div>
               ))}
+            </div>
+
+            {/* Show more for browse results */}
+            <div className="mt-4 flex justify-center">
+              <button
+                onClick={async () => {
+                  const next = browseCount + 20;
+                  setBrowseCount(next);
+                  await fetchRandom(selectedCategory, next);
+                }}
+                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md text-white"
+              >
+                Show more
+              </button>
             </div>
           </div>
         )}

@@ -1,1 +1,22 @@
 /* Add any app-specific styles here */
+
+/* Use the GM Kit banner as a subtle site-wide background. */
+.App {
+	/* layered: dark gradient overlay will be applied inline in App.js to avoid webpack resolving /gmkit at build time */
+	background-repeat: no-repeat;
+	background-position: center top;
+	background-size: cover;
+	background-attachment: fixed;
+	background-blend-mode: overlay;
+}
+
+/* Ensure overlaying content remains readable on top of the image */
+.App .mx-auto, .App .max-w-6xl {
+	position: relative;
+	z-index: 2;
+}
+
+/* Low-level fallback for very small screens: reduce background intensity */
+@media (max-width: 640px) {
+	.App { background-position: center center; background-size: auto 120%; }
+}

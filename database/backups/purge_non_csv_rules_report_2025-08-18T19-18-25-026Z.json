@@ -1,0 +1,11 @@
+{
+  "purgedAt": "2025-08-18T19:18:25.052Z",
+  "purgedCount": 532,
+  "remaining": [
+    {
+      "source": "csv-import",
+      "c": 45
+    }
+  ],
+  "total": 45
+}

@@ -9,7 +9,10 @@ const shopRoutes = require('./routes/shopRoutes');
 const rulesRoutes = require('./routes/rulesRoutes');
 const bestiaryRoutes = require('./routes/bestiaryRoutes');
 const weaponsRoutes = require('./routes/weaponsRoutes');
+const rulesStagingRoutes = require('./routes/rulesStagingRoutes');
 // const rulesRoutes = require('./routes/rulesRoutes-simple');
+
+const gmkitDir = path.join(__dirname, '..', 'data', 'gamemasters_kit');
 
 console.log('Routes loaded:', {
   playerRoutes: typeof playerRoutes,
@@ -60,6 +63,67 @@ try {
   console.error('Error mounting /api/rules:', e && e.stack ? e.stack : e);
   throw e;
 }
+
+  try {
+    console.log('Registering /api/rules/staging');
+    app.use('/api/rules/staging', rulesStagingRoutes);
+    console.log('Rules staging routes registered');
+  } catch (e) {
+    console.error('Error mounting /api/rules/staging:', e && e.stack ? e.stack : e);
+  }
+
+  // Expose gamemaster kit files and a simple listing API for GM-only resources
+  try {
+    console.log('Registering /api/gmkit and /gmkit static');
+    app.get('/api/gmkit/list', (req, res) => {
+      try {
+        if (!fs.existsSync(gmkitDir)) return res.json([]);
+        const files = fs.readdirSync(gmkitDir).filter(f => !f.startsWith('.'));
+        const list = files.map(f => {
+          const filePath = path.join(gmkitDir, f);
+          let stat = null;
+          try { stat = fs.statSync(filePath); } catch (e) { stat = null; }
+          const ext = path.extname(f).toLowerCase().replace('.', '');
+          // minimal mime mapping
+          const mimeMap = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', svg: 'image/svg+xml', pdf: 'application/pdf' };
+          const mime = mimeMap[ext] || 'application/octet-stream';
+          return { name: f, url: `/gmkit/${encodeURIComponent(f)}`, size: stat ? stat.size : null, mime, ext };
+        });
+        res.json(list);
+      } catch (err) {
+        console.error('Failed to list gmkit files', err);
+        res.status(500).json({ error: 'Failed to list gmkit files' });
+      }
+    });
+
+    app.use('/gmkit', express.static(gmkitDir));
+    console.log('GMKit routes registered');
+  } catch (e) {
+    console.error('Error mounting /api/gmkit or /gmkit:', e && e.stack ? e.stack : e);
+  }
+
+  // Simple JSON base64 upload endpoint for GM Kit files (GM-only via header)
+  app.post('/api/gmkit/upload', express.json({ limit: '20mb' }), (req, res) => {
+    try {
+      const gmSecret = req.headers['x-gm-secret'];
+      if (gmSecret !== 'bongo') return res.status(403).json({ error: 'Unauthorized' });
+      const { name, b64 } = req.body || {};
+      if (!name || !b64) return res.status(400).json({ error: 'Missing name or b64 body' });
+      if (!fs.existsSync(gmkitDir)) fs.mkdirSync(gmkitDir, { recursive: true });
+      // Basic sanitize name
+      const safeName = name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+      const filePath = path.join(gmkitDir, safeName);
+      // Decode base64 (allow data: prefix)
+      const m = b64.match(/^data:([\w/+-\.]+);base64,(.*)$/);
+      const data = m ? m[2] : b64;
+      const buf = Buffer.from(data, 'base64');
+      fs.writeFileSync(filePath, buf);
+      return res.json({ success: true, name: safeName, url: `/gmkit/${encodeURIComponent(safeName)}` });
+    } catch (err) {
+      console.error('GMKit upload failed', err);
+      return res.status(500).json({ error: 'Upload failed' });
+    }
+  });
 
 // Add bestiary copy endpoint
 app.post('/api/copy-bestiary', (req, res) => {

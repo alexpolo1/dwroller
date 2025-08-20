@@ -1,0 +1,116 @@
+{
+  "sanitized": [
+    {
+      "original": {
+        "id": 398,
+        "rule_id": "ocr_refined_1_inquiry_basic_investigation_",
+        "title": "Inquiry (Basic, INVESTIGATION) ",
+        "content": "Fellowship The character can use the Inquity Skill to gain information bby asking questions, making conversation, or simple ‘eavesdropping, Inquiry allows the character to pick up general information about an area: its news, recent events, and more.\nAdditional Degrees of Success reveal more detailed or more secretive tidings. Inquiry can also be used as an Investigation Skill allowing the character to hunt after a particular item of information from either individuals or resources, such as the Chapter’ librarium, This use is virtually always an Extended “Test, with difficulty and duration set by the GM.\n",
+        "page": null,
+        "source": "Core Rulebook",
+        "source_abbr": "CR",
+        "category": "skills",
+        "created_at": "2025-08-17 18:10:28"
+      },
+      "title": "Inquiry (Basic, INVESTIGATION)",
+      "content": "Fellowship The character can use the Inquiry Skill to gain information by asking questions, making conversation, or simple 'eavesdropping'. Inquiry allows the character to pick up general information about an area: its news, recent events, and more. Additional Degrees of Success reveal more detailed or more secretive tidings. Inquiry can also be used as an Investigation Skill allowing the character to hunt after a particular item of information from either individuals or resources, such as the Chapter's librarium. This use is virtually always an Extended Test, with difficulty and duration set by the GM.",
+      "category": "skills",
+      "verified": true,
+      "confidence": 0.95
+    },
+    {
+      "original": {
+        "id": 399,
+        "rule_id": "ocr_refined_2_willpower",
+        "title": "Willpower",
+        "content": "The Interrogation skill allows the character to extract information from an unwilling subject. The application differs from torture, where a subject will frequently say anything to stop the ordeal. Rather, interrogation represents skilled application of psychology, various devices, serums, and other techniques. The GM may modify the difficulty of the test according to the availability of tools, facilities, and other ‘conditions. Interrogation is always an Opposed Test, pitting the characters Interrogation Skill against an opponent's Willpower. Ifthe interrogator wins the Opposed Test, he gets ‘one answer plus one answer for each Degree of Success. the victim wins the Opposed Test, the interrogator get nothing  ‘of worth, Two or more Degrees of Failure inflict 1410 plus interrogator’s Willpower Bonus in damage against the and prevents any further interrogation for 145 days  im takes the same damage and gains a +30 bonus to  et Tests made to resist Interrogation at the hands of or his allies. Each Interrogation Test inflicts gue on the target.\n",
+        "page": null,
+        "source": "Core Rulebook",
+        "source_abbr": "CR",
+        "category": "skills",
+        "created_at": "2025-08-17 18:10:28"
+      },
+      "title": "Willpower",
+      "content": "The Interrogation skill allows the character to extract information from an unwilling subject. The application differs from torture, where a subject will frequently say anything to stop the ordeal. Rather, interrogation represents skilled application of psychology, various devices, serums, and other techniques. The GM may modify the difficulty of the test according to the availability of tools, facilities, and other conditions. Interrogation is always an Opposed Test, pitting the character's Interrogation Skill against an opponent's Willpower. If the interrogator wins the Opposed Test, he gets one answer plus one answer for each Degree of Success. If the victim wins the Opposed Test, the interrogator gets nothing of worth. Two or more Degrees of Failure inflict 1d10 plus interrogator's Willpower Bonus in damage against the victim and prevents any further interrogation for 1d5 days. The interrogator takes the same damage and gains a +30 bonus to resist Tests made to resist Interrogation at the hands of him or his allies. Each Interrogation Test inflicts fatigue on the target.",
+      "category": "skills",
+      "verified": true,
+      "confidence": 0.98
+    },
+    {
+      "original": {
+        "id": 400,
+        "rule_id": "ocr_refined_3_strength",
+        "title": "Strength",
+        "content": "“The character uses Intimidote Tests 40 presife indi ial  to give in to his demands. The character does not make an  Intimidate Test every time he makes a threat, but only when it involves coercion. Though Intimidate lists Strength as its  associated Characteristic, the character may substitute either  Intelligence or Fellowship if the threat involves more subtle  ‘methods than brute force, such as blackmail or humiliation. An  Intimidate Test affects number of targets equal to the character's  Strength, Intelligence, or Fellowship Bonus, depending on the  characteristic used for the test. The targets must be able to see  and hear the character cleatly, ether in person or via pict or  vox-caster, and speak a common language.\n\nSkill Use: Full Action ",
+        "page": null,
+        "source": "Core Rulebook",
+        "source_abbr": "CR",
+        "category": "skills",
+        "created_at": "2025-08-17 18:10:28"
+      },
+      "title": "Strength",
+      "content": "The character uses Intimidate Tests to pressure individuals to give in to his demands. The character does not make an Intimidate Test every time he makes a threat, but only when it involves coercion. Though Intimidate lists Strength as its associated Characteristic, the character may substitute either Intelligence or Fellowship if the threat involves more subtle methods than brute force, such as blackmail or humiliation. An Intimidate Test affects a number of targets equal to the character's Strength, Intelligence, or Fellowship Bonus, depending on the characteristic used for the test. The targets must be able to see and hear the character clearly, either in person or via pict or vox-caster, and speak a common language.",
+      "category": "skills",
+      "verified": true,
+      "confidence": 0.96
+    },
+    {
+      "original": {
+        "id": 401,
+        "rule_id": "ocr_refined_4_war_cry",
+        "title": "War Cry",
+        "content": "[As part of a Charge Action a character may use the Intimidate skill (0 make a war ery. This is @ Free Action that targets the recipient or recipients of the character's charge—ic. those he will end up in combat with and make melee attacks against The character then makes an Intimidate Test, based on Strength, opposed by the target’s Willpower. If the character is successful, the target suffers ~10 to all Parry and Dodge tests against the charging character.\n\nCreatures immune to the effects of Fear and other mindeffecting psychology are immune to the effects of a war cry ",
+        "page": null,
+        "source": "Core Rulebook",
+        "source_abbr": "CR",
+        "category": "skills",
+        "created_at": "2025-08-17 18:10:28"
+      },
+      "title": "War Cry",
+      "content": "As part of a Charge Action, a character may use the Intimidate skill to make a war cry. This is a Free Action that targets the recipient or recipients of the character's charge—i.e. those he will end up in combat with and make melee attacks against. The character then makes an Intimidate Test, based on Strength, opposed by the target's Willpower. If the character is successful, the target suffers -10 to all Parry and Dodge tests against the charging character. Creatures immune to the effects of Fear and other mind-affecting psychology are immune to the effects of a war cry.",
+      "category": "skills",
+      "verified": true,
+      "confidence": 0.97
+    },
+    {
+      "original": {
+        "id": 402,
+        "rule_id": "ocr_refined_5_willpower",
+        "title": "Willpower",
+        "content": "{An Invocation test is a Full Action. For the duration of the Round, the character clears his mind of external influence and focuses his will more intently. This may be through recitation of mantras, use of psychic foci, or meditation. A successful test indicates that the character's mind is ready to channel a greater amount of the warp than usual, while still limiting his exposure. On the next Round, the character adds +1 to the final Psy Rating of any Fettered Power Test  Failure on the Invocation Test indicates that the character's attempts to focus have backfired, and he must take a —I penalty tothe final Psy Rating ofa Fettered Power Test. If this reduces the Psy Rating to zero, the power fails to activate.\nSkill Use: Full Action ",
+        "page": null,
+        "source": "Core Rulebook",
+        "source_abbr": "CR",
+        "category": "skills",
+        "created_at": "2025-08-17 18:10:28"
+      },
+      "title": "Willpower",
+      "content": "An Invocation test is a Full Action. For the duration of the Round, the character clears his mind of external influence and focuses his will more intently. This may be through recitation of mantras, use of psychic foci, or meditation. A successful test indicates that the character's mind is ready to channel a greater amount of the warp than usual, while still limiting his exposure. On the next Round, the character adds +1 to the final Psy Rating of any Fettered Power Test. Failure on the Invocation Test indicates that the character's attempts to focus have backfired, and he must take a -1 penalty to the final Psy Rating of a Fettered Power Test. If this reduces the Psy Rating to zero, the power fails to activate.",
+      "category": "skills/rules",
+      "verified": true,
+      "confidence": 1
+    },
+    {
+      "original": {
+        "id": 403,
+        "rule_id": "ocr_refined_6_literacy_advanced_",
+        "title": "Literacy (ADVANCED) ",
+        "content": "Intelligence The Literacy skill allows the character to read and wri any language he speaks. Everyday activities do not r Literacy Tests, but situations involving regional  damaged manuscripts, archaic ese or colloquial necessitate a Skill Test Skill Use: 1 minute for I page of text, oe ",
+        "page": null,
+        "source": "Core Rulebook",
+        "source_abbr": "CR",
+        "category": "skills",
+        "created_at": "2025-08-17 18:10:28"
+      },
+      "title": "Literacy (ADVANCED)",
+      "content": "The Literacy skill allows the character to read and write in any language he speaks. Everyday activities do not require Literacy Tests, but situations involving regional damaged manuscripts, archaic languages, or colloquial dialects necessitate a Skill Test. Skill Use: 1 minute for 1 page of text.",
+      "category": "skills/rules",
+      "verified": true,
+      "confidence": 1
+    }
+  ],
+  "meta": {
+    "generatedAt": "2025-08-17T19:38:40.501Z",
+    "count": 6
+  }
+}

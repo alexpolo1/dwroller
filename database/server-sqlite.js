@@ -5,7 +5,6 @@ const fs = require('fs');
 const path = require('path');
 const playerRoutes = require('./routes/playerRoutes-sqlite');
 const sessionRoutes = require('./routes/sessionRoutes-sqlite');
-const shopRoutes = require('./routes/shopRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,15 +12,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 app.use(cors());
-
-// Serve static files from public directory
-const publicDir = path.join(__dirname, '..', 'public');
-app.use(express.static(publicDir));
-
-// API Routes
-app.use('/api/players', playerRoutes);
-app.use('/api/sessions', sessionRoutes);
-app.use('/api/shop', shopRoutes);
+app.use(express.static('public')); // Serve files from public directory
 
 // Initialize SQLite database
 const { db } = require('./sqlite-db');
@@ -44,8 +35,23 @@ app.get('/', (req, res) => {
   res.send('Deathwatch Roller API is running with SQLite. Use /api/players for player data.');
 });
 
+// Shop endpoint
+app.get('/api/shop', (req, res) => {
+  try {
+    console.log('Shop endpoint hit');
+    const filepath = path.join(__dirname, '../public/deathwatch-armoury.json');
+    console.log('Looking for shop data at:', filepath);
+    console.log('File exists:', fs.existsSync(filepath));
+    const shopData = JSON.parse(fs.readFileSync(filepath, 'utf8'));
+    console.log('Shop data loaded, keys:', Object.keys(shopData));
+    res.json(shopData);
+  } catch (error) {
+    console.error('Shop error:', error);
+    res.status(500).json({ error: String(error) });
+  }
+});
+
 // Use routes
-app.use('/api/shop', shopRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api/sessions', sessionRoutes);
 

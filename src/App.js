@@ -4,6 +4,7 @@ import RequisitionShop from './components/RequisitionShop';
 import PlayerTab from './components/PlayerTab';
 import RulesTab from './components/RulesTab';
 import BestiaryTab from './components/BestiaryTab';
+import GMKit from './components/GMKit';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { debug, info, warn, error, logApiCall, logApiError, logUserAction } from './utils/logger';
@@ -141,8 +142,49 @@ function App() {
 
   // GM session is now handled through the regular login
 
+  const [appBackgroundUrl, setAppBackgroundUrl] = useState(() => {
+    try {
+      return localStorage.getItem('dw:gmkit:background') || '/gmkit/deathwatch-banner.png';
+    } catch (e) {
+      return '/gmkit/deathwatch-banner.png';
+    }
+  });
+
+  // On mount, try to get the gmkit list and pick a banner if available.
+  useEffect(() => {
+    let mounted = true;
+    async function pickBackground() {
+      try {
+        const res = await axios.get('/api/gmkit/list');
+        const list = res.data || [];
+        if (!mounted) return;
+        // prefer explicit deathwatch-banner.png if present
+        const banner = list.find(f => f.name === 'deathwatch-banner.png');
+        if (banner) return setAppBackgroundUrl(banner.url);
+        // otherwise use the first image-like file (png/jpg/jpeg)
+        const firstImg = list.find(f => ['png', 'jpg', 'jpeg'].includes(f.ext));
+        if (firstImg) return setAppBackgroundUrl(firstImg.url);
+        // fallback remains the default (may 404) or no background
+      } catch (err) {
+        // ignore — keep default
+        console.debug('Could not load gmkit list for background', err.message || err);
+      }
+    }
+    pickBackground();
+    return () => { mounted = false; };
+  }, []);
+
+  const appBackgroundStyle = {
+    backgroundImage: `linear-gradient(rgba(2,6,23,0.65), rgba(15,23,42,0.65)), url('${appBackgroundUrl}')`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center top',
+    backgroundSize: 'cover',
+    backgroundAttachment: 'fixed',
+    backgroundBlendMode: 'overlay'
+  };
+
   return (
-    <div className="App min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="App min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={appBackgroundStyle}>
       {/* Persistent Header */}
       <div className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-white/10">
         <div className="mx-auto max-w-6xl px-6 py-4">
@@ -217,12 +259,20 @@ function App() {
               Rules
             </button>
             {authedPlayer === 'gm' && (
-              <button 
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${tab==='bestiary' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-700/50 text-slate-200 hover:bg-slate-600/50'}`} 
-                onClick={()=>{logUserAction('navigation', 'Tab switch', { from: tab, to: 'bestiary' }); setTab('bestiary')}}
-              >
-                Bestiary
-              </button>
+              <>
+                <button 
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${tab==='bestiary' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-700/50 text-slate-200 hover:bg-slate-600/50'}`} 
+                  onClick={()=>{logUserAction('navigation', 'Tab switch', { from: tab, to: 'bestiary' }); setTab('bestiary')}}
+                >
+                  Bestiary
+                </button>
+                <button 
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${tab==='gmkit' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-700/50 text-slate-200 hover:bg-slate-600/50'}`} 
+                  onClick={()=>{logUserAction('navigation', 'Tab switch', { from: tab, to: 'gmkit' }); setTab('gmkit')}}
+                >
+                  GM Kit
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -261,7 +311,7 @@ function App() {
           </div>
         )}
         
-        {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : tab==='rules' ? <RulesTab authedPlayer={authedPlayer} sessionId={sessionId} /> : tab==='bestiary' ? (authedPlayer === 'gm' ? <BestiaryTab /> : <div className="p-6 rounded-lg bg-red-900/20 border border-red-500/30"><h2 className="text-xl font-bold text-red-300 mb-2">Access Denied</h2><p className="text-red-200">The Bestiary is only accessible to Game Masters. Please log in with a GM account.</p></div>) : <PlayerTab 
+  {tab==='roller' ? <DeathwatchRoller /> : tab==='shop' ? <RequisitionShop authedPlayer={authedPlayer} sessionId={sessionId} /> : tab==='rules' ? <RulesTab authedPlayer={authedPlayer} sessionId={sessionId} /> : tab==='bestiary' ? (authedPlayer === 'gm' ? <BestiaryTab /> : <div className="p-6 rounded-lg bg-red-900/20 border border-red-500/30"><h2 className="text-xl font-bold text-red-300 mb-2">Access Denied</h2><p className="text-red-200">The Bestiary is only accessible to Game Masters. Please log in with a GM account.</p></div>) : tab==='gmkit' ? <GMKit authedPlayer={authedPlayer} /> : <PlayerTab 
           authedPlayer={authedPlayer} 
           sessionId={sessionId}
         />}

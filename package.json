@@ -36,6 +36,7 @@
     "pm2:start": "cd database && pm2 start pm2.config.js --env production --update-env",
     "pm2:stop": "pm2 stop deathwatch-server || true",
     "pm2:reload": "cd database && pm2 reload pm2.config.js --env production --update-env",
+  "sanitize:openai": "node scripts/sanitize-rules-openai.js",
     "prestart": "",
     "preserver": ""
   },
@@ -59,6 +60,8 @@
     ]
   },
   "devDependencies": {
+  "canvas": "^2.11.2",
+  "tesseract.js": "^4.1.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
     "autoprefixer": "^10.4.14",
     "axios": "^1.11.0",

@@ -38,7 +38,19 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ## Learn More
 - [React Documentation](https://reactjs.org/)
 - [Create React App Documentation](https://create-react-app.dev/)
-=======
-# dwroller
-dwroller
->>>>>>> 18513bcff9028e31a5b4d35eba2f4deb6bf4439c
+
+## OpenAI sanitizer
+This project includes a helper to sanitize OCR/extracted rule blocks before importing into the database.
+
+Usage:
+1. Add your OpenAI API key to a local `.env` file in the project root (DO NOT commit this file):
+
+```
+OPENAI_API_KEY=sk-REPLACE
+```
+
+2. Run the sanitizer (it reads `database/backups/extracted-blocks.json` by default):
+
+```
+npm run sanitize:openai
+```

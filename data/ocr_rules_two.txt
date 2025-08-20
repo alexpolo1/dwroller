@@ -1,0 +1,38 @@
+AWARENESS (Basic)
+
+Perception
+
+“Awareness encompasses the character's subconscious ability
+{o react to things his conscious mind may not perceive.
+He can use this Skill to notice threats—such as ambushes,
+‘taps oF cleverly hidden objects—or slight changes in the
+fenvironment—such as a faint vibration of a far off Ork
+Squiggoth or the foul smell of a Daemonhost. When us
+‘Awareness against an opponent, the testis always opposed.
+‘This use includes noticing ambushes, spotting taps, and
+
+‘other things involving another's actions. However, noticing
+‘environmental factors is a standard test. This use includes
+perceiving trace scents, motion, or similar things.
+
+‘Skill Use: Free Action made in reaction to something.
+
+Carouse (Basic)
+
+‘Toughness
+
+The Carouse Skill is used to resist the effects of alcohol and
+narcotics. Frequent imbibers can build up quite a tolerance to
+alcohols and other drugs, remaining clear-headed and lucid
+‘while those across the table find their judgement or capabilities
+diminished. The character makes a Skill Test whenever he
+suffers the effects of alcohol or similar intoxicants (naturally,
+for Space Marines, this requires imbibing of truly prodigious
+amounts or toxicity!). Each time he would otherwise suffer
+fiom the effects of an intoxicant, make a Carouse Test. Failure
+indicates he gains a level of Fatigue or suffers the side effects
+of the substance. Should the character lose consciousness, he
+remains passed out for a number of hours equal to 1410 minus
+his Toughness Bonus (minimum 1 hour)
+
+‘Skill Use: Free Action taken whenever the character imbibes
