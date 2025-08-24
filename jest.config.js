@@ -11,7 +11,8 @@ module.exports = {
       configFile: './babel.config.js',
     },
   },
-  testMatch: ['**/tests/**/*.test.js', '**/src/tests/**/*.test.js'],
+  // Default to unit tests only for CI compatibility
+  testMatch: ['**/src/tests/**/*.test.js'],
   testEnvironmentOptions: {
     node: true
   },
