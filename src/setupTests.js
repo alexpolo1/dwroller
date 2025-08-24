@@ -4,6 +4,15 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
-// Polyfill fetch for testing environment
-import fetch from 'node-fetch';
-global.fetch = fetch;
+// Mock fetch for unit tests to prevent network calls
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: false,
+    json: () => Promise.resolve([]),
+  })
+);
+
+// Reset fetch mock before each test
+beforeEach(() => {
+  fetch.mockClear();
+});
