@@ -10958,3 +10958,7 @@ Connected to MongoDB
 [2025-08-24T20:33:01.323Z] DB: getAllPlayers - resultCount 7
 [2025-08-24T20:33:24.887Z] DB: getAllPlayers - start
 [2025-08-24T20:33:24.888Z] DB: getAllPlayers - resultCount 7
+[2025-08-24T20:35:19.472Z] DB: getAllPlayers - start
+[2025-08-24T20:35:19.473Z] DB: getAllPlayers - resultCount 7
+[2025-08-24T20:35:28.148Z] DB: getAllPlayers - start
+[2025-08-24T20:35:28.148Z] DB: getAllPlayers - resultCount 7
