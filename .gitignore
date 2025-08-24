@@ -39,3 +39,11 @@ data/Deathwatch - The Achilus Assault.pdf
 
 # Ignore all PDF files (prevent including copyrighted book PDFs)
 *.pdf
+
+# Database and server log files
+backend.log
+server.log
+database/backend.log
+database/server.log
+database/sqlite/*.db-shm
+database/sqlite/*.db-wal
