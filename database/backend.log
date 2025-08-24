@@ -10954,3 +10954,11 @@ Connected to MongoDB
 [2025-08-21T20:43:12.560Z] DB: getSession - start f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
 [2025-08-21T20:43:12.561Z] DB: getSession - not found f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
 [2025-08-21T20:43:12.561Z] SESSION: Validate not found f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T20:33:01.322Z] DB: getAllPlayers - start
+[2025-08-24T20:33:01.323Z] DB: getAllPlayers - resultCount 7
+[2025-08-24T20:33:24.887Z] DB: getAllPlayers - start
+[2025-08-24T20:33:24.888Z] DB: getAllPlayers - resultCount 7
+[2025-08-24T20:35:19.472Z] DB: getAllPlayers - start
+[2025-08-24T20:35:19.473Z] DB: getAllPlayers - resultCount 7
+[2025-08-24T20:35:28.148Z] DB: getAllPlayers - start
+[2025-08-24T20:35:28.148Z] DB: getAllPlayers - resultCount 7

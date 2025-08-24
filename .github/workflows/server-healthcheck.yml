@@ -15,10 +15,6 @@ jobs:
         with:
           node-version: '18'
       - name: Install dependencies
-        run: |
-          cd database
-          npm ci --silent || true
+        run: npm ci --silent
       - name: Run healthcheck
-        run: |
-          cd database
-          node healthcheck.js
+        run: node database/healthcheck.js
