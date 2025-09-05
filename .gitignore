@@ -59,3 +59,9 @@ database/backups/
 # SQLite WAL files
 *.db-shm
 *.db-wal
+
+# Core dumps and crash files
+core
+core.*
+*.core
+*.dump
