@@ -42,6 +42,20 @@ describe('RequisitionShop Component', () => {
           }]
         });
       }
+      if (url === '/api/shop/items') {
+        return Promise.resolve({
+          data: [
+            { name: "Test Item", cost: 10, category: "Gear", renown: "None" }
+          ]
+        });
+      }
+      if (url === '/api/players/names') {
+        return Promise.resolve({
+          data: [
+            { name: 'TestPlayer', tabInfo: { rp: 100, renown: 'None' } }
+          ]
+        });
+      }
       return Promise.reject(new Error('Unknown endpoint'));
     });
   });

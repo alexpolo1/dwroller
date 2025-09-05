@@ -12,7 +12,8 @@ describe('BestiaryTab', () => {
     
     // Should render the component header
     expect(screen.getByText('Bestiary')).toBeInTheDocument();
-    expect(screen.getByText('Refresh')).toBeInTheDocument();
+    // Button text can be either "Refresh" or "Refreshing..." depending on loading state
+    expect(screen.getByText(/Refresh/)).toBeInTheDocument();
   });
 
   test('component mounts without crashing', async () => {
@@ -41,7 +42,8 @@ describe('BestiaryTab', () => {
   test('renders refresh button', () => {
     render(<BestiaryTab />);
     
-    const refreshButton = screen.getByText('Refresh');
+    // Button text can be either "Refresh" or "Refreshing..." depending on loading state
+    const refreshButton = screen.getByText(/Refresh/);
     expect(refreshButton).toBeInTheDocument();
     expect(refreshButton.tagName).toBe('BUTTON');
   });
@@ -51,7 +53,8 @@ describe('BestiaryTab', () => {
     
     // Should always have these elements
     expect(screen.getByText('Bestiary')).toBeInTheDocument();
-    expect(screen.getByText('Refresh')).toBeInTheDocument();
+    // Button text can be either "Refresh" or "Refreshing..." depending on loading state
+    expect(screen.getByText(/Refresh/)).toBeInTheDocument();
     
     // Wait for component to settle into final state
     await waitFor(() => {

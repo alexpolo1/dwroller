@@ -54,11 +54,55 @@ const createTables = () => {
     )
   `);
 
+  // Shop tables for requisition system
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS shop_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL UNIQUE,
+      category TEXT NOT NULL,
+      requisition_cost INTEGER NOT NULL DEFAULT 0,
+      renown_requirement TEXT NOT NULL DEFAULT 'None',
+      item_type TEXT NOT NULL,
+      stats TEXT NOT NULL,
+      source TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS player_inventory (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      player_id INTEGER NOT NULL,
+      item_id INTEGER NOT NULL,
+      quantity INTEGER NOT NULL DEFAULT 1,
+      acquired_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (player_id) REFERENCES players(id),
+      FOREIGN KEY (item_id) REFERENCES shop_items(id),
+      UNIQUE(player_id, item_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS transactions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      player_id INTEGER NOT NULL,
+      item_id INTEGER NOT NULL,
+      requisition_cost INTEGER NOT NULL,
+      quantity INTEGER NOT NULL DEFAULT 1,
+      previous_rp INTEGER NOT NULL,
+      new_rp INTEGER NOT NULL,
+      transaction_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (player_id) REFERENCES players(id),
+      FOREIGN KEY (item_id) REFERENCES shop_items(id)
+    );
+  `);
+
   // Create indexes for better performance
   db.exec(`
     CREATE INDEX IF NOT EXISTS idx_players_name ON players(name);
     CREATE INDEX IF NOT EXISTS idx_sessions_session_id ON sessions(session_id);
     CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at);
+    CREATE INDEX IF NOT EXISTS idx_shop_items_category ON shop_items(category);
+    CREATE INDEX IF NOT EXISTS idx_shop_items_renown ON shop_items(renown_requirement);
+    CREATE INDEX IF NOT EXISTS idx_player_inventory_player ON player_inventory(player_id);
+    CREATE INDEX IF NOT EXISTS idx_transactions_player ON transactions(player_id);
     CREATE TABLE IF NOT EXISTS rules_staging (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT,

@@ -1,54 +1,47 @@
-const sqlite3 = require('sqlite3');
-const path = require('path');
-
-// Get database path
-const dbPath = path.join(__dirname, 'sqlite', 'deathwatch.db');
-
-// Create database connection
-const db = new sqlite3.Database(dbPath);
+const { db } = require('./sqlite-db');
 
 // Shop and inventory related database operations
 const shopHelpers = {
   // Get all items in the shop
   getAllItems: () => {
-    return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM shop_items ORDER BY category, name', [], (err, rows) => {
-        if (err) return reject(err);
-        // Parse stats JSON string into object when possible
-        const parsed = rows.map(r => {
-          try {
-            return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
-          } catch (e) {
-            // if parsing fails, leave as-is
-            return r;
-          }
-        });
-        resolve(parsed);
+    try {
+      const rows = db.prepare('SELECT * FROM shop_items ORDER BY category, name').all();
+      // Parse stats JSON string into object when possible
+      const parsed = rows.map(r => {
+        try {
+          return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
+        } catch (e) {
+          // if parsing fails, leave as-is
+          return r;
+        }
       });
-    });
+      return Promise.resolve(parsed);
+    } catch (err) {
+      return Promise.reject(err);
+    }
   },
 
   // Get items by category
   getItemsByCategory: (category) => {
-    return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM shop_items WHERE category = ? ORDER BY name', [category], (err, rows) => {
-        if (err) return reject(err);
-        const parsed = rows.map(r => {
-          try {
-            return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
-          } catch (e) {
-            return r;
-          }
-        });
-        resolve(parsed);
+    try {
+      const rows = db.prepare('SELECT * FROM shop_items WHERE category = ? ORDER BY name').all(category);
+      const parsed = rows.map(r => {
+        try {
+          return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
+        } catch (e) {
+          return r;
+        }
       });
-    });
+      return Promise.resolve(parsed);
+    } catch (err) {
+      return Promise.reject(err);
+    }
   },
 
   // Get player's inventory
   getPlayerInventory: (playerId) => {
-    return new Promise((resolve, reject) => {
-      db.all(`
+    try {
+      const rows = db.prepare(`
         SELECT 
           pi.*,
           si.*
@@ -56,88 +49,93 @@ const shopHelpers = {
         JOIN shop_items si ON pi.item_id = si.id
         WHERE pi.player_id = ?
         ORDER BY si.category, si.name
-      `, [playerId], (err, rows) => {
-        if (err) return reject(err);
-        const parsed = rows.map(r => {
-          try {
-            return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
-          } catch (e) {
-            return r;
-          }
-        });
-        resolve(parsed);
+      `).all(playerId);
+      const parsed = rows.map(r => {
+        try {
+          return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
+        } catch (e) {
+          return r;
+        }
       });
-    });
+      return Promise.resolve(parsed);
+    } catch (err) {
+      return Promise.reject(err);
+    }
   },
 
   // Purchase item for player
   purchaseItem: (playerId, itemId, quantity = 1) => {
-    return new Promise((resolve, reject) => {
-      db.serialize(() => {
-        db.get('BEGIN TRANSACTION');
+    try {
+      // Start transaction
+      const transaction = db.transaction(() => {
+        // Get player's current RP and the item cost
+        const playerAndItem = db.prepare(`
+          SELECT p.requisition_points, p.renown_level, si.requisition_cost, si.renown_requirement
+          FROM players p, shop_items si
+          WHERE p.id = ? AND si.id = ?
+        `).get(playerId, itemId);
 
-        try {
-          // Get player's current RP and the item cost
-          db.get(`
-            SELECT p.requisition_points, p.renown_level, si.requisition_cost, si.renown_requirement
-            FROM players p, shop_items si
-            WHERE p.id = ? AND si.id = ?
-          `, [playerId, itemId], (err, row) => {
-            if (err) throw err;
-            if (!row) throw new Error('Player or item not found');
-
-            const { requisition_points, renown_level, requisition_cost, renown_requirement } = row;
-            const totalCost = requisition_cost * quantity;
-
-            // Check if player has enough RP
-            if (requisition_points < totalCost) {
-              throw new Error('Insufficient requisition points');
-            }
-
-            // Check if player meets renown requirement
-            const renownLevels = ['None', 'Respected', 'Distinguished', 'Hero', 'Legend'];
-            const playerRenownIndex = renownLevels.indexOf(renown_level);
-            const requiredRenownIndex = renownLevels.indexOf(renown_requirement);
-            if (playerRenownIndex < requiredRenownIndex) {
-              throw new Error('Insufficient renown level');
-            }
-
-            // Update player's RP
-            const newRp = requisition_points - totalCost;
-            db.run('UPDATE players SET requisition_points = ? WHERE id = ?',
-              [newRp, playerId]);
-
-            // Add to inventory or update quantity
-            db.run(`
-              INSERT INTO player_inventory (player_id, item_id, quantity)
-              VALUES (?, ?, ?)
-              ON CONFLICT(player_id, item_id) 
-              DO UPDATE SET quantity = quantity + ?
-            `, [playerId, itemId, quantity, quantity]);
-
-            // Record transaction
-            db.run(`
-              INSERT INTO transactions (
-                player_id, item_id, requisition_cost,
-                previous_rp, new_rp
-              ) VALUES (?, ?, ?, ?, ?)
-            `, [playerId, itemId, totalCost, requisition_points, newRp]);
-
-            db.get('COMMIT');
-            resolve({ newRp });
-          });
-        } catch (error) {
-          db.get('ROLLBACK');
-          reject(error);
+        if (!playerAndItem) {
+          throw new Error('Player or item not found');
         }
+
+        const { requisition_points, renown_level, requisition_cost, renown_requirement } = playerAndItem;
+        const totalCost = requisition_cost * quantity;
+
+        // Check if player has enough RP
+        if (requisition_points < totalCost) {
+          throw new Error('Insufficient requisition points');
+        }
+
+        // Check if player meets renown requirement
+        // Keep renown levels in the same order used by the frontend
+        const renownLevels = ['None', 'Respected', 'Distinguished', 'Famed', 'Hero'];
+        const normalize = (r) => String(r || '').trim();
+        const playerRenownIndex = renownLevels.findIndex(x => x.toLowerCase() === normalize(renown_level).toLowerCase());
+        const requiredRenownIndex = renownLevels.findIndex(x => x.toLowerCase() === normalize(renown_requirement).toLowerCase());
+        // If not found, treat unknown as lowest rank (index 0)
+        const pIndex = playerRenownIndex === -1 ? 0 : playerRenownIndex;
+        const reqIndex = requiredRenownIndex === -1 ? 0 : requiredRenownIndex;
+        if (pIndex < reqIndex) {
+          throw new Error('Insufficient renown level');
+        }
+
+        // Update player's RP
+        const newRp = requisition_points - totalCost;
+        db.prepare('UPDATE players SET requisition_points = ? WHERE id = ?')
+          .run(newRp, playerId);
+
+        // Add to inventory or update quantity
+        db.prepare(`
+          INSERT INTO player_inventory (player_id, item_id, quantity)
+          VALUES (?, ?, ?)
+          ON CONFLICT(player_id, item_id) 
+          DO UPDATE SET quantity = quantity + ?
+        `).run(playerId, itemId, quantity, quantity);
+
+        // Record transaction
+        db.prepare(`
+          INSERT INTO transactions (
+            player_id, item_id, requisition_cost, quantity,
+            previous_rp, new_rp
+          ) VALUES (?, ?, ?, ?, ?, ?)
+        `).run(playerId, itemId, totalCost, quantity, requisition_points, newRp);
+
+        return { newRp };
       });
-    });
+
+      // Execute transaction
+      const result = transaction();
+      return Promise.resolve(result);
+    } catch (error) {
+      return Promise.reject(error);
+    }
   },
 
   // Get player's transaction history
   getPlayerTransactions: (playerId) => {
-    return new Promise((resolve, reject) => {
-      db.all(`
+    try {
+      const rows = db.prepare(`
         SELECT 
           t.*,
           si.name as item_name,
@@ -146,19 +144,18 @@ const shopHelpers = {
         JOIN shop_items si ON t.item_id = si.id
         WHERE t.player_id = ?
         ORDER BY t.transaction_date DESC
-      `, [playerId], (err, rows) => {
-        if (err) return reject(err);
-        // transactions don't include full item stats, but parse if present
-        const parsed = rows.map(r => {
-          try {
-            return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
-          } catch (e) {
-            return r;
-          }
-        });
-        resolve(parsed);
+      `).all(playerId);
+      const parsed = rows.map(r => {
+        try {
+          return Object.assign({}, r, { stats: r.stats ? JSON.parse(r.stats) : r.stats });
+        } catch (e) {
+          return r;
+        }
       });
-    });
+      return Promise.resolve(parsed);
+    } catch (err) {
+      return Promise.reject(err);
+    }
   }
 };
 

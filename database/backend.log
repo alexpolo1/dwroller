@@ -10954,3 +10954,270 @@ Connected to MongoDB
 [2025-08-21T20:43:12.560Z] DB: getSession - start f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
 [2025-08-21T20:43:12.561Z] DB: getSession - not found f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
 [2025-08-21T20:43:12.561Z] SESSION: Validate not found f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-22T07:32:42.843Z] DB: getSession - start d393d4985b00ea835b59d47a7b425a9df059131de8db895671247367d13d0e23
+[2025-08-22T07:32:42.843Z] DB: getSession - not found d393d4985b00ea835b59d47a7b425a9df059131de8db895671247367d13d0e23
+[2025-08-22T07:32:42.843Z] SESSION: Validate not found d393d4985b00ea835b59d47a7b425a9df059131de8db895671247367d13d0e23
+[2025-08-24T15:22:44.668Z] DB: getSession - start f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T15:22:44.669Z] DB: getSession - not found f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T15:22:44.669Z] SESSION: Validate not found f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T15:22:46.982Z] DB: getSession - start f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T15:22:46.983Z] DB: getSession - not found f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T15:22:46.983Z] SESSION: Validate not found f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T15:22:48.222Z] DB: deleteSession - start f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T15:22:48.230Z] DB: deleteSession - changes 1 f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T15:22:48.230Z] SESSION: Logout success f83b1f4fd61f1130ce534415b32166f106c9ba524e25b9123a9b249e2ed11ac7
+[2025-08-24T15:22:51.327Z] DB: getAllPlayers - start
+[2025-08-24T15:22:51.329Z] DB: getAllPlayers - resultCount 7
+[2025-08-24T15:22:56.296Z] SESSION: Missing sessionId GET /api/players
+[2025-08-24T15:22:56.336Z] DB: getAllPlayers - start
+[2025-08-24T15:22:56.337Z] DB: getAllPlayers - resultCount 7
+[2025-08-24T15:22:56.757Z] SESSION: Missing sessionId GET /api/players
+[2025-08-24T15:22:59.263Z] SESSION: Missing sessionId GET /api/players
+[2025-08-25T04:59:30.191Z] DB: getAllPlayers - start
+[2025-08-25T04:59:30.193Z] DB: getAllPlayers - resultCount 7
+[2025-08-25T04:59:32.374Z] DB: getPlayerByName - start andreas
+[2025-08-25T04:59:32.374Z] DB: getPlayerByName - found andreas
+[2025-08-25T04:59:32.612Z] DB: createSession - start c0f2336acf33cde462e83200cfc9641c258397368e71bd7800ca2fd4c369f8c1 expiresAt 2025-08-26T04:59:32.612Z
+[2025-08-25T04:59:32.612Z] DB: createSession - done c0f2336acf33cde462e83200cfc9641c258397368e71bd7800ca2fd4c369f8c1
+[2025-08-25T04:59:32.612Z] API: Player login andreas c0f2336acf33cde462e83200cfc9641c258397368e71bd7800ca2fd4c369f8c1
+[2025-08-25T04:59:32.791Z] DB: getSession - start c0f2336acf33cde462e83200cfc9641c258397368e71bd7800ca2fd4c369f8c1
+[2025-08-25T04:59:32.791Z] DB: getSession - ok c0f2336acf33cde462e83200cfc9641c258397368e71bd7800ca2fd4c369f8c1
+[2025-08-25T04:59:32.791Z] SESSION: Validate success c0f2336acf33cde462e83200cfc9641c258397368e71bd7800ca2fd4c369f8c1 andreas
+[2025-08-25T05:04:13.015Z] DB: deleteSession - start c0f2336acf33cde462e83200cfc9641c258397368e71bd7800ca2fd4c369f8c1
+[2025-08-25T05:04:13.016Z] DB: deleteSession - changes 1 c0f2336acf33cde462e83200cfc9641c258397368e71bd7800ca2fd4c369f8c1
+[2025-08-25T05:04:13.016Z] SESSION: Logout success c0f2336acf33cde462e83200cfc9641c258397368e71bd7800ca2fd4c369f8c1
+[2025-08-29T07:40:22.144Z] DB: getSession - start edf7968f63afdbfc89f447ddbc60e189ae2bde46b7bf85c29763008eb18145fc
+[2025-08-29T07:40:22.447Z] DB: getSession - not found edf7968f63afdbfc89f447ddbc60e189ae2bde46b7bf85c29763008eb18145fc
+[2025-08-29T07:40:22.448Z] SESSION: Validate not found edf7968f63afdbfc89f447ddbc60e189ae2bde46b7bf85c29763008eb18145fc
+[2025-08-29T07:40:23.066Z] DB: getSession - start edf7968f63afdbfc89f447ddbc60e189ae2bde46b7bf85c29763008eb18145fc
+[2025-08-29T07:40:23.066Z] DB: getSession - not found edf7968f63afdbfc89f447ddbc60e189ae2bde46b7bf85c29763008eb18145fc
+[2025-08-29T07:40:23.066Z] SESSION: Validate not found edf7968f63afdbfc89f447ddbc60e189ae2bde46b7bf85c29763008eb18145fc
+[2025-08-29T07:40:24.701Z] DB: deleteSession - start edf7968f63afdbfc89f447ddbc60e189ae2bde46b7bf85c29763008eb18145fc
+[2025-08-29T07:40:24.702Z] DB: deleteSession - changes 1 edf7968f63afdbfc89f447ddbc60e189ae2bde46b7bf85c29763008eb18145fc
+[2025-08-29T07:40:24.702Z] SESSION: Logout success edf7968f63afdbfc89f447ddbc60e189ae2bde46b7bf85c29763008eb18145fc
+[2025-08-29T07:40:30.170Z] DB: getAllPlayers - start
+[2025-08-29T07:40:30.182Z] DB: getAllPlayers - resultCount 7
+[2025-08-29T07:40:34.616Z] DB: getPlayerByName - start christoffer
+[2025-08-29T07:40:34.616Z] DB: getPlayerByName - found christoffer
+[2025-08-29T07:40:34.989Z] DB: createSession - start d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a expiresAt 2025-08-30T07:40:34.988Z
+[2025-08-29T07:40:34.989Z] DB: createSession - done d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a
+[2025-08-29T07:40:34.989Z] API: Player login christoffer d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a
+[2025-08-29T07:40:35.033Z] DB: getSession - start d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a
+[2025-08-29T07:40:35.033Z] DB: getSession - ok d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a
+[2025-08-29T07:40:35.033Z] SESSION: Validate success d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a christoffer
+[2025-08-29T07:41:01.065Z] DB: getSession - start d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a
+[2025-08-29T07:41:01.066Z] DB: getSession - ok d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a
+[2025-08-29T07:41:01.066Z] SESSION: Validate success d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a christoffer
+[2025-08-29T07:41:08.904Z] DB: deleteSession - start d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a
+[2025-08-29T07:41:08.904Z] DB: deleteSession - changes 1 d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a
+[2025-08-29T07:41:08.904Z] SESSION: Logout success d708174e15da5a64e02363bad988073ce6f45787518f6a7debac4e153e39df4a
+[2025-08-29T07:41:08.948Z] SESSION: Missing sessionId GET /api/players
+[2025-08-29T07:41:16.672Z] DB: getPlayerByName - start gm
+[2025-08-29T07:41:16.672Z] DB: getPlayerByName - found gm
+[2025-08-29T07:41:16.752Z] DB: createSession - start 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518 expiresAt 2025-08-30T07:41:16.752Z
+[2025-08-29T07:41:16.755Z] DB: createSession - done 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518
+[2025-08-29T07:41:16.755Z] API: Player login gm 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518
+[2025-08-29T07:41:16.799Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:41:16.801Z] SESSION: GM bypass accepted GET /api/players
+[2025-08-29T07:41:16.802Z] DB: getAllPlayers - start
+[2025-08-29T07:41:16.803Z] DB: getAllPlayers - resultCount 7
+[2025-08-29T07:41:16.803Z] API: Fetch all players (public) Found 7 players
+[2025-08-29T07:41:16.806Z] DB: getSession - start 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518
+[2025-08-29T07:41:16.806Z] DB: getSession - ok 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518
+[2025-08-29T07:41:16.806Z] SESSION: Validate success 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518 gm
+[2025-08-29T07:41:16.811Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:41:16.850Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:41:16.863Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:41:19.834Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:41:24.115Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:41:24.117Z] SESSION: GM bypass accepted GET /api/players
+[2025-08-29T07:41:24.118Z] DB: getAllPlayers - start
+[2025-08-29T07:41:24.119Z] DB: getAllPlayers - resultCount 7
+[2025-08-29T07:41:24.119Z] API: Fetch all players (public) Found 7 players
+[2025-08-29T07:41:24.126Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:41:24.153Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:41:24.158Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:42:30.029Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:42:30.031Z] SESSION: GM bypass accepted GET /api/players
+[2025-08-29T07:42:30.031Z] DB: getAllPlayers - start
+[2025-08-29T07:42:30.032Z] DB: getAllPlayers - resultCount 7
+[2025-08-29T07:42:30.032Z] API: Fetch all players (public) Found 7 players
+[2025-08-29T07:42:30.047Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:42:30.083Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:42:30.094Z] SESSION: GM bypass accepted GET /api/players/admin/pregens
+[2025-08-29T07:42:33.267Z] DB: getSession - start 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518
+[2025-08-29T07:42:33.267Z] DB: getSession - ok 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518
+[2025-08-29T07:42:33.267Z] SESSION: Valid 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518 gm GET /api/players
+[2025-08-29T07:42:33.268Z] DB: getAllPlayers - start
+[2025-08-29T07:42:33.268Z] DB: getAllPlayers - resultCount 7
+[2025-08-29T07:42:33.268Z] API: Fetch all players (public) Found 7 players
+[2025-08-29T07:47:07.007Z] DB: deleteSession - start 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518
+[2025-08-29T07:47:07.007Z] DB: deleteSession - changes 1 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518
+[2025-08-29T07:47:07.008Z] SESSION: Logout success 365c1c68111b8010f6bae9ae3327f02e006492effefb52dff3accb85118d1518
+[2025-08-29T07:47:07.050Z] SESSION: Missing sessionId GET /api/players
+[2025-08-29T07:47:07.084Z] DB: getAllPlayers - start
+[2025-08-29T07:47:07.085Z] DB: getAllPlayers - resultCount 7
+[2025-08-29T07:47:09.576Z] DB: getAllPlayers - start
+[2025-08-29T07:47:09.577Z] DB: getAllPlayers - resultCount 7
+[2025-08-29T07:47:11.934Z] DB: getPlayerByName - start claes
+[2025-08-29T07:47:11.935Z] DB: getPlayerByName - found claes
+[2025-08-29T07:47:12.045Z] DB: createSession - start ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5 expiresAt 2025-08-30T07:47:12.044Z
+[2025-08-29T07:47:12.045Z] DB: createSession - done ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5
+[2025-08-29T07:47:12.045Z] API: Player login claes ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5
+[2025-08-29T07:47:12.085Z] DB: getSession - start ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5
+[2025-08-29T07:47:12.085Z] DB: getSession - ok ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5
+[2025-08-29T07:47:12.085Z] SESSION: Valid ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5 claes GET /api/players
+[2025-08-29T07:47:12.085Z] DB: getAllPlayers - start
+[2025-08-29T07:47:12.086Z] DB: getAllPlayers - resultCount 7
+[2025-08-29T07:47:12.086Z] API: Fetch all players (public) Found 7 players
+[2025-08-29T07:47:12.089Z] DB: getSession - start ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5
+[2025-08-29T07:47:12.089Z] DB: getSession - ok ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5
+[2025-08-29T07:47:12.089Z] SESSION: Validate success ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5 claes
+[2025-08-29T07:47:18.586Z] DB: deleteSession - start ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5
+[2025-08-29T07:47:18.587Z] DB: deleteSession - changes 1 ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5
+[2025-08-29T07:47:18.587Z] SESSION: Logout success ac63cda74dc2f6076793469b2896aaa0c9587367b155f3508aed5705a7287fb5
+[2025-08-29T07:47:18.618Z] SESSION: Missing sessionId GET /api/players
+[2025-08-29T07:47:18.654Z] DB: getAllPlayers - start
+[2025-08-29T07:47:18.655Z] DB: getAllPlayers - resultCount 7
+[2025-09-02T18:46:06.999Z] SESSION: Missing sessionId GET /api/players
+[2025-09-02T18:46:07.055Z] DB: getAllPlayers - start
+[2025-09-02T18:46:07.060Z] DB: getAllPlayers - resultCount 7
+[2025-09-02T18:46:09.066Z] DB: getAllPlayers - start
+[2025-09-02T18:46:09.067Z] DB: getAllPlayers - resultCount 7
+[2025-09-02T18:46:11.935Z] DB: getPlayerByName - start chris
+[2025-09-02T18:46:11.935Z] DB: getPlayerByName - found chris
+[2025-09-02T18:46:12.025Z] DB: createSession - start 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e expiresAt 2025-09-03T18:46:12.025Z
+[2025-09-02T18:46:12.028Z] DB: createSession - done 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e
+[2025-09-02T18:46:12.028Z] API: Player login chris 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e
+[2025-09-02T18:46:12.071Z] DB: getSession - start 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e
+[2025-09-02T18:46:12.071Z] DB: getSession - ok 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e
+[2025-09-02T18:46:12.071Z] SESSION: Valid 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e chris GET /api/players
+[2025-09-02T18:46:12.071Z] DB: getAllPlayers - start
+[2025-09-02T18:46:12.071Z] DB: getAllPlayers - resultCount 7
+[2025-09-02T18:46:12.071Z] API: Fetch all players (public) Found 7 players
+[2025-09-02T18:46:12.074Z] DB: getSession - start 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e
+[2025-09-02T18:46:12.075Z] DB: getSession - ok 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e
+[2025-09-02T18:46:12.075Z] SESSION: Validate success 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e chris
+[2025-09-02T18:46:29.860Z] DB: deleteSession - start 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e
+[2025-09-02T18:46:29.861Z] DB: deleteSession - changes 1 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e
+[2025-09-02T18:46:29.861Z] SESSION: Logout success 779c2d222c2e5d4b4beb78b2ec2b499d258e9cbdb6cd269f5da6866d18d92d1e
+[2025-09-02T18:46:29.914Z] SESSION: Missing sessionId GET /api/players
+[2025-09-05T06:17:54.988Z] DB: getSession - start d393d4985b00ea835b59d47a7b425a9df059131de8db895671247367d13d0e23
+[2025-09-05T06:17:54.989Z] DB: getSession - not found d393d4985b00ea835b59d47a7b425a9df059131de8db895671247367d13d0e23
+[2025-09-05T06:17:54.990Z] SESSION: Validate not found d393d4985b00ea835b59d47a7b425a9df059131de8db895671247367d13d0e23
+[2025-09-05T06:56:36.551Z] DB: getAllPlayers - start
+[2025-09-05T06:56:36.553Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T06:56:39.218Z] DB: getPlayerByName - start claes
+[2025-09-05T06:56:39.218Z] DB: getPlayerByName - found claes
+[2025-09-05T06:56:39.392Z] DB: createSession - start 534d76763739efe87dd1fdcfa8306c4df1abcd39ca9aa0cb7fc5421384752c12 expiresAt 2025-09-06T06:56:39.391Z
+[2025-09-05T06:56:39.393Z] DB: createSession - done 534d76763739efe87dd1fdcfa8306c4df1abcd39ca9aa0cb7fc5421384752c12
+[2025-09-05T06:56:39.393Z] API: Player login claes 534d76763739efe87dd1fdcfa8306c4df1abcd39ca9aa0cb7fc5421384752c12
+[2025-09-05T06:56:39.427Z] DB: getSession - start 534d76763739efe87dd1fdcfa8306c4df1abcd39ca9aa0cb7fc5421384752c12
+[2025-09-05T06:56:39.428Z] DB: getSession - ok 534d76763739efe87dd1fdcfa8306c4df1abcd39ca9aa0cb7fc5421384752c12
+[2025-09-05T06:56:39.428Z] SESSION: Validate success 534d76763739efe87dd1fdcfa8306c4df1abcd39ca9aa0cb7fc5421384752c12 claes
+[2025-09-05T06:56:40.794Z] DB: getSession - start 534d76763739efe87dd1fdcfa8306c4df1abcd39ca9aa0cb7fc5421384752c12
+[2025-09-05T06:56:40.794Z] DB: getSession - ok 534d76763739efe87dd1fdcfa8306c4df1abcd39ca9aa0cb7fc5421384752c12
+[2025-09-05T06:56:40.794Z] SESSION: Valid 534d76763739efe87dd1fdcfa8306c4df1abcd39ca9aa0cb7fc5421384752c12 claes GET /api/players
+[2025-09-05T06:56:40.794Z] DB: getAllPlayers - start
+[2025-09-05T06:56:40.795Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T06:56:40.796Z] API: Fetch all players (public) Found 7 players
+[2025-09-05T06:57:42.082Z] DB: getAllPlayers - start
+[2025-09-05T06:57:42.084Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T06:57:45.071Z] DB: getPlayerByName - start christoffer
+[2025-09-05T06:57:45.071Z] DB: getPlayerByName - found christoffer
+[2025-09-05T06:57:45.263Z] DB: createSession - start d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed expiresAt 2025-09-06T06:57:45.263Z
+[2025-09-05T06:57:45.273Z] DB: createSession - done d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed
+[2025-09-05T06:57:45.274Z] API: Player login christoffer d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed
+[2025-09-05T06:57:45.305Z] DB: getSession - start d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed
+[2025-09-05T06:57:45.306Z] DB: getSession - ok d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed
+[2025-09-05T06:57:45.306Z] SESSION: Validate success d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed christoffer
+[2025-09-05T06:57:46.346Z] DB: getSession - start d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed
+[2025-09-05T06:57:46.346Z] DB: getSession - ok d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed
+[2025-09-05T06:57:46.347Z] SESSION: Valid d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed christoffer GET /api/players
+[2025-09-05T06:57:46.347Z] DB: getAllPlayers - start
+[2025-09-05T06:57:46.348Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T06:57:46.348Z] API: Fetch all players (public) Found 7 players
+[2025-09-05T06:58:03.565Z] DB: getAllPlayers - start
+[2025-09-05T06:58:03.566Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T06:58:41.250Z] SESSION: Missing sessionId POST /api/players
+[2025-09-05T06:59:31.355Z] DB: getAllPlayers - start
+[2025-09-05T06:59:31.355Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T06:59:37.333Z] DB: getAllPlayers - start
+[2025-09-05T06:59:37.333Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T06:59:52.118Z] DB: getPlayerByName - start christoffer
+[2025-09-05T06:59:52.119Z] DB: getPlayerByName - found christoffer
+[2025-09-05T06:59:52.206Z] DB: createSession - start be82ac4d78702f61492ef72b05e3b80b53b708cfaf077b15010729c23b08049b expiresAt 2025-09-06T06:59:52.206Z
+[2025-09-05T06:59:52.206Z] DB: createSession - done be82ac4d78702f61492ef72b05e3b80b53b708cfaf077b15010729c23b08049b
+[2025-09-05T06:59:52.206Z] API: Player login christoffer be82ac4d78702f61492ef72b05e3b80b53b708cfaf077b15010729c23b08049b
+[2025-09-05T07:05:37.799Z] DB: deleteSession - start d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed
+[2025-09-05T07:05:37.800Z] DB: deleteSession - changes 1 d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed
+[2025-09-05T07:05:37.800Z] SESSION: Logout success d90b0537ea8dfea2596e07175673479170e8a872d489a8484f15be184044c5ed
+[2025-09-05T07:05:37.835Z] SESSION: Missing sessionId GET /api/players
+[2025-09-05T07:05:37.871Z] DB: getAllPlayers - start
+[2025-09-05T07:05:37.872Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T07:05:43.327Z] DB: getPlayerByName - start gm
+[2025-09-05T07:05:43.327Z] DB: getPlayerByName - found gm
+[2025-09-05T07:05:43.411Z] DB: createSession - start 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca expiresAt 2025-09-06T07:05:43.410Z
+[2025-09-05T07:05:43.411Z] DB: createSession - done 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:05:43.411Z] API: Player login gm 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:05:43.450Z] DB: getSession - start 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:05:43.450Z] DB: getSession - ok 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:05:43.450Z] SESSION: Valid 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca gm GET /api/players
+[2025-09-05T07:05:43.451Z] DB: getAllPlayers - start
+[2025-09-05T07:05:43.451Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T07:05:43.451Z] API: Fetch all players (public) Found 7 players
+[2025-09-05T07:05:43.454Z] DB: getSession - start 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:05:43.458Z] DB: getSession - ok 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:05:43.458Z] SESSION: Validate success 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca gm
+[2025-09-05T07:05:59.996Z] DB: getAllPlayers - start
+[2025-09-05T07:05:59.997Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T07:06:05.938Z] DB: getAllPlayers - start
+[2025-09-05T07:06:05.939Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T07:13:58.070Z] DB: getSession - start 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:13:58.070Z] DB: getSession - ok 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:13:58.070Z] SESSION: Validate success 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca gm
+[2025-09-05T07:14:00.005Z] DB: getSession - start 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:14:00.005Z] DB: getSession - ok 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:14:00.005Z] SESSION: Valid 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca gm GET /api/players
+[2025-09-05T07:14:00.006Z] DB: getAllPlayers - start
+[2025-09-05T07:14:00.006Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T07:14:00.006Z] API: Fetch all players (public) Found 7 players
+[2025-09-05T07:14:02.978Z] DB: deleteSession - start 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:14:02.978Z] DB: deleteSession - changes 1 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:14:02.978Z] SESSION: Logout success 47915ea898951066e0a5a1dd3983b2b719ae4f9a7ff97b54bdbcc5235bb094ca
+[2025-09-05T07:14:03.009Z] SESSION: Missing sessionId GET /api/players
+[2025-09-05T07:14:03.041Z] DB: getAllPlayers - start
+[2025-09-05T07:14:03.041Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T07:14:05.542Z] DB: getAllPlayers - start
+[2025-09-05T07:14:05.543Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T07:14:07.603Z] DB: getPlayerByName - start christoffer
+[2025-09-05T07:14:07.604Z] DB: getPlayerByName - found christoffer
+[2025-09-05T07:14:07.684Z] DB: createSession - start 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173 expiresAt 2025-09-06T07:14:07.684Z
+[2025-09-05T07:14:07.684Z] DB: createSession - done 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:14:07.684Z] API: Player login christoffer 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:14:07.723Z] DB: getSession - start 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:14:07.724Z] DB: getSession - ok 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:14:07.724Z] SESSION: Valid 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173 christoffer GET /api/players
+[2025-09-05T07:14:07.724Z] DB: getAllPlayers - start
+[2025-09-05T07:14:07.724Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T07:14:07.724Z] API: Fetch all players (public) Found 7 players
+[2025-09-05T07:14:07.735Z] DB: getSession - start 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:14:07.735Z] DB: getSession - ok 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:14:07.735Z] SESSION: Validate success 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173 christoffer
+[2025-09-05T07:14:32.031Z] DB: getSession - start 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:14:32.031Z] DB: getSession - ok 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:14:32.031Z] SESSION: Valid 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173 christoffer GET /api/players
+[2025-09-05T07:14:32.031Z] DB: getAllPlayers - start
+[2025-09-05T07:14:32.032Z] DB: getAllPlayers - resultCount 7
+[2025-09-05T07:14:32.032Z] API: Fetch all players (public) Found 7 players
+[2025-09-05T07:15:32.891Z] DB: deleteSession - start 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:15:32.891Z] DB: deleteSession - changes 1 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:15:32.891Z] SESSION: Logout success 2008e9033196cda937b73eaec26a862b0c7d40fe2f710a0733206f635882b173
+[2025-09-05T07:15:38.890Z] DB: getPlayerByName - start gm
+[2025-09-05T07:15:38.891Z] DB: getPlayerByName - found gm
+[2025-09-05T07:15:38.971Z] DB: createSession - start e57738159981441e3d8198f945323aa4f2118160ef0e0e0571ce9e8522158c88 expiresAt 2025-09-06T07:15:38.971Z
+[2025-09-05T07:15:38.971Z] DB: createSession - done e57738159981441e3d8198f945323aa4f2118160ef0e0e0571ce9e8522158c88
+[2025-09-05T07:15:38.971Z] API: Player login gm e57738159981441e3d8198f945323aa4f2118160ef0e0e0571ce9e8522158c88
+[2025-09-05T07:15:39.003Z] DB: getSession - start e57738159981441e3d8198f945323aa4f2118160ef0e0e0571ce9e8522158c88
+[2025-09-05T07:15:39.003Z] DB: getSession - ok e57738159981441e3d8198f945323aa4f2118160ef0e0e0571ce9e8522158c88
+[2025-09-05T07:15:39.003Z] SESSION: Validate success e57738159981441e3d8198f945323aa4f2118160ef0e0e0571ce9e8522158c88 gm

@@ -4,7 +4,7 @@
 		{
 			"label": "build",
 			"type": "shell",
-			"command": "npm run build",
+			"command": "npm run build:ci",
 			"group": "build",
 			"problemMatcher": [
 				"$eslint-stylish"
