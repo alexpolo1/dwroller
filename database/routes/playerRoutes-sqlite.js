@@ -409,4 +409,268 @@ router.post('/:name/avatar', requireSession, async (req, res) => {
   }
 });
 
+// GM ENDPOINTS - bypassing session validation with GM secret
+function gmBypass(req, res, next) {
+  const gmSecret = req.headers['x-gm-secret'];
+  if (gmSecret === 'bongo') {
+    logToFile('SESSION: GM bypass accepted', req.method, req.url);
+    return next();
+  }
+  logToFile('SESSION: GM bypass rejected - invalid secret', req.method, req.url);
+  return res.status(401).json({ error: 'GM access denied' });
+}
+
+// Add/update player (GM only)
+router.post('/gm/add-or-update', gmBypass, (req, res) => {
+  try {
+    const { name, rp, pw } = req.body;
+    
+    if (!name) {
+      return res.status(400).json({ error: 'Player name is required' });
+    }
+
+    // Check if player exists
+    const existing = playerHelpers.getByName(name);
+    
+    if (existing) {
+      // Update existing player
+      const updates = { ...existing };
+      if (rp !== undefined) updates.tabInfo = { ...updates.tabInfo, rp: parseInt(rp) };
+      if (pw) updates.pwHash = require('bcrypt').hashSync(pw, 10);
+      
+      const { valid, errors, normalized } = validatePlayer(updates);
+      if (!valid) return res.status(400).json({ error: 'Validation failed', details: errors });
+
+      const ok = playerHelpers.update(name, normalized);
+      if (!ok) return res.status(500).json({ error: 'Failed to update player' });
+      
+      logToFile('GM: Updated player', name);
+      return res.json({ success: true, message: `Updated player ${name}` });
+    } else {
+      // Create new player
+      const defaultRP = rp !== undefined ? parseInt(rp) : 50;
+      const password = pw || '1234';
+      
+      const newPlayer = {
+        name,
+        tabInfo: { 
+          rp: defaultRP,
+          renown: 'None',
+          xp: 0,
+          xpSpent: 0,
+          charName: `Brother ${name.charAt(0).toUpperCase() + name.slice(1)}`
+        },
+        rollerInfo: {},
+        shopInfo: {},
+        pwHash: require('bcrypt').hashSync(password, 10),
+        pw: ''
+      };
+
+      const { valid, errors, normalized } = validatePlayer(newPlayer);
+      if (!valid) return res.status(400).json({ error: 'Validation failed', details: errors });
+
+      const saved = playerHelpers.create(normalized);
+      if (!saved) return res.status(500).json({ error: 'Failed to create player' });
+      
+      logToFile('GM: Created player', name);
+      return res.json({ success: true, message: `Created player ${name}` });
+    }
+  } catch (error) {
+    logToFile('GM: Add/update player failed', error);
+    res.status(500).json({ error: 'Failed to add/update player' });
+  }
+});
+
+// Set RP (GM only)
+router.post('/gm/set-rp', gmBypass, (req, res) => {
+  try {
+    const { playerName, requisitionPoints } = req.body;
+    
+    if (!playerName) {
+      return res.status(400).json({ error: 'Player name is required' });
+    }
+    
+    const player = playerHelpers.getByName(playerName);
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    const updates = {
+      ...player,
+      tabInfo: { ...player.tabInfo, rp: parseInt(requisitionPoints) }
+    };
+
+    const { valid, errors, normalized } = validatePlayer(updates);
+    if (!valid) return res.status(400).json({ error: 'Validation failed', details: errors });
+
+    const ok = playerHelpers.update(playerName, normalized);
+    if (!ok) return res.status(500).json({ error: 'Failed to update player RP' });
+    
+    logToFile('GM: Set RP for', playerName, 'to', requisitionPoints);
+    res.json({ success: true, message: `Set RP for ${playerName} to ${requisitionPoints}` });
+  } catch (error) {
+    logToFile('GM: Set RP failed', error);
+    res.status(500).json({ error: 'Failed to set RP' });
+  }
+});
+
+// Set XP (GM only)
+router.post('/gm/set-xp', gmBypass, (req, res) => {
+  try {
+    const { playerName, xp } = req.body;
+    
+    if (!playerName) {
+      return res.status(400).json({ error: 'Player name is required' });
+    }
+    
+    const player = playerHelpers.getByName(playerName);
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    const updates = {
+      ...player,
+      tabInfo: { ...player.tabInfo, xp: parseInt(xp) }
+    };
+
+    const { valid, errors, normalized } = validatePlayer(updates);
+    if (!valid) return res.status(400).json({ error: 'Validation failed', details: errors });
+
+    const ok = playerHelpers.update(playerName, normalized);
+    if (!ok) return res.status(500).json({ error: 'Failed to update player XP' });
+    
+    logToFile('GM: Set XP for', playerName, 'to', xp);
+    res.json({ success: true, message: `Set XP for ${playerName} to ${xp}` });
+  } catch (error) {
+    logToFile('GM: Set XP failed', error);
+    res.status(500).json({ error: 'Failed to set XP' });
+  }
+});
+
+// Set XP Spent (GM only)
+router.post('/gm/set-xp-spent', gmBypass, (req, res) => {
+  try {
+    const { playerName, xpSpent } = req.body;
+    
+    if (!playerName) {
+      return res.status(400).json({ error: 'Player name is required' });
+    }
+    
+    const player = playerHelpers.getByName(playerName);
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    const updates = {
+      ...player,
+      tabInfo: { ...player.tabInfo, xpSpent: parseInt(xpSpent) }
+    };
+
+    const { valid, errors, normalized } = validatePlayer(updates);
+    if (!valid) return res.status(400).json({ error: 'Validation failed', details: errors });
+
+    const ok = playerHelpers.update(playerName, normalized);
+    if (!ok) return res.status(500).json({ error: 'Failed to update player XP Spent' });
+    
+    logToFile('GM: Set XP Spent for', playerName, 'to', xpSpent);
+    res.json({ success: true, message: `Set XP Spent for ${playerName} to ${xpSpent}` });
+  } catch (error) {
+    logToFile('GM: Set XP Spent failed', error);
+    res.status(500).json({ error: 'Failed to set XP Spent' });
+  }
+});
+
+// Set Renown (GM only)
+router.post('/gm/set-renown', gmBypass, (req, res) => {
+  try {
+    const { playerName, renown } = req.body;
+    
+    if (!playerName) {
+      return res.status(400).json({ error: 'Player name is required' });
+    }
+    
+    const player = playerHelpers.getByName(playerName);
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    const updates = {
+      ...player,
+      tabInfo: { ...player.tabInfo, renown }
+    };
+
+    const { valid, errors, normalized } = validatePlayer(updates);
+    if (!valid) return res.status(400).json({ error: 'Validation failed', details: errors });
+
+    const ok = playerHelpers.update(playerName, normalized);
+    if (!ok) return res.status(500).json({ error: 'Failed to update player renown' });
+    
+    logToFile('GM: Set renown for', playerName, 'to', renown);
+    res.json({ success: true, message: `Set renown for ${playerName} to ${renown}` });
+  } catch (error) {
+    logToFile('GM: Set renown failed', error);
+    res.status(500).json({ error: 'Failed to set renown' });
+  }
+});
+
+// Reset password (GM only)
+router.post('/gm/reset-password', gmBypass, (req, res) => {
+  try {
+    const { playerName, newPassword } = req.body;
+    
+    if (!playerName) {
+      return res.status(400).json({ error: 'Player name is required' });
+    }
+    
+    const player = playerHelpers.getByName(playerName);
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    const password = newPassword || '1234';
+    const updates = {
+      ...player,
+      pwHash: require('bcrypt').hashSync(password, 10),
+      pw: ''
+    };
+
+    const { valid, errors, normalized } = validatePlayer(updates);
+    if (!valid) return res.status(400).json({ error: 'Validation failed', details: errors });
+
+    const ok = playerHelpers.update(playerName, normalized);
+    if (!ok) return res.status(500).json({ error: 'Failed to reset password' });
+    
+    logToFile('GM: Reset password for', playerName);
+    res.json({ success: true, message: `Reset password for ${playerName}` });
+  } catch (error) {
+    logToFile('GM: Reset password failed', error);
+    res.status(500).json({ error: 'Failed to reset password' });
+  }
+});
+
+// Delete player (GM only)
+router.delete('/gm/delete/:playerName', gmBypass, (req, res) => {
+  try {
+    const { playerName } = req.params;
+    
+    if (!playerName) {
+      return res.status(400).json({ error: 'Player name is required' });
+    }
+    
+    const player = playerHelpers.getByName(playerName);
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    const ok = playerHelpers.delete(playerName);
+    if (!ok) return res.status(500).json({ error: 'Failed to delete player' });
+    
+    logToFile('GM: Deleted player', playerName);
+    res.json({ success: true, message: `Deleted player ${playerName}` });
+  } catch (error) {
+    logToFile('GM: Delete player failed', error);
+    res.status(500).json({ error: 'Failed to delete player' });
+  }
+});
+
 module.exports = router;
