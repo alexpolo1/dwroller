@@ -15,8 +15,40 @@ function normalizeEntry(en){
   // Helper to format arrays and objects into readable strings
   const formatField = (field) => {
     if (!field) return null
-    if (Array.isArray(field)) return field.join(', ')
-    if (typeof field === 'object') return JSON.stringify(field)
+    if (Array.isArray(field)) {
+      // Handle array of objects (like weapons)
+      return field.map(item => {
+        if (typeof item === 'object' && item !== null) {
+          // If it's a weapon object with detailed stats, format it nicely
+          if (item.name && (item.damage || item.range || item.pen)) {
+            const parts = [item.name]
+            if (item.range) parts.push(`Range: ${item.range}`)
+            if (item.rof) parts.push(`RoF: ${item.rof}`)
+            if (item.damage) parts.push(`Damage: ${item.damage}`)
+            if (item.pen) parts.push(`Pen: ${item.pen}`)
+            if (item.clip) parts.push(`Clip: ${item.clip}`)
+            if (item.reload) parts.push(`Reload: ${item.reload}`)
+            if (item.traits && Array.isArray(item.traits)) parts.push(`Traits: ${item.traits.join(', ')}`)
+            return parts.join(' | ')
+          }
+          // If it's an object with a name property, use that
+          if (item.name) return item.name
+          // Otherwise, convert to JSON but make it more readable
+          return Object.entries(item)
+            .filter(([key, val]) => val !== null && val !== undefined && val !== '')
+            .map(([key, val]) => `${key}: ${val}`)
+            .join(', ')
+        }
+        return String(item)
+      }).join('\n')
+    }
+    if (typeof field === 'object' && field !== null) {
+      // Handle single objects by converting to readable format
+      return Object.entries(field)
+        .filter(([key, val]) => val !== null && val !== undefined && val !== '')
+        .map(([key, val]) => `${key}: ${val}`)
+        .join(', ')
+    }
     return String(field)
   }
   
@@ -42,6 +74,8 @@ function normalizeEntry(en){
 
 export default function BestiaryTab(){
   const [q, setQ] = useState('')
+  const [sortBy, setSortBy] = useState('name') // name, wounds, book
+  const [sortOrder, setSortOrder] = useState('asc') // asc, desc
   const [enemies, setEnemies] = useState(() => {
     try{
       const raw = localStorage.getItem(STORAGE_ENEMIES)
@@ -158,17 +192,71 @@ export default function BestiaryTab(){
     })
   },[q,enemies])
 
+  const sortedAndFiltered = useMemo(() => {
+    const sorted = [...filtered].sort((a, b) => {
+      let aVal, bVal
+      
+      switch(sortBy) {
+        case 'wounds':
+          aVal = a.wounds ?? 0
+          bVal = b.wounds ?? 0
+          // Handle numeric comparison
+          if (typeof aVal === 'number' && typeof bVal === 'number') {
+            return sortOrder === 'asc' ? aVal - bVal : bVal - aVal
+          }
+          break
+        case 'book':
+          aVal = (a.book || '').toLowerCase()
+          bVal = (b.book || '').toLowerCase()
+          break
+        case 'name':
+        default:
+          aVal = (a.name || '').toLowerCase()
+          bVal = (b.name || '').toLowerCase()
+          break
+      }
+      
+      // String comparison fallback
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        return sortOrder === 'asc' 
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal)
+      }
+      
+      return 0
+    })
+    
+    return sorted
+  }, [filtered, sortBy, sortOrder])
+
   return (
     <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-4 md:p-8">
       <div className="mx-auto max-w-5xl">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-semibold">Bestiary</h2>
+          <h2 className="text-2xl font-semibold">Bestiary ({enemies.length} total)</h2>
           <div className="flex items-center gap-3">
             <input 
               className="px-3 py-2 rounded bg-white/5 border border-white/10 text-white placeholder-slate-400" 
+              placeholder="Search enemies..."
               value={q} 
               onChange={e=>setQ(e.target.value)} 
             />
+            <select 
+              className="px-3 py-2 rounded bg-white/5 border border-white/10 text-white"
+              value={sortBy}
+              onChange={e=>setSortBy(e.target.value)}
+            >
+              <option value="name">Sort by Name</option>
+              <option value="wounds">Sort by Wounds</option>
+              <option value="book">Sort by Book</option>
+            </select>
+            <button
+              className="px-3 py-2 rounded bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors"
+              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+              title={`Currently ${sortOrder === 'asc' ? 'ascending' : 'descending'}`}
+            >
+              {sortOrder === 'asc' ? '↑' : '↓'}
+            </button>
             <button 
               className={`px-4 py-2 rounded font-medium transition-colors ${isRefreshing ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500'} text-white`}
               onClick={()=>{ loadData(true).catch(()=>{}); }}
@@ -200,8 +288,14 @@ export default function BestiaryTab(){
           </div>
         ) : null}
 
+        {q && (
+          <div className="mb-4 text-sm text-slate-400">
+            Showing {sortedAndFiltered.length} of {enemies.length} enemies
+          </div>
+        )}
+
         <div className="grid grid-cols-1 gap-4">
-          {filtered.map((en, idx) => {
+          {sortedAndFiltered.map((en, idx) => {
             const d = normalizeEntry(en)
             return (
             <div key={d.name + idx} className="p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
@@ -261,13 +355,13 @@ export default function BestiaryTab(){
                     {d.weapons && (
                       <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
                         <strong className="text-red-300">Weapons:</strong>
-                        <div className="text-slate-200 mt-1">{d.weapons}</div>
+                        <div className="text-slate-200 mt-1 whitespace-pre-line text-xs leading-relaxed">{d.weapons}</div>
                       </div>
                     )}
                     {d.gear && (
                       <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
                         <strong className="text-cyan-300">Gear:</strong>
-                        <div className="text-slate-200 mt-1">{d.gear}</div>
+                        <div className="text-slate-200 mt-1 whitespace-pre-line text-xs leading-relaxed">{d.gear}</div>
                       </div>
                     )}
                   </div>
