@@ -1,22 +1,19 @@
 module.exports = {
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
   transform: {
     '^.+\\.(js|jsx)$': 'babel-jest',
-  },
-  moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   globals: {
     'babel-jest': {
       configFile: './babel.config.js',
     },
   },
-  // Default to unit tests only for CI compatibility
-  testMatch: ['**/src/tests/**/*.test.js'],
+  // Integration tests only - exclude src/tests directory
+  testMatch: ['**/tests/**/*.test.js'],
+  testPathIgnorePatterns: ['<rootDir>/src/tests/'],
   testEnvironmentOptions: {
     node: true
   },
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
   transformIgnorePatterns: [
     '/node_modules/(?!(axios)/)',
   ],

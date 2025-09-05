@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import RequisitionShop from '../components/RequisitionShop';
 import '@testing-library/jest-dom';
 import axios from 'axios';
@@ -16,21 +16,28 @@ const mockLocalStorage = {
 
 global.localStorage = mockLocalStorage;
 
-// Mock fetch for armoury data
-global.fetch = jest.fn(() => 
-  Promise.resolve({
-    ok: true,
-    json: () => Promise.resolve([
-      { name: "Test Item", cost: 10, category: "Gear", renown: "None" }
-    ])
-  })
-);
-
 describe('RequisitionShop Component', () => {
   beforeEach(() => {
     // Clear all mock calls between tests
     jest.clearAllMocks();
     mockLocalStorage.getItem.mockReturnValue(null);
+    
+    // Reset fetch mock to return successful responses for shop data
+    fetch.mockImplementation((url) => {
+      if (url.includes('/api/shop/items') || url.includes('/deathwatch-armoury.json')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve([
+            { name: "Test Item", cost: 10, category: "Gear", renown: "None" }
+          ])
+        });
+      }
+      // Default to failure for other endpoints
+      return Promise.resolve({
+        ok: false,
+        json: () => Promise.resolve({})
+      });
+    });
     
     // Mock axios responses
     axios.get.mockImplementation((url) => {
@@ -61,7 +68,10 @@ describe('RequisitionShop Component', () => {
   });
 
   test('renders the shop component', async () => {
-    render(<RequisitionShop authedPlayer="TestPlayer" sessionId="test-session" />);
+    await act(async () => {
+      render(<RequisitionShop authedPlayer="TestPlayer" sessionId="test-session" />);
+    });
+    
     await waitFor(() => {
       const shopTitle = screen.getByText(/Requisition Shop/i);
       expect(shopTitle).toBeInTheDocument();
@@ -69,7 +79,10 @@ describe('RequisitionShop Component', () => {
   });
 
   test('displays player info when authenticated', async () => {
-    render(<RequisitionShop authedPlayer="TestPlayer" sessionId="test-session" />);
+    await act(async () => {
+      render(<RequisitionShop authedPlayer="TestPlayer" sessionId="test-session" />);
+    });
+    
     await waitFor(() => {
       const shopTitle = screen.getByText(/Requisition Shop/i);
       expect(shopTitle).toBeInTheDocument();
@@ -77,14 +90,20 @@ describe('RequisitionShop Component', () => {
   });
 
   test('shows login message when not authenticated', async () => {
-    render(<RequisitionShop authedPlayer="" sessionId="" />);
+    await act(async () => {
+      render(<RequisitionShop authedPlayer="" sessionId="" />);
+    });
+    
     await waitFor(() => {
       expect(screen.getByText(/Please log in/i)).toBeInTheDocument();
     });
   });
 
   test('displays available items', async () => {
-    render(<RequisitionShop authedPlayer="TestPlayer" sessionId="test-session" />);
+    await act(async () => {
+      render(<RequisitionShop authedPlayer="TestPlayer" sessionId="test-session" />);
+    });
+    
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Search items/i)).toBeInTheDocument();
     });
