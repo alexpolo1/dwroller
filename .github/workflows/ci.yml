@@ -17,7 +17,16 @@ jobs:
           node-version: '18'
       - name: Install dependencies
         run: npm ci
-      - name: Run tests
-        run: npm test -- --runInBand
+      - name: Install PM2 globally
+        run: npm install -g pm2
+      - name: Run unit tests
+        run: npm run test:unit
+        env:
+          API_BASE: http://localhost:5000
+      - name: Run integration tests
+        run: npm run test:integration
+        env:
+          API_BASE: http://localhost:5000
+          GM_PASSWORD: bongo
       - name: Build production bundle
         run: npm run build
