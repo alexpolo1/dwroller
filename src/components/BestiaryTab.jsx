@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react'
 
 const STORAGE_ENEMIES = 'dw:enemies:v1'
+// API_BASE allows configuring the base URL for API calls
+// - In browsers: defaults to empty string (relative URLs like '/api/bestiary/full')
+// - In Jest/Node: can be set to absolute URL (e.g., 'http://localhost:5000')
+// - In CI: set via environment variable for integration testing
 const API_BASE = process.env.API_BASE || ''
 
 function prettyProfile(p){ if(!p) return '';
