@@ -1,5 +1,11 @@
 const { useEffect, useMemo, useState } = require('react')
 
+// API_BASE allows configuring the base URL for API calls
+// - In browsers: defaults to empty string (relative URLs like '/api/weapons')  
+// - In Jest/Node: can be set to absolute URL (e.g., 'http://localhost:5000')
+// - In CI: set via environment variable for integration testing
+const API_BASE = process.env.API_BASE || ''
+
 // Tooltip component for abbreviations
 function Tooltip({ children, text }) {
   return (
@@ -340,7 +346,7 @@ function DeathwatchRoller() {
     setEnemiesLoading(true)
     setEnemiesError(null)
     try {
-      const response = await fetch('/api/bestiary/enemies')
+      const response = await fetch(`${API_BASE}/api/bestiary/enemies`)
       if (response.ok) {
         const apiEnemies = await response.json()
         // Add default custom entry at the top
@@ -371,7 +377,7 @@ function DeathwatchRoller() {
   useEffect(() => {
     (async () => {
         try {
-          const res = await fetch('/api/weapons', { cache: 'no-store' })
+          const res = await fetch(`${API_BASE}/api/weapons`, { cache: 'no-store' })
           if (!res.ok) return
           const json = await res.json()
           // Some consumers expect the original build DB shape with keys like
@@ -447,7 +453,7 @@ function DeathwatchRoller() {
       if ((!stored || !Array.isArray(stored) || stored.length===0)) {
         // Prefer server API for weapons; if unavailable, keep defaultWeapons
         try {
-          const res = await fetch('/api/weapons', { cache: 'no-store' })
+          const res = await fetch(`${API_BASE}/api/weapons`, { cache: 'no-store' })
           if (res.ok) {
             const json = await res.json()
             // Attempt mapping via existing helpers
@@ -548,7 +554,7 @@ function DeathwatchRoller() {
 
   async function fetchWeaponsFromServer() {
     setError(''); setInfo('')
-  const endpoints = ['/api/weapons']
+  const endpoints = [`${API_BASE}/api/weapons`]
     let lastErr = null
     for (const ep of endpoints) {
       try {

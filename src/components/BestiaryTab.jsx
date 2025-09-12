@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react'
 
 const STORAGE_ENEMIES = 'dw:enemies:v1'
+// API_BASE allows configuring the base URL for API calls
+// - In browsers: defaults to empty string (relative URLs like '/api/bestiary/full')
+// - In Jest/Node: can be set to absolute URL (e.g., 'http://localhost:5000')
+// - In CI: set via environment variable for integration testing
+const API_BASE = process.env.API_BASE || ''
 
 function prettyProfile(p){ if(!p) return '';
   return `WS ${p.ws} / BS ${p.bs} / S ${p.s} / T ${p.t} / Ag ${p.ag} / Int ${p.int} / Per ${p.per} / WP ${p.wp} / Fel ${p.fel}`
@@ -72,7 +77,7 @@ export default function BestiaryTab(){
     
     try {
       // Try database API first
-      const response = await fetch(`/api/bestiary/full${cacheParam}`)
+      const response = await fetch(`${API_BASE}/api/bestiary/full${cacheParam}`)
       if (response.ok) {
         const data = await response.json()
         if (Array.isArray(data) && data.length > 0) {
@@ -115,7 +120,7 @@ export default function BestiaryTab(){
     setIsRefreshing(true)
     try {
       // First try to reload the database
-      const reloadResponse = await fetch('/api/bestiary/reload', { 
+      const reloadResponse = await fetch(`${API_BASE}/api/bestiary/reload`, { 
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

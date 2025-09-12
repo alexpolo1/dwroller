@@ -48,6 +48,45 @@ npm run build
 npm run pm2:start
 ```
 
+## Testing
+
+### Running Tests
+The project includes both unit tests and integration tests:
+
+```bash
+# Run unit tests only
+npm test
+
+# Run integration tests (requires backend server)
+npm run test:integration
+
+# Run all tests (starts backend automatically)
+npm run test-build-test
+```
+
+### Environment Configuration
+For testing environments or custom API configurations, you can set the `API_BASE` environment variable:
+
+```bash
+# For local development with custom backend port
+API_BASE=http://localhost:8000 npm start
+
+# For testing against a remote API
+API_BASE=https://api.example.com npm test
+```
+
+**Note**: In browser environments, API calls default to relative URLs (e.g., `/api/players`). The `API_BASE` environment variable is primarily used for:
+- Jest/Node.js test environments (which require absolute URLs)
+- Custom backend configurations
+- CI/CD pipelines
+
+### CI/CD
+The GitHub Actions workflow automatically:
+1. Starts the backend API server on port 5000
+2. Sets `API_BASE=http://localhost:5000` for tests
+3. Runs both unit and integration tests
+4. Builds the production bundle
+
 ## Clean Repository
 This repository is configured to exclude:
 - Log files (`*.log`)
