@@ -11514,3 +11514,318 @@ Connected to MongoDB
 [2025-09-12T07:36:54.293Z] API: Fetch all players (public) Found 7 players
 [2025-09-12T07:36:54.512Z] DB: getAllPlayers - start
 [2025-09-12T07:36:54.513Z] DB: getAllPlayers - resultCount 7
+[2025-09-12T07:38:27.355Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:38:27.356Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:38:27.356Z] DB: deletePlayer - start testplayer
+[2025-09-12T07:38:27.357Z] DB: deletePlayer - changes 0 testplayer
+[2025-09-12T07:38:27.381Z] SESSION: GM bypass accepted POST /api/players
+[2025-09-12T07:38:27.382Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:38:27.382Z] DB: getPlayerByName - not found testplayer
+[2025-09-12T07:38:27.480Z] DB: createPlayer - start testplayer
+[2025-09-12T07:38:27.481Z] DB: createPlayer - done testplayer rowid 190
+[2025-09-12T07:38:27.481Z] API: Created player testplayer
+[2025-09-12T07:38:27.494Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:38:27.494Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:38:27.554Z] DB: createSession - start 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b expiresAt 2025-09-13T07:38:27.554Z
+[2025-09-12T07:38:27.554Z] DB: createSession - done 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.554Z] API: Player login testplayer 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.566Z] DB: getSession - start 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.566Z] DB: getSession - ok 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.566Z] SESSION: Valid 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b testplayer PUT /api/players/testplayer
+[2025-09-12T07:38:27.567Z] DB: getSession - start 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.567Z] DB: getSession - ok 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.567Z] SESSION: Valid 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b testplayer PUT /api/players/testplayer
+[2025-09-12T07:38:27.567Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:38:27.567Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:38:27.567Z] DB: updatePlayer - start testplayer
+[2025-09-12T07:38:27.568Z] DB: updatePlayer - changes 1 testplayer
+[2025-09-12T07:38:27.568Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:38:27.568Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:38:27.568Z] API: Updated player testplayer
+[2025-09-12T07:38:27.578Z] DB: getSession - start 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.578Z] DB: getSession - ok 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.578Z] SESSION: Valid 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b testplayer PUT /api/players/testplayer
+[2025-09-12T07:38:27.579Z] DB: getSession - start 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.579Z] DB: getSession - ok 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b
+[2025-09-12T07:38:27.579Z] SESSION: Valid 386a016053236502afa4eb3299cc6f84c84d9aa7a10a50fce0057b16c1552f3b testplayer PUT /api/players/testplayer
+[2025-09-12T07:38:27.579Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:38:27.579Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:38:27.579Z] DB: updatePlayer - start testplayer
+[2025-09-12T07:38:27.579Z] DB: updatePlayer - changes 1 testplayer
+[2025-09-12T07:38:27.579Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:38:27.579Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:38:27.579Z] API: Updated player testplayer
+[2025-09-12T07:38:27.589Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:38:27.589Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:38:27.589Z] DB: deletePlayer - start testplayer
+[2025-09-12T07:38:27.589Z] DB: deletePlayer - changes 1 testplayer
+[2025-09-12T07:38:27.589Z] API: Deleted player testplayer
+[2025-09-12T07:38:27.667Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:38:27.667Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:38:27.667Z] DB: deletePlayer - start gmtest
+[2025-09-12T07:38:27.667Z] DB: deletePlayer - changes 0 gmtest
+[2025-09-12T07:38:27.678Z] SESSION: GM bypass accepted POST /api/players
+[2025-09-12T07:38:27.678Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:38:27.678Z] DB: getPlayerByName - not found gmtest
+[2025-09-12T07:38:27.738Z] DB: createPlayer - start gmtest
+[2025-09-12T07:38:27.738Z] DB: createPlayer - done gmtest rowid 191
+[2025-09-12T07:38:27.738Z] API: Created player gmtest
+[2025-09-12T07:38:27.749Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:38:27.749Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:38:27.749Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:38:27.749Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:38:27.749Z] DB: updatePlayer - start gmtest
+[2025-09-12T07:38:27.749Z] DB: updatePlayer - changes 1 gmtest
+[2025-09-12T07:38:27.749Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:38:27.749Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:38:27.749Z] API: Updated player gmtest
+[2025-09-12T07:38:27.759Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:38:27.759Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:38:27.759Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:38:27.759Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:38:27.819Z] DB: updatePlayer - start gmtest
+[2025-09-12T07:38:27.819Z] DB: updatePlayer - changes 1 gmtest
+[2025-09-12T07:38:27.819Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:38:27.819Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:38:27.819Z] API: Updated player gmtest
+[2025-09-12T07:38:27.830Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:38:27.830Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:38:27.889Z] DB: createSession - start a637280a12af00780a7f04a09f50abc294a127211a922dfb7da59c44ed04c901 expiresAt 2025-09-13T07:38:27.889Z
+[2025-09-12T07:38:27.890Z] DB: createSession - done a637280a12af00780a7f04a09f50abc294a127211a922dfb7da59c44ed04c901
+[2025-09-12T07:38:27.890Z] API: Player login gmtest a637280a12af00780a7f04a09f50abc294a127211a922dfb7da59c44ed04c901
+[2025-09-12T07:38:27.900Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:38:27.900Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:38:27.900Z] DB: deletePlayer - start gmtest
+[2025-09-12T07:38:27.900Z] DB: deletePlayer - changes 1 gmtest
+[2025-09-12T07:38:27.900Z] API: Deleted player gmtest
+[2025-09-12T07:38:27.909Z] SESSION: GM bypass accepted GET /api/players
+[2025-09-12T07:38:27.910Z] DB: getAllPlayers - start
+[2025-09-12T07:38:27.910Z] DB: getAllPlayers - resultCount 7
+[2025-09-12T07:38:27.910Z] API: Fetch all players (public) Found 7 players
+[2025-09-12T07:38:28.189Z] DB: getAllPlayers - start
+[2025-09-12T07:38:28.190Z] DB: getAllPlayers - resultCount 7
+[2025-09-12T07:40:01.700Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:01.700Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:01.700Z] DB: deletePlayer - start shoptestplayer
+[2025-09-12T07:40:01.700Z] DB: deletePlayer - changes 0 shoptestplayer
+[2025-09-12T07:40:01.716Z] SESSION: GM bypass accepted POST /api/players
+[2025-09-12T07:40:01.717Z] DB: getPlayerByName - start shoptestplayer
+[2025-09-12T07:40:01.717Z] DB: getPlayerByName - not found shoptestplayer
+[2025-09-12T07:40:01.819Z] DB: createPlayer - start shoptestplayer
+[2025-09-12T07:40:01.821Z] DB: createPlayer - done shoptestplayer rowid 192
+[2025-09-12T07:40:01.821Z] API: Created player shoptestplayer
+[2025-09-12T07:40:01.842Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:01.842Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:01.842Z] DB: deletePlayer - start shoptestplayer
+[2025-09-12T07:40:01.842Z] DB: deletePlayer - changes 1 shoptestplayer
+[2025-09-12T07:40:01.842Z] API: Deleted player shoptestplayer
+[2025-09-12T07:40:11.237Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:40:11.237Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:40:11.237Z] DB: deletePlayer - start testplayer
+[2025-09-12T07:40:11.238Z] DB: deletePlayer - changes 0 testplayer
+[2025-09-12T07:40:11.254Z] SESSION: GM bypass accepted POST /api/players
+[2025-09-12T07:40:11.254Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:11.255Z] DB: getPlayerByName - not found testplayer
+[2025-09-12T07:40:11.314Z] DB: createPlayer - start testplayer
+[2025-09-12T07:40:11.315Z] DB: createPlayer - done testplayer rowid 193
+[2025-09-12T07:40:11.315Z] API: Created player testplayer
+[2025-09-12T07:40:11.327Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:11.327Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:11.387Z] DB: createSession - start 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5 expiresAt 2025-09-13T07:40:11.387Z
+[2025-09-12T07:40:11.387Z] DB: createSession - done 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.387Z] API: Player login testplayer 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.397Z] DB: getSession - start 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.397Z] DB: getSession - ok 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.398Z] SESSION: Valid 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5 testplayer PUT /api/players/testplayer
+[2025-09-12T07:40:11.398Z] DB: getSession - start 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.398Z] DB: getSession - ok 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.398Z] SESSION: Valid 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5 testplayer PUT /api/players/testplayer
+[2025-09-12T07:40:11.398Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:11.398Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:11.398Z] DB: updatePlayer - start testplayer
+[2025-09-12T07:40:11.398Z] DB: updatePlayer - changes 1 testplayer
+[2025-09-12T07:40:11.399Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:11.399Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:11.399Z] API: Updated player testplayer
+[2025-09-12T07:40:11.408Z] DB: getSession - start 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.409Z] DB: getSession - ok 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.409Z] SESSION: Valid 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5 testplayer PUT /api/players/testplayer
+[2025-09-12T07:40:11.409Z] DB: getSession - start 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.409Z] DB: getSession - ok 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5
+[2025-09-12T07:40:11.409Z] SESSION: Valid 2e8abe3d48353b4683b3b798caf1ed900ac0c9b3ddafde77177aafa43049a0f5 testplayer PUT /api/players/testplayer
+[2025-09-12T07:40:11.409Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:11.409Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:11.409Z] DB: updatePlayer - start testplayer
+[2025-09-12T07:40:11.409Z] DB: updatePlayer - changes 1 testplayer
+[2025-09-12T07:40:11.409Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:11.409Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:11.409Z] API: Updated player testplayer
+[2025-09-12T07:40:11.419Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:40:11.419Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:40:11.419Z] DB: deletePlayer - start testplayer
+[2025-09-12T07:40:11.419Z] DB: deletePlayer - changes 1 testplayer
+[2025-09-12T07:40:11.419Z] API: Deleted player testplayer
+[2025-09-12T07:40:11.516Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:11.516Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:11.516Z] DB: deletePlayer - start shoptestplayer
+[2025-09-12T07:40:11.516Z] DB: deletePlayer - changes 0 shoptestplayer
+[2025-09-12T07:40:11.525Z] SESSION: GM bypass accepted POST /api/players
+[2025-09-12T07:40:11.525Z] DB: getPlayerByName - start shoptestplayer
+[2025-09-12T07:40:11.525Z] DB: getPlayerByName - not found shoptestplayer
+[2025-09-12T07:40:11.585Z] DB: createPlayer - start shoptestplayer
+[2025-09-12T07:40:11.585Z] DB: createPlayer - done shoptestplayer rowid 194
+[2025-09-12T07:40:11.585Z] API: Created player shoptestplayer
+[2025-09-12T07:40:11.602Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:11.602Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:11.602Z] DB: deletePlayer - start shoptestplayer
+[2025-09-12T07:40:11.602Z] DB: deletePlayer - changes 1 shoptestplayer
+[2025-09-12T07:40:11.602Z] API: Deleted player shoptestplayer
+[2025-09-12T07:40:11.641Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:40:11.642Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:40:11.642Z] DB: deletePlayer - start gmtest
+[2025-09-12T07:40:11.642Z] DB: deletePlayer - changes 0 gmtest
+[2025-09-12T07:40:11.654Z] SESSION: GM bypass accepted POST /api/players
+[2025-09-12T07:40:11.654Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:11.654Z] DB: getPlayerByName - not found gmtest
+[2025-09-12T07:40:11.714Z] DB: createPlayer - start gmtest
+[2025-09-12T07:40:11.714Z] DB: createPlayer - done gmtest rowid 195
+[2025-09-12T07:40:11.714Z] API: Created player gmtest
+[2025-09-12T07:40:11.724Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:40:11.724Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:40:11.724Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:11.725Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:11.725Z] DB: updatePlayer - start gmtest
+[2025-09-12T07:40:11.725Z] DB: updatePlayer - changes 1 gmtest
+[2025-09-12T07:40:11.725Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:11.725Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:11.725Z] API: Updated player gmtest
+[2025-09-12T07:40:11.734Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:40:11.734Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:40:11.734Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:11.734Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:11.794Z] DB: updatePlayer - start gmtest
+[2025-09-12T07:40:11.795Z] DB: updatePlayer - changes 1 gmtest
+[2025-09-12T07:40:11.795Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:11.795Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:11.795Z] API: Updated player gmtest
+[2025-09-12T07:40:11.804Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:11.805Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:11.864Z] DB: createSession - start c15e06dfbc4b2662c5b4ec2e9dfde55702fe5d933dbe8504734b10fc753a47a0 expiresAt 2025-09-13T07:40:11.864Z
+[2025-09-12T07:40:11.864Z] DB: createSession - done c15e06dfbc4b2662c5b4ec2e9dfde55702fe5d933dbe8504734b10fc753a47a0
+[2025-09-12T07:40:11.864Z] API: Player login gmtest c15e06dfbc4b2662c5b4ec2e9dfde55702fe5d933dbe8504734b10fc753a47a0
+[2025-09-12T07:40:11.874Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:40:11.874Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:40:11.874Z] DB: deletePlayer - start gmtest
+[2025-09-12T07:40:11.874Z] DB: deletePlayer - changes 1 gmtest
+[2025-09-12T07:40:11.874Z] API: Deleted player gmtest
+[2025-09-12T07:40:11.883Z] SESSION: GM bypass accepted GET /api/players
+[2025-09-12T07:40:11.883Z] DB: getAllPlayers - start
+[2025-09-12T07:40:11.884Z] DB: getAllPlayers - resultCount 7
+[2025-09-12T07:40:11.884Z] API: Fetch all players (public) Found 7 players
+[2025-09-12T07:40:12.105Z] DB: getAllPlayers - start
+[2025-09-12T07:40:12.106Z] DB: getAllPlayers - resultCount 7
+[2025-09-12T07:40:24.410Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:40:24.410Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:40:24.411Z] DB: deletePlayer - start testplayer
+[2025-09-12T07:40:24.411Z] DB: deletePlayer - changes 0 testplayer
+[2025-09-12T07:40:24.435Z] SESSION: GM bypass accepted POST /api/players
+[2025-09-12T07:40:24.436Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:24.436Z] DB: getPlayerByName - not found testplayer
+[2025-09-12T07:40:24.534Z] DB: createPlayer - start testplayer
+[2025-09-12T07:40:24.535Z] DB: createPlayer - done testplayer rowid 196
+[2025-09-12T07:40:24.535Z] API: Created player testplayer
+[2025-09-12T07:40:24.548Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:24.548Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:24.608Z] DB: createSession - start fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2 expiresAt 2025-09-13T07:40:24.608Z
+[2025-09-12T07:40:24.608Z] DB: createSession - done fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.608Z] API: Player login testplayer fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.619Z] DB: getSession - start fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.619Z] DB: getSession - ok fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.619Z] SESSION: Valid fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2 testplayer PUT /api/players/testplayer
+[2025-09-12T07:40:24.619Z] DB: getSession - start fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.619Z] DB: getSession - ok fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.619Z] SESSION: Valid fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2 testplayer PUT /api/players/testplayer
+[2025-09-12T07:40:24.619Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:24.620Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:24.620Z] DB: updatePlayer - start testplayer
+[2025-09-12T07:40:24.620Z] DB: updatePlayer - changes 1 testplayer
+[2025-09-12T07:40:24.620Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:24.620Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:24.620Z] API: Updated player testplayer
+[2025-09-12T07:40:24.631Z] DB: getSession - start fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.631Z] DB: getSession - ok fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.631Z] SESSION: Valid fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2 testplayer PUT /api/players/testplayer
+[2025-09-12T07:40:24.631Z] DB: getSession - start fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.631Z] DB: getSession - ok fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2
+[2025-09-12T07:40:24.631Z] SESSION: Valid fa7a6eee53f7f8430e596809180a765bc4c630ae78399e868ed8a29fa11721b2 testplayer PUT /api/players/testplayer
+[2025-09-12T07:40:24.631Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:24.631Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:24.631Z] DB: updatePlayer - start testplayer
+[2025-09-12T07:40:24.631Z] DB: updatePlayer - changes 1 testplayer
+[2025-09-12T07:40:24.631Z] DB: getPlayerByName - start testplayer
+[2025-09-12T07:40:24.631Z] DB: getPlayerByName - found testplayer
+[2025-09-12T07:40:24.631Z] API: Updated player testplayer
+[2025-09-12T07:40:24.641Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:40:24.641Z] SESSION: GM bypass accepted DELETE /api/players/testplayer
+[2025-09-12T07:40:24.641Z] DB: deletePlayer - start testplayer
+[2025-09-12T07:40:24.641Z] DB: deletePlayer - changes 1 testplayer
+[2025-09-12T07:40:24.641Z] API: Deleted player testplayer
+[2025-09-12T07:40:24.722Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:40:24.722Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:40:24.722Z] DB: deletePlayer - start gmtest
+[2025-09-12T07:40:24.722Z] DB: deletePlayer - changes 0 gmtest
+[2025-09-12T07:40:24.733Z] SESSION: GM bypass accepted POST /api/players
+[2025-09-12T07:40:24.733Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:24.733Z] DB: getPlayerByName - not found gmtest
+[2025-09-12T07:40:24.793Z] DB: createPlayer - start gmtest
+[2025-09-12T07:40:24.793Z] DB: createPlayer - done gmtest rowid 197
+[2025-09-12T07:40:24.793Z] API: Created player gmtest
+[2025-09-12T07:40:24.804Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:40:24.804Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:40:24.804Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:24.804Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:24.804Z] DB: updatePlayer - start gmtest
+[2025-09-12T07:40:24.804Z] DB: updatePlayer - changes 1 gmtest
+[2025-09-12T07:40:24.804Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:24.804Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:24.804Z] API: Updated player gmtest
+[2025-09-12T07:40:24.814Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:40:24.814Z] SESSION: GM bypass accepted PUT /api/players/gmtest
+[2025-09-12T07:40:24.814Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:24.814Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:24.874Z] DB: updatePlayer - start gmtest
+[2025-09-12T07:40:24.874Z] DB: updatePlayer - changes 1 gmtest
+[2025-09-12T07:40:24.874Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:24.874Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:24.874Z] API: Updated player gmtest
+[2025-09-12T07:40:24.885Z] DB: getPlayerByName - start gmtest
+[2025-09-12T07:40:24.885Z] DB: getPlayerByName - found gmtest
+[2025-09-12T07:40:24.944Z] DB: createSession - start d84cd886b98443d3c98c19018e0314e4fe7714dda43eb1786edeb3378d249238 expiresAt 2025-09-13T07:40:24.944Z
+[2025-09-12T07:40:24.944Z] DB: createSession - done d84cd886b98443d3c98c19018e0314e4fe7714dda43eb1786edeb3378d249238
+[2025-09-12T07:40:24.944Z] API: Player login gmtest d84cd886b98443d3c98c19018e0314e4fe7714dda43eb1786edeb3378d249238
+[2025-09-12T07:40:24.954Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:40:24.954Z] SESSION: GM bypass accepted DELETE /api/players/gmtest
+[2025-09-12T07:40:24.954Z] DB: deletePlayer - start gmtest
+[2025-09-12T07:40:24.954Z] DB: deletePlayer - changes 1 gmtest
+[2025-09-12T07:40:24.955Z] API: Deleted player gmtest
+[2025-09-12T07:40:24.964Z] SESSION: GM bypass accepted GET /api/players
+[2025-09-12T07:40:24.964Z] DB: getAllPlayers - start
+[2025-09-12T07:40:24.965Z] DB: getAllPlayers - resultCount 7
+[2025-09-12T07:40:24.965Z] API: Fetch all players (public) Found 7 players
+[2025-09-12T07:40:25.031Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:25.032Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:25.032Z] DB: deletePlayer - start shoptestplayer
+[2025-09-12T07:40:25.032Z] DB: deletePlayer - changes 0 shoptestplayer
+[2025-09-12T07:40:25.040Z] SESSION: GM bypass accepted POST /api/players
+[2025-09-12T07:40:25.040Z] DB: getPlayerByName - start shoptestplayer
+[2025-09-12T07:40:25.040Z] DB: getPlayerByName - not found shoptestplayer
+[2025-09-12T07:40:25.100Z] DB: createPlayer - start shoptestplayer
+[2025-09-12T07:40:25.100Z] DB: createPlayer - done shoptestplayer rowid 198
+[2025-09-12T07:40:25.100Z] API: Created player shoptestplayer
+[2025-09-12T07:40:25.118Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:25.118Z] SESSION: GM bypass accepted DELETE /api/players/shoptestplayer
+[2025-09-12T07:40:25.118Z] DB: deletePlayer - start shoptestplayer
+[2025-09-12T07:40:25.118Z] DB: deletePlayer - changes 1 shoptestplayer
+[2025-09-12T07:40:25.118Z] API: Deleted player shoptestplayer
+[2025-09-12T07:40:25.332Z] DB: getAllPlayers - start
+[2025-09-12T07:40:25.333Z] DB: getAllPlayers - resultCount 7
