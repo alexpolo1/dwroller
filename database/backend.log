@@ -11407,3 +11407,5 @@ Connected to MongoDB
 [2025-08-24T20:39:43.003Z] API: Fetch all players (public) Found 7 players
 [2025-08-24T20:39:43.249Z] DB: getAllPlayers - start
 [2025-08-24T20:39:43.250Z] DB: getAllPlayers - resultCount 7
+[2025-09-12T07:32:21.915Z] DB: getAllPlayers - start
+[2025-09-12T07:32:21.916Z] DB: getAllPlayers - resultCount 7
