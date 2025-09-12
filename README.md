@@ -41,6 +41,34 @@ Deathwatch Roller is a React-based application designed to assist players and Ga
 
 The application will be available at `http://localhost:3000` with the API at `http://localhost:5000`.
 
+## Environment Configuration
+
+The application supports environment variables for configuration:
+
+### Development/Testing Variables
+- `API_BASE`: Base URL for API requests (default: empty string for relative URLs)
+  - Development: Leave unset for relative URLs (e.g., `/api/players`)  
+  - Testing: Set to `http://localhost:5000` for absolute URLs
+- `GM_PASSWORD`: Game Master authentication secret (default: `bongo`)
+
+### Example Usage
+```bash
+# For unit tests (relative URLs)
+npm run test:unit
+
+# For integration tests (absolute URLs)
+API_BASE=http://localhost:5000 GM_PASSWORD=bongo npm run test:integration
+
+# For development
+npm start    # Uses relative URLs automatically
+npm run server  # Backend runs on port 5000
+```
+
+### CI/CD Configuration
+The CI workflow automatically sets these variables:
+- Unit tests run without API_BASE (uses relative URLs)
+- Integration tests run with `API_BASE=http://localhost:5000` and backend server started via PM2
+
 ### Production Deployment
 For production deployment with PM2:
 ```bash
