@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import logger, { debug, info, warn, logApiCall, logApiError, logUserAction } from '../utils/logger';
 import { Tooltip } from './DeathwatchRoller';
+import { XPBar, XPSummary } from './XPBar';
 
 const STORAGE_SHOP_AUTHED = 'dw:shop:authedPlayer';
 const STORAGE_SHOP_PLAYERS = 'dw:shop:players:v1';
@@ -936,6 +937,82 @@ function PlayerTab({
           )}
         </div>
 
+        {/* Experience Points Display - Minecraft-style XP Bar */}
+        <div className="rounded-xl border border-white/10 bg-black/20 p-3 space-y-2">
+          <div className="text-lg font-medium">Experience Points (XP)</div>
+          
+          {/* XP Bar */}
+          <div className="space-y-1">
+            <XPBar 
+              currentXP={currentPlayer?.tabInfo?.xp || 0}
+              xpSpent={currentPlayer?.tabInfo?.xpSpent || 0}
+              thresholdXP={500}
+              showLabel={true}
+              compact={false}
+            />
+            <div className="text-xs text-slate-400">
+              1 Characteristic = 500 XP | 1 Skill Rank = 100 XP | 1 Talent = 50 XP
+            </div>
+          </div>
+
+          {/* XP Summary */}
+          <div className="mt-3">
+            <XPSummary 
+              currentXP={currentPlayer?.tabInfo?.xp || 0}
+              xpSpent={currentPlayer?.tabInfo?.xpSpent || 0}
+              thresholdXP={500}
+            />
+          </div>
+
+          {/* GM Controls */}
+          {isGMLoggedIn() && (
+            <div className="mt-4 space-y-2 border-t border-white/10 pt-3">
+              <div className="text-sm text-slate-300 font-medium">GM Controls</div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs min-w-fit">Set Total XP:</span>
+                  <GmSetXP name={currentPlayer?.name} onSet={gmSetXP} />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs min-w-fit">Set Spent XP:</span>
+                  <GmSetXPSpent name={currentPlayer?.name} onSet={gmSetXPSpent} />
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      const currentXP = currentPlayer?.tabInfo?.xp || 0;
+                      gmSetXP(currentPlayer.name, currentXP + 100);
+                    }}
+                    className="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-xs"
+                  >
+                    +100 XP
+                  </button>
+                  <button
+                    onClick={() => {
+                      const currentXP = currentPlayer?.tabInfo?.xp || 0;
+                      gmSetXP(currentPlayer.name, currentXP + 200);
+                    }}
+                    className="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-xs"
+                  >
+                    +200 XP
+                  </button>
+                  <button
+                    onClick={() => {
+                      const currentXP = currentPlayer?.tabInfo?.xp || 0;
+                      if (currentXP > 0) {
+                        gmSetXP(currentPlayer.name, Math.max(0, currentXP - 50));
+                      }
+                    }}
+                    className="px-3 py-1 rounded bg-rose-600 hover:bg-rose-500 text-xs"
+                  >
+                    -50 XP
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Characteristics */}
         <div className="bg-white/5 rounded-xl p-3 border border-white/10">
           <div className="font-semibold mb-2">Characteristics</div>
@@ -1168,10 +1245,20 @@ function PlayerTab({
           <div>
             <label className="text-xs uppercase opacity-70">Renown</label>
             <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" value={renown} onChange={e=>setRenown(e.target.value)} />
-            <label className="text-xs uppercase opacity-70">XP</label>
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" type="number" value={xp} onChange={e=>setXp(parseInt(e.target.value||'0'))} />
-            <label className="text-xs uppercase opacity-70">XP Spent</label>
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" value={xpSpent} onChange={e=>setXpSpent(parseInt(e.target.value||'0'))} />
+            <label className="text-xs uppercase opacity-70 mt-3 block">Experience Points</label>
+            <div className="mb-3">
+              <XPBar currentXP={xp} xpSpent={xpSpent} thresholdXP={500} showLabel={true} compact={false} />
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+              <div>
+                <label className="uppercase opacity-70 block">XP Total</label>
+                <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" value={xp} onChange={e=>setXp(parseInt(e.target.value||'0'))} />
+              </div>
+              <div>
+                <label className="uppercase opacity-70 block">XP Spent</label>
+                <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" value={xpSpent} onChange={e=>setXpSpent(parseInt(e.target.value||'0'))} />
+              </div>
+            </div>
           </div>
         </div>
 
