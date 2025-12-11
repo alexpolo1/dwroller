@@ -1,10 +1,10 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { db } = require('../sqlite-db');
+const { rulesHelpers, logToFile } = require('../mariadb');
 const router = express.Router();
 
-console.log('Rules routes registered (sqlite-backed)');
+console.log('Rules routes registered (MariaDB)');
 
 // Helpers to clean up OCR/extracted text
 function cleanText(s) {
@@ -32,62 +32,95 @@ function cleanTitle(t) {
   return s;
 }
 
-// We will query sqlite `rules` table on demand; helper to fetch all rules
-function getAllRules() {
+// Fetch all rules from MariaDB
+async function getAllRules() {
   try {
-  const rows = db.prepare('SELECT id, rule_id, title, content, page, source, source_abbr, category FROM rules ORDER BY id').all();
-  return rows.map(r => ({ id: r.id, rule_id: r.rule_id, title: cleanTitle(r.title), content: cleanText(r.content), page: r.page, source: r.source, sourceAbbr: r.source_abbr, category: r.category }));
+    const rows = await rulesHelpers.getAll();
+    return rows.map(r => ({ 
+      id: r.id, 
+      rule_id: r.rule_id, 
+      title: cleanTitle(r.title), 
+      content: cleanText(r.content), 
+      page: r.page_num, 
+      source: r.source, 
+      sourceAbbr: r.source_abbr, 
+      category: r.category 
+    }));
   } catch (e) {
-    console.error('Failed to read rules from sqlite:', e);
+    console.error('Failed to read rules from MariaDB:', e);
+    logToFile('Error getting all rules:', e);
     return [];
   }
 }
-function getRuleById(ruleId) {
+
+async function getRuleById(ruleId) {
   try {
-  const row = db.prepare('SELECT rule_id as id, title, content, page, source, source_abbr as sourceAbbr, category FROM rules WHERE rule_id = ?').get(ruleId);
-  if (!row) return null;
-  return { id: row.id, title: cleanTitle(row.title), content: cleanText(row.content), page: row.page, source: row.source, sourceAbbr: row.sourceAbbr, category: row.category };
+    const rows = await rulesHelpers.getAll();
+    const row = rows.find(r => r.rule_id === ruleId || r.id === ruleId);
+    if (!row) return null;
+    return { 
+      id: row.rule_id || row.id, 
+      title: cleanTitle(row.title), 
+      content: cleanText(row.content), 
+      page: row.page_num, 
+      source: row.source, 
+      sourceAbbr: row.source_abbr, 
+      category: row.category 
+    };
   } catch (e) {
     console.error('Failed to read rule by id:', e);
+    logToFile('Error getting rule by id:', ruleId, e);
     return null;
   }
 }
 
 // Get all rule categories
-router.get('/categories', (req, res) => {
+router.get('/categories', async (req, res) => {
   try {
-  const rows = getAllRules();
-  const categories = [...new Set(rows.map(r => r.category).filter(Boolean))];
-  const categoryList = categories.map(cat => ({ id: cat, name: cleanTitle(cat) }));
-  res.json([{ id: 'all', name: 'All Rules' }, ...categoryList]);
+    const rows = await getAllRules();
+    const categories = [...new Set(rows.map(r => r.category).filter(Boolean))];
+    const categoryList = categories.map(cat => ({ id: cat, name: cleanTitle(cat) }));
+    res.json([{ id: 'all', name: 'All Rules' }, ...categoryList]);
   } catch (error) {
     console.error('Categories error:', error);
     res.status(500).json({ error: 'Failed to get categories' });
   }
 });
 
-// Search rules (sqlite-backed)
-router.get('/search', (req, res) => {
+// Search rules (MariaDB)
+router.get('/search', async (req, res) => {
   try {
     const { q: query, category, limit = 20 } = req.query;
     if (!query || !query.trim()) return res.json([]);
     const limitInt = Math.max(1, parseInt(limit) || 20);
-    const term = `%${query}%`;
-
-    let rows;
-    if (category && category !== 'all') {
-      rows = db.prepare('SELECT rule_id as id, title, content, page, source, source_abbr as sourceAbbr, category FROM rules WHERE (title LIKE ? OR content LIKE ?) AND category = ? ORDER BY id LIMIT ?').all(term, term, category, limitInt);
-      if (!rows || rows.length === 0) {
-        rows = db.prepare('SELECT rule_id as id, title, content, page, source, source_abbr as sourceAbbr, category FROM rules WHERE (title LIKE ? OR content LIKE ?) ORDER BY id LIMIT ?').all(term, term, limitInt);
-      }
-    } else {
-      rows = db.prepare('SELECT rule_id as id, title, content, page, source, source_abbr as sourceAbbr, category FROM rules WHERE (title LIKE ? OR content LIKE ?) ORDER BY id LIMIT ?').all(term, term, limitInt);
+    
+    const allRules = await getAllRules();
+    const term = query.toLowerCase();
+    
+    let filtered = allRules.filter(rule => {
+      const titleMatch = rule.title && rule.title.toLowerCase().includes(term);
+      const contentMatch = rule.content && rule.content.toLowerCase().includes(term);
+      const categoryMatch = !category || category === 'all' || rule.category === category;
+      
+      return (titleMatch || contentMatch) && categoryMatch;
+    });
+    
+    // If category filtering yielded no results, try without category filter
+    if (filtered.length === 0 && category && category !== 'all') {
+      filtered = allRules.filter(rule => {
+        const titleMatch = rule.title && rule.title.toLowerCase().includes(term);
+        const contentMatch = rule.content && rule.content.toLowerCase().includes(term);
+        return titleMatch || contentMatch;
+      });
     }
-
-    const results = (rows || []).map(r => ({ ...r, content: r.content && r.content.length > 300 ? r.content.substring(0,300) + '...' : r.content }));
-  // Clean text fields before returning
-  const cleaned = (results || []).map(r => ({ ...r, title: cleanTitle(r.title), content: r.content ? cleanText(r.content) : r.content }));
-  res.json(cleaned);
+    
+    // Limit results and truncate content
+    const results = filtered.slice(0, limitInt).map(r => ({
+      ...r,
+      content: r.content && r.content.length > 300 ? r.content.substring(0, 300) + '...' : r.content
+    }));
+    
+    res.json(results);
   } catch (error) {
     console.error('Search error:', error);
     res.status(500).json({ error: 'Search failed' });
@@ -95,10 +128,10 @@ router.get('/search', (req, res) => {
 });
 
 // Get a specific rule by ID
-router.get('/rule/:id', (req, res) => {
+router.get('/rule/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const rule = getRuleById(id);
+    const rule = await getRuleById(id);
     if (!rule) return res.status(404).json({ error: 'Rule not found' });
     res.json(rule);
   } catch (error) {
@@ -108,20 +141,26 @@ router.get('/rule/:id', (req, res) => {
 });
 
 // Get random rules for discovery
-router.get('/random', (req, res) => {
+router.get('/random', async (req, res) => {
   try {
     const { count = 5, category } = req.query;
     const max = Math.max(1, parseInt(count) || 5);
-    let rows;
+    
+    const allRules = await getAllRules();
+    let filtered = allRules;
+    
     if (category && category !== 'all') {
-      rows = db.prepare('SELECT rule_id as id, title, content, page, source, source_abbr as sourceAbbr, category FROM rules WHERE category = ? ORDER BY RANDOM() LIMIT ?').all(category, max);
-    } else {
-      rows = db.prepare('SELECT rule_id as id, title, content, page, source, source_abbr as sourceAbbr, category FROM rules ORDER BY RANDOM() LIMIT ?').all(max);
+      filtered = allRules.filter(rule => rule.category === category);
     }
-    const randomRules = (rows || []).map(r => ({ ...r, content: r.content && r.content.length > 200 ? r.content.substring(0,200) + '...' : r.content }));
-  // Clean before responding
-  const cleaned = (randomRules || []).map(r => ({ ...r, title: cleanTitle(r.title), content: r.content ? cleanText(r.content) : r.content }));
-  res.json(cleaned);
+    
+    // Shuffle and pick random rules
+    const shuffled = filtered.sort(() => 0.5 - Math.random());
+    const randomRules = shuffled.slice(0, max).map(r => ({
+      ...r,
+      content: r.content && r.content.length > 200 ? r.content.substring(0, 200) + '...' : r.content
+    }));
+    
+    res.json(randomRules);
   } catch (error) {
     console.error('Random rules error:', error);
     res.status(500).json({ error: 'Failed to get random rules' });
@@ -129,11 +168,26 @@ router.get('/random', (req, res) => {
 });
 
 // Get rules statistics
-router.get('/stats', (req, res) => {
+router.get('/stats', async (req, res) => {
   try {
-    const totalRules = db.prepare('SELECT COUNT(*) as c FROM rules').get().c;
-    const categories = db.prepare('SELECT category, COUNT(*) as c FROM rules GROUP BY category').all();
-    const sources = db.prepare('SELECT source, COUNT(*) as c FROM rules GROUP BY source').all();
+    const allRules = await getAllRules();
+    const totalRules = allRules.length;
+    
+    const categoryCount = {};
+    const sourceCount = {};
+    
+    allRules.forEach(rule => {
+      if (rule.category) {
+        categoryCount[rule.category] = (categoryCount[rule.category] || 0) + 1;
+      }
+      if (rule.source) {
+        sourceCount[rule.source] = (sourceCount[rule.source] || 0) + 1;
+      }
+    });
+    
+    const categories = Object.entries(categoryCount).map(([category, c]) => ({ category, c }));
+    const sources = Object.entries(sourceCount).map(([source, c]) => ({ source, c }));
+    
     res.json({ totalRules, categories, sources, searchTerms: 0 });
   } catch (error) {
     console.error('Stats error:', error);
@@ -142,12 +196,15 @@ router.get('/stats', (req, res) => {
 });
 
 // Reload the rules database (admin only)
-router.post('/reload', (req, res) => {
+router.post('/reload', async (req, res) => {
   try {
     const gmSecret = req.headers['x-gm-secret'];
     if (gmSecret !== 'bongo') return res.status(403).json({ error: 'Unauthorized' });
-    const totalRules = db.prepare('SELECT COUNT(*) as c FROM rules').get().c;
-    res.json({ success: true, totalRules, message: 'Rules are sqlite-backed; no reload necessary' });
+    
+    const allRules = await getAllRules();
+    const totalRules = allRules.length;
+    
+    res.json({ success: true, totalRules, message: 'Rules are MariaDB-backed; already loaded' });
   } catch (error) {
     console.error('Reload error:', error);
     res.status(500).json({ error: 'Failed to reload database' });

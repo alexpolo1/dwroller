@@ -3,8 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const playerRoutes = require('./routes/playerRoutes-sqlite');
-const sessionRoutes = require('./routes/sessionRoutes-sqlite');
+// MariaDB routes
+const playerRoutes = require('./routes/playerRoutes');
+const sessionRoutes = require('./routes/sessionRoutes');
 const shopRoutes = require('./routes/shopRoutes');
 const rulesRoutes = require('./routes/rulesRoutes');
 const bestiaryRoutes = require('./routes/bestiaryRoutes');
@@ -14,12 +15,14 @@ const rulesStagingRoutes = require('./routes/rulesStagingRoutes');
 
 const gmkitDir = path.join(__dirname, '..', 'data', 'gamemasters_kit');
 
+// Initialize MariaDB
+require('./mariadb');
+
 console.log('Routes loaded:', {
-  playerRoutes: typeof playerRoutes,
-  sessionRoutes: typeof sessionRoutes,
   shopRoutes: typeof shopRoutes,
   rulesRoutes: typeof rulesRoutes,
-  bestiaryRoutes: typeof bestiaryRoutes
+  bestiaryRoutes: typeof bestiaryRoutes,
+  weaponsRoutes: typeof weaponsRoutes
 });
 
 const app = express();
@@ -31,6 +34,7 @@ app.use(cors());
 
 // API Routes (before static files)
 console.log('Registering API routes...');
+// Player routes now working with MariaDB
 try {
   console.log('Registering /api/players');
   app.use('/api/players', playerRoutes);
@@ -62,7 +66,25 @@ try {
 } catch (e) {
   console.error('Error mounting /api/rules:', e && e.stack ? e.stack : e);
   throw e;
-}
+  }
+
+  try {
+    console.log('Registering /api/weapons');
+    app.use('/api/weapons', weaponsRoutes);
+    console.log('Weapons routes registered');
+  } catch (e) {
+    console.error('Error mounting /api/weapons:', e && e.stack ? e.stack : e);
+    throw e;
+  }
+
+  try {
+    console.log('Registering /api/bestiary');
+    app.use('/api/bestiary', bestiaryRoutes);
+    console.log('Bestiary routes registered');
+  } catch (e) {
+    console.error('Error mounting /api/bestiary:', e && e.stack ? e.stack : e);
+    throw e;
+  }
 
   try {
     console.log('Registering /api/rules/staging');
@@ -70,9 +92,7 @@ try {
     console.log('Rules staging routes registered');
   } catch (e) {
     console.error('Error mounting /api/rules/staging:', e && e.stack ? e.stack : e);
-  }
-
-  // Expose gamemaster kit files and a simple listing API for GM-only resources
+  }  // Expose gamemaster kit files and a simple listing API for GM-only resources
   try {
     console.log('Registering /api/gmkit and /gmkit static');
     app.get('/api/gmkit/list', (req, res) => {
@@ -157,19 +177,14 @@ app.use('/avatars', express.static(avatarsDir));
 //   res.sendFile(path.join(buildDir, 'index.html'));
 // });
 
-// Initialize SQLite database
-const { db } = require('./sqlite-db');
-
-// Graceful shutdown
+// Graceful shutdown - MariaDB connections are handled by the pool
 process.on('SIGINT', () => {
-  console.log('Closing SQLite database...');
-  db.close();
+  console.log('Shutting down server...');
   process.exit(0);
 });
 
 process.on('SIGTERM', () => {
-  console.log('Closing SQLite database...');
-  db.close();
+  console.log('Shutting down server...');
   process.exit(0);
 });
 
@@ -188,34 +203,16 @@ if (fs.existsSync(indexHtml)) {
 } else {
   // Root route for friendly message when no build is present
   app.get('/', (req, res) => {
-    res.send('Deathwatch Roller API is running with SQLite. Use /api/players for player data.');
+    res.send('Deathwatch Roller API is running with MariaDB. Use /api/shop for shop data.');
   });
 }
 
-// Use routes (instrument mounts to debug invalid route patterns)
-console.log('Mounting route: /api/shop');
-app.use('/api/shop', shopRoutes);
-console.log('Mounted /api/shop');
-console.log('Mounting route: /api/players');
-app.use('/api/players', playerRoutes);
-console.log('Mounted /api/players');
-console.log('Mounting route: /api/sessions');
-app.use('/api/sessions', sessionRoutes);
-console.log('Mounted /api/sessions');
-console.log('Mounting route: /api/rules');
-app.use('/api/rules', rulesRoutes);
-console.log('Mounted /api/rules');
-console.log('Mounting route: /api/bestiary');
-app.use('/api/bestiary', bestiaryRoutes);
-console.log('Mounted /api/bestiary');
-console.log('Mounting route: /api/weapons');
-app.use('/api/weapons', weaponsRoutes);
-console.log('Mounted /api/weapons');
+// Routes have already been registered above - no need to duplicate
 
 // Start Server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);
-  console.log('Using SQLite database');
+  console.log('Using MariaDB database');
 });
 
 module.exports = app;

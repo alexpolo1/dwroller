@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import DeathwatchRoller from './components/DeathwatchRoller';
 import RequisitionShop from './components/RequisitionShop';
@@ -36,6 +37,11 @@ function App() {
     }
   }
 
+  // Fetch players on mount
+  useEffect(() => {
+    fetchPlayers();
+  }, []);
+
   // Validate session on mount/refresh
   useEffect(() => {
     async function validate() {
@@ -48,6 +54,18 @@ function App() {
           if (res.data && res.data.playerName) {
             setAuthedPlayer(res.data.playerName);
             localStorage.setItem('dw:shop:authedPlayer', JSON.stringify(res.data.playerName));
+            
+            // Fetch full player data for the validated session
+            try {
+              const fullPlayerResponse = await axios.get(`/api/players/${res.data.playerName}`, {
+                headers: { 'x-session-id': sessionId }
+              });
+              localStorage.setItem('dw:shop:playerData', JSON.stringify(fullPlayerResponse.data));
+              info(`Session validation and player data fetch successful for: ${res.data.playerName}`, 'auth');
+            } catch (playerFetchError) {
+              warn(`Failed to fetch full player data during session validation: ${playerFetchError.message}`, 'auth');
+            }
+            
             info(`Session validation successful for: ${res.data.playerName}`, 'auth');
           } else {
             warn('Session validation failed - invalid response', 'auth');
@@ -57,7 +75,7 @@ function App() {
             localStorage.removeItem('dw:shop:sessionId');
           }
         } catch (err) {
-          logApiError('POST', '/api/sessions/validate', err);
+          logApiError('App', 'POST', '/api/sessions/validate', err);
           error(`Session validation error: ${err.message}`, 'auth');
           setAuthedPlayer('');
           setSessionId('');
@@ -93,7 +111,19 @@ function App() {
         setSessionId(response.data.sessionId);
         localStorage.setItem('dw:shop:authedPlayer', JSON.stringify(response.data.player.name));
         localStorage.setItem('dw:shop:sessionId', JSON.stringify(response.data.sessionId));
-        localStorage.setItem('dw:shop:playerData', JSON.stringify(response.data.player));
+        
+        // Fetch full player data including tabInfo after successful login
+        try {
+          const fullPlayerResponse = await axios.get(`/api/players/${response.data.player.name}`, {
+            headers: { 'x-session-id': response.data.sessionId }
+          });
+          localStorage.setItem('dw:shop:playerData', JSON.stringify(fullPlayerResponse.data));
+          info(`Full player data loaded for: ${loginName}`, 'auth');
+        } catch (playerFetchError) {
+          warn(`Failed to fetch full player data: ${playerFetchError.message}`, 'auth');
+          // Store minimal player data as fallback
+          localStorage.setItem('dw:shop:playerData', JSON.stringify(response.data.player));
+        }
         
         info(`Login successful for user: ${loginName}`, 'auth');
         logUserAction('user', 'Login successful', { username: loginName });
@@ -111,7 +141,7 @@ function App() {
         setTimeout(() => setLoginMsg(''), 5000);
       }
     } catch (err) {
-      logApiError('POST', '/api/players/login', err);
+      logApiError('App', 'POST', '/api/players/login', err);
       error(`Login error for user: ${loginName} - ${err.message}`, 'auth');
       setLoginMsg('Login failed. Please check your credentials and try again.');
       
@@ -176,16 +206,16 @@ function App() {
   }, []);
 
   const appBackgroundStyle = {
-    backgroundImage: `linear-gradient(rgba(2,6,23,0.65), rgba(15,23,42,0.65)), url('${appBackgroundUrl}')`,
+    backgroundImage: `linear-gradient(rgba(2,6,23,0.75), rgba(15,23,42,0.75)), url('${appBackgroundUrl}')`,
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center top',
-    backgroundSize: 'cover',
+    backgroundPosition: 'left center, right center',
+    backgroundSize: '25%, 25%',
     backgroundAttachment: 'fixed',
-    backgroundBlendMode: 'overlay'
+    backgroundBlendMode: 'multiply'
   };
 
   return (
-    <div className="App min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={appBackgroundStyle}>
+    <div className="App min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={tab === 'players' ? appBackgroundStyle : {}}>
       {/* Persistent Header */}
       <div className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-white/10">
         <div className="mx-auto max-w-6xl px-6 py-4">

@@ -59,37 +59,40 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
         }
         // Fetch shop items from the new database (public endpoint, no session needed)
         console.log('Fetching shop items');
-        const itemsResponse = await axios.get('/api/shop/items');
+        const itemsResponse = await axios.get('/api/shop');
         console.log('Fetched shop items:', itemsResponse.data);
 
-        if (!itemsResponse.data || itemsResponse.data.length === 0) {
-          console.log('Warning: Shop items response was empty')
+        if (!itemsResponse.data || !itemsResponse.data.items) {
+          console.log('Warning: Shop items response was empty or missing items')
+          setItems([]);
+          return;
         }
 
-        // helper to safely get stats as object whether API returned string or object
-        const parseStats = s => {
-          if (!s) return {};
-          if (typeof s === 'string') {
-            try { return JSON.parse(s); } catch (e) { return { raw: s }; }
+        // Flatten the categorized items into a single array
+        const allItems = [];
+        const itemsByCategory = itemsResponse.data.items;
+        
+        for (const category in itemsByCategory) {
+          if (Array.isArray(itemsByCategory[category])) {
+            itemsByCategory[category].forEach(item => {
+              // Only include items that have a cost > 0 (purchasable items)
+              const reqCost = item.req || 0;
+              if (reqCost > 0) {
+                allItems.push({
+                  id: item.id || `${category}-${item.name}`,
+                  name: item.name,
+                  category: category,
+                  req: reqCost,
+                  renown: item.renown || 'Any',
+                  stats: item.stats || {},
+                  itemType: item.itemType || 'equipment'
+                });
+              }
+            });
           }
-          return s;
         }
 
-        const normalizedItems = itemsResponse.data.map(item => {
-          const statsObj = parseStats(item.stats);
-          return {
-            id: item.id,
-            name: item.name,
-            category: item.category,
-            cost: item.requisition_cost,
-            req: item.requisition_cost,
-            renown: item.renown_requirement,
-            desc: statsObj.description || '',
-            stats: statsObj
-          };
-        });
-
-        setItems(normalizedItems);
+        setItems(allItems);
       } catch (error) {
         console.error('Error fetching data:', error);
         // If shop API fails, we can't load items. Keep players fallback behavior.
@@ -104,18 +107,56 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
     const p = players.find(p => p.name === authedPlayer);
     if (!p) return null;
     
-    // Support both old and new data structure
-    // Old data is in tabInfo, new data is directly on the player object
+    // Player data is stored in tabInfo structure
     const tabInfo = p.tabInfo || {};
     return {
       ...p,
       id: p.id,
-      requisition_points: p.requisition_points !== undefined ? p.requisition_points : Number(tabInfo.rp || 0),
-      renown_level: p.renown_level || tabInfo.renown || 'None',
-      // Keep gear from tabInfo for now, as we transition to using the inventory table
+      requisition_points: Number(tabInfo.rp || 0),
+      renown_level: tabInfo.renown || 'None',
+      // Keep gear from tabInfo for inventory system
       gear: Array.isArray(tabInfo.gear) ? tabInfo.gear : []
     };
   }, [players, authedPlayer]);
+
+  // Helper function to check if an item can be purchased
+  const canPurchaseItem = (item) => {
+    if (!currentPlayer) return false;
+    
+    const playerRP = currentPlayer.requisition_points || 0;
+    const playerRenown = currentPlayer.renown_level || 'None';
+    const requiredRenown = item.renown || 'Any';
+    
+    const hasEnoughRP = playerRP >= item.req;
+    const hasEnoughRenown = requiredRenown === 'Any' || 
+      RANK_ORDER.indexOf(playerRenown) >= RANK_ORDER.indexOf(requiredRenown);
+    
+    return hasEnoughRP && hasEnoughRenown;
+  };
+
+  // Helper function to get purchase button text and styling
+  const getPurchaseButtonInfo = (item) => {
+    if (!currentPlayer) return { text: 'Buy', disabled: true, className: 'px-3 py-1 rounded bg-slate-600 text-sm cursor-not-allowed' };
+    
+    const playerRP = currentPlayer.requisition_points || 0;
+    const playerRenown = currentPlayer.renown_level || 'None';
+    const requiredRenown = item.renown || 'Any';
+    
+    const hasEnoughRP = playerRP >= item.req;
+    const hasEnoughRenown = requiredRenown === 'Any' || 
+      RANK_ORDER.indexOf(playerRenown) >= RANK_ORDER.indexOf(requiredRenown);
+    
+    if (!hasEnoughRP && !hasEnoughRenown) {
+      return { text: 'Need RP & Renown', disabled: true, className: 'px-3 py-1 rounded bg-red-600 text-xs cursor-not-allowed' };
+    } else if (!hasEnoughRP) {
+      return { text: 'Need RP', disabled: true, className: 'px-3 py-1 rounded bg-red-600 text-xs cursor-not-allowed' };
+    } else if (!hasEnoughRenown) {
+      return { text: 'Need Renown', disabled: true, className: 'px-3 py-1 rounded bg-orange-600 text-xs cursor-not-allowed' };
+    } else {
+      return { text: 'Buy', disabled: false, className: 'px-3 py-1 rounded bg-blue-600 hover:bg-blue-500 text-sm' };
+    }
+  };
+
   const filteredItems = useMemo(()=>{
     const q = search.trim().toLowerCase()
     return items.filter(i => {
@@ -138,8 +179,8 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
 
     // Check if player has enough RP
     const currentRp = currentPlayer.requisition_points || 0;
-    if (currentRp < item.cost) {
-      setErrorMsg(`Not enough Requisition Points. Need ${item.cost} RP but only have ${currentRp} RP.`);
+    if (currentRp < item.req) {
+      setErrorMsg(`Not enough Requisition Points. Need ${item.req} RP but only have ${currentRp} RP.`);
       return;
     }
 
@@ -161,7 +202,7 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
       await axios.post(
         '/api/shop/purchase',
         {
-          playerId: currentPlayer.id,
+          playerId: currentPlayer.name, // Use player name instead of id
           itemId: item.id,
           quantity: 1
         },
@@ -174,7 +215,7 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
       });
       setPlayers(response.data);
       
-      setErrorMsg(`Successfully purchased ${item.name} for ${item.cost} RP`);
+      setErrorMsg(`Successfully purchased ${item.name} for ${item.req} RP`);
     } catch (error) {
       console.error('Failed to purchase item:', error);
       setErrorMsg(error.response?.data?.error || 'Failed to make purchase');
@@ -245,10 +286,37 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
               <div key={item.id} className="p-3 rounded-lg bg-slate-800/50 border border-white/10">
                 <div className="font-semibold text-white">{item.name}</div>
                 <div className="text-xs text-slate-300 mb-2">{item.category}</div>
-                <div className="text-sm text-slate-200 mb-3">{item.desc}</div>
+                
+                {/* Display item stats */}
+                {item.stats && Object.keys(item.stats).length > 0 && (
+                  <div className="text-sm text-slate-200 mb-3 space-y-1">
+                    {item.stats.damage && (
+                      <div className="text-xs"><span className="text-slate-400">Damage:</span> {item.stats.damage}</div>
+                    )}
+                    {item.stats.class && (
+                      <div className="text-xs"><span className="text-slate-400">Class:</span> {item.stats.class}</div>
+                    )}
+                    {item.stats.type && (
+                      <div className="text-xs"><span className="text-slate-400">Type:</span> {item.stats.type}</div>
+                    )}
+                    {item.stats.protection && (
+                      <div className="text-xs">
+                        <span className="text-slate-400">Protection:</span> 
+                        {' '}Head: {item.stats.protection.head}, 
+                        Arms: {item.stats.protection.arms}, 
+                        Body: {item.stats.protection.body}, 
+                        Legs: {item.stats.protection.legs}
+                      </div>
+                    )}
+                    {item.stats.source && (
+                      <div className="text-xs text-slate-500">Source: {item.stats.source}</div>
+                    )}
+                  </div>
+                )}
+                
                 <div className="flex justify-between items-center">
                   <div>
-                    <div className="text-xs text-slate-400">Cost: {item.cost} RP</div>
+                    <div className="text-xs text-slate-400">Cost: {item.req} RP</div>
                     <div className={`text-xs px-2 py-1 rounded ${renownClass(item.renown)}`}>
                       {item.renown}
                     </div>
@@ -256,10 +324,10 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
                   {currentPlayer && (
                     <button
                       onClick={() => purchaseItem(item)}
-                      disabled={!currentPlayer || (currentPlayer.requisition_points || 0) < item.cost}
-                      className="px-3 py-1 rounded bg-blue-600 hover:bg-blue-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-sm"
+                      disabled={getPurchaseButtonInfo(item).disabled}
+                      className={getPurchaseButtonInfo(item).className}
                     >
-                      Buy
+                      {getPurchaseButtonInfo(item).text}
                     </button>
                   )}
                 </div>
@@ -267,17 +335,7 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
             ))}
           </div>
 
-          {/* GM Panel moved to PlayerTab - GM controls (add/set RP/renown/reset PW) available in PlayerTab when GM is logged in */}
-          <div className="border-t border-white/10 pt-4">
-            <div className="p-3 rounded bg-amber-900/20 border border-amber-500/30">
-              <div className="text-amber-300 font-semibold mb-2">
-                GM Panel
-              </div>
-              <div className="text-sm text-amber-200">
-                GM controls have been moved to the PlayerTab. When logged in as GM, you can add players, set RP and renown, reset passwords, and manage items.
-              </div>
-            </div>
-          </div>
+
         </>
       )}
     </div>

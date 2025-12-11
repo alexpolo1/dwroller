@@ -1,151 +1,176 @@
-
-
 const express = require('express');
-const Player = require('../playerModel');
-const fs = require('fs');
-const path = require('path');
-
-// Simple file logger
-function logToFile(...args) {
-  const msg = `[${new Date().toISOString()}] ` + args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ') + '\n';
-  fs.appendFileSync(path.join(__dirname, '../backend.log'), msg, { encoding: 'utf8' });
-}
-
-const requireSession = require('../requireSession');
+const { playerHelpers, logToFile } = require('../mariadb');
 const router = express.Router();
 
-// TEMP ADMIN: List all users
-router.get('/admin/list', async (req, res) => {
+// Login endpoint for players
+router.post('/login', async (req, res) => {
   try {
-    const players = await Player.find();
-    res.json(players);
+    const { name, password } = req.body;
+    console.log('Login attempt for player:', name);
+    
+    if (!name || !password) {
+      return res.status(400).json({ error: 'Name and password required' });
+    }
+    
+    // Special handling for GM user
+    if (name.toLowerCase() === 'gm') {
+      if (password !== 'bongo') {
+        return res.status(401).json({ error: 'Invalid password' });
+      }
+    } else {
+      // For regular players, use password '1234'
+      if (password !== '1234') {
+        return res.status(401).json({ error: 'Invalid password' });
+      }
+    }
+    
+    const player = await playerHelpers.getByName(name);
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+    
+    // Generate a simple session ID (in production, use proper session management)
+    const sessionId = `session_${name}_${Date.now()}`;
+    
+    logToFile('API: Player login', name, 'success');
+    res.json({ 
+      success: true, 
+      sessionId,
+      player: { name: player.name }
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to list players' });
+    console.error('Login error:', error);
+    logToFile('API: Failed to login player', req.body?.name, error);
+    res.status(500).json({ error: String(error) });
   }
 });
 
-// TEMP ADMIN: Delete test users (name contains 'test' or 'Test')
-router.delete('/admin/delete-tests', async (req, res) => {
+// Get player names for login dropdown (public - no session required)
+router.get('/names', async (req, res) => {
   try {
-    const result = await Player.deleteMany({ name: /test/i });
-    res.json({ deletedCount: result.deletedCount });
+    console.log('Player names endpoint hit');
+    const players = await playerHelpers.getAll();
+    // Only return names for the login dropdown, not full player data
+    const playerNames = players.map(p => ({ name: p.name }));
+    res.json(playerNames);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete test users' });
+    console.error('Player names error:', error);
+    logToFile('API: Failed to get player names', error);
+    res.status(500).json({ error: String(error) });
   }
 });
 
 // Get all players (public for dropdown)
 router.get('/', async (req, res) => {
   try {
-    const players = await Player.find();
-    logToFile('API: Fetch all players (public)', players);
-    // Only send name for dropdown if not authed
-    if (!req.headers['x-session-id']) {
-      return res.json(players.map(p => ({ name: p.name })));
+    const players = await playerHelpers.getAll();
+    logToFile('API: Fetch all players (public)', players.length);
+    
+    // If authenticated (has session header or x-gm-secret), return full player data
+    const hasSession = req.headers['x-session-id'] || req.headers['x-gm-secret'];
+    
+    if (hasSession) {
+      // Return full player data for authenticated requests
+      res.json(players);
+    } else {
+      // Only send name for dropdown if not authenticated
+      res.json(players.map(p => ({ name: p.name })));
     }
-    res.json(players);
   } catch (error) {
     logToFile('API: Failed to fetch players', error);
     res.status(500).json({ error: 'Failed to fetch players' });
   }
 });
 
-// Get a single player by name (require session)
-router.get('/:name', requireSession, async (req, res) => {
+// Get player by name
+router.get('/:name', async (req, res) => {
   try {
-    const player = await Player.findOne({ name: req.params.name });
-    logToFile('API: Fetch player', req.params.name, player);
+    const { name } = req.params;
+    console.log('Getting player:', name);
+    
+    const player = await playerHelpers.getByName(name);
     if (!player) {
       return res.status(404).json({ error: 'Player not found' });
     }
+    
+    logToFile('API: Fetch player', name, 'success');
     res.json(player);
   } catch (error) {
-    logToFile('API: Failed to fetch player', req.params.name, error);
-    res.status(500).json({ error: 'Failed to fetch player' });
+    console.error('Get player error:', error);
+    logToFile('API: Failed to get player', req.params.name, error);
+    res.status(500).json({ error: String(error) });
   }
 });
 
-// Helper to flatten tabInfo
-function flattenTabInfo(tabInfo) {
-  let t = tabInfo;
-  while (t && t.tabInfo) t = t.tabInfo;
-  return { ...t };
-}
+// Update player data
+router.put('/:name', async (req, res) => {
+  try {
+    const { name } = req.params;
+    const playerData = req.body;
+    
+    console.log('Updating player:', name);
+    
+    const success = await playerHelpers.update(name, playerData);
+    if (!success) {
+      return res.status(500).json({ error: 'Failed to update player' });
+    }
+    
+    logToFile('API: Updated player', name, 'success');
+    res.json({ success: true, message: 'Player updated successfully' });
+  } catch (error) {
+    console.error('Update player error:', error);
+    logToFile('API: Failed to update player', req.params.name, error);
+    res.status(500).json({ error: String(error) });
+  }
+});
 
-// Create a new player
+// Create new player
 router.post('/', async (req, res) => {
   try {
-    logToFile('API: Creating player', req.body);
-    const body = { ...req.body };
-    if (body.tabInfo) body.tabInfo = flattenTabInfo(body.tabInfo);
-    const newPlayer = new Player(body);
-    await newPlayer.save();
-    logToFile('API: Player created', newPlayer);
-    res.status(201).json(newPlayer);
+    const playerData = req.body;
+    
+    console.log('Creating player:', playerData.name);
+    
+    // Check if player already exists
+    const existing = await playerHelpers.getByName(playerData.name);
+    if (existing) {
+      return res.status(409).json({ error: 'Player already exists' });
+    }
+    
+    const playerId = await playerHelpers.create(playerData);
+    if (!playerId) {
+      return res.status(500).json({ error: 'Failed to create player' });
+    }
+    
+    logToFile('API: Created player', playerData.name, 'success');
+    res.json({ success: true, id: playerId, message: 'Player created successfully' });
   } catch (error) {
-    logToFile('API: Failed to create player', error);
-    res.status(400).json({ error: 'Failed to create player' });
+    console.error('Create player error:', error);
+    logToFile('API: Failed to create player', req.body.name, error);
+    res.status(500).json({ error: String(error) });
   }
 });
 
-// Update a player (require session)
-router.put('/:name', requireSession, async (req, res) => {
+// Delete player
+router.delete('/:name', async (req, res) => {
   try {
-    logToFile('API: Updating player', req.params.name, req.body);
-    // Always extract pw and pwHash from any location in the request
-    let pw, pwHash;
-    let tabInfo = req.body.tabInfo;
-    if (req.body.pw !== undefined) pw = req.body.pw;
-    if (req.body.pwHash !== undefined) pwHash = req.body.pwHash;
-    if (tabInfo !== undefined) {
-      if (tabInfo.pw !== undefined) pw = tabInfo.pw;
-      if (tabInfo.pwHash !== undefined) pwHash = tabInfo.pwHash;
-      if (tabInfo.tabInfo) {
-        if (tabInfo.tabInfo.pw !== undefined) pw = tabInfo.tabInfo.pw;
-        if (tabInfo.tabInfo.pwHash !== undefined) pwHash = tabInfo.tabInfo.pwHash;
-      }
-      tabInfo = flattenTabInfo(tabInfo);
+    const { name } = req.params;
+    
+    console.log('Deleting player:', name);
+    
+    const success = await playerHelpers.delete(name);
+    if (!success) {
+      return res.status(404).json({ error: 'Player not found or could not be deleted' });
     }
-    const update = {};
-    if (pw !== undefined) update.pw = pw;
-    if (pwHash !== undefined) update.pwHash = pwHash;
-    if (tabInfo !== undefined) update.tabInfo = tabInfo;
-    if (Object.keys(update).length === 0) {
-      logToFile('API: No valid fields to update for player', req.params.name);
-      return res.status(400).json({ error: 'No valid fields to update' });
-    }
-    const updatedPlayer = await Player.findOneAndUpdate(
-      { name: req.params.name },
-      update,
-      { new: true }
-    );
-    if (!updatedPlayer) {
-      logToFile('API: Player not found for update', req.params.name);
-      return res.status(404).json({ error: 'Player not found' });
-    }
-    logToFile('API: Player updated', updatedPlayer);
-    res.json(updatedPlayer);
+    
+    logToFile('API: Deleted player', name, 'success');
+    res.json({ success: true, message: 'Player deleted successfully' });
   } catch (error) {
-    logToFile('API: Failed to update player', error);
-    res.status(400).json({ error: 'Failed to update player' });
+    console.error('Delete player error:', error);
+    logToFile('API: Failed to delete player', req.params.name, error);
+    res.status(500).json({ error: String(error) });
   }
 });
 
-// Delete a player (require session)
-router.delete('/:name', requireSession, async (req, res) => {
-  try {
-    logToFile('API: Deleting player', req.params.name);
-    const deletedPlayer = await Player.findOneAndDelete({ name: req.params.name });
-    if (!deletedPlayer) {
-      logToFile('API: Player not found for delete', req.params.name);
-      return res.status(404).json({ error: 'Player not found' });
-    }
-    logToFile('API: Player deleted', req.params.name);
-    res.status(204).send();
-  } catch (error) {
-    logToFile('API: Failed to delete player', error);
-    res.status(500).json({ error: 'Failed to delete player' });
-  }
-});
-
+console.log('Player routes registered (MariaDB)');
 module.exports = router;

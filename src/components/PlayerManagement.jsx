@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { XPBar } from './XPBar';
 
 const RANK_ORDER = ['None','Respected','Distinguished','Famed','Hero'];
 
@@ -500,7 +501,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
                       <div>
                         <div className="font-medium text-white text-lg">{player.name}</div>
                         <div className="text-sm text-slate-400">
-                          {player.renown || 'None'} • RP: {player.requisitionPoints || 0}
+                          {player.tabInfo?.renown || 'None'} • RP: {player.tabInfo?.rp || 0}
                         </div>
                       </div>
                       <button 
@@ -511,19 +512,25 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
                       </button>
                     </div>
                     
-                    {/* Player Stats */}
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div className="text-slate-300">
-                        <span className="text-slate-400">Total XP:</span> {player.xp || 0}
+                    {/* Player Stats with XP Bar */}
+                    <div className="space-y-3 mb-4">
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <div className="text-slate-300">
+                          <span className="text-slate-400">Character:</span> {player.tabInfo?.charName || 'Unnamed'}
+                        </div>
+                        <div className="text-slate-300">
+                          <span className="text-slate-400">Available XP:</span> <span className="text-green-400 font-medium">{(player.tabInfo?.xp || 0) - (player.tabInfo?.xpSpent || 0)}</span>
+                        </div>
                       </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-400">XP Spent:</span> {player.xpSpent || 0}
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-400">Available XP:</span> {(player.xp || 0) - (player.xpSpent || 0)}
-                      </div>
-                      <div className="text-slate-300">
-                        <span className="text-slate-400">Character:</span> {player.charName || 'Unnamed'}
+                      <div className="bg-slate-800/50 rounded p-3 border border-slate-700">
+                        <div className="text-xs font-medium text-slate-300 uppercase tracking-wide mb-2">Experience Progress</div>
+                        <XPBar 
+                          currentXP={player.tabInfo?.xp || 0} 
+                          xpSpent={player.tabInfo?.xpSpent || 0}
+                          thresholdXP={500}
+                          showLabel={true}
+                          compact={false}
+                        />
                       </div>
                     </div>
                   </div>
@@ -535,7 +542,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
                       <label className="text-xs font-medium text-slate-300 uppercase tracking-wide">Requisition Points</label>
                       <GmSetRP 
                         name={player.name} 
-                        currentRP={player.requisitionPoints}
+                        currentRP={player.tabInfo?.rp}
                         onSet={gmSetRP} 
                       />
                     </div>
@@ -545,7 +552,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
                       <label className="text-xs font-medium text-slate-300 uppercase tracking-wide">Experience Points</label>
                       <GmSetXP 
                         name={player.name} 
-                        currentXP={player.xp}
+                        currentXP={player.tabInfo?.xp}
                         onSet={gmSetXP} 
                       />
                     </div>
@@ -555,7 +562,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
                       <label className="text-xs font-medium text-slate-300 uppercase tracking-wide">XP Spent</label>
                       <GmSetXPSpent 
                         name={player.name} 
-                        currentXPSpent={player.xpSpent}
+                        currentXPSpent={player.tabInfo?.xpSpent}
                         onSet={gmSetXPSpent} 
                       />
                     </div>
@@ -565,7 +572,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
                       <label className="text-xs font-medium text-slate-300 uppercase tracking-wide">Renown Level</label>
                       <GmSetRenown 
                         name={player.name} 
-                        currentRenown={player.renown}
+                        currentRenown={player.tabInfo?.renown}
                         onSet={gmSetRenown} 
                       />
                     </div>
@@ -596,7 +603,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
           <div className="flex flex-wrap gap-2">
             <BulkXPGiver onGive={(amount) => {
               players.forEach(player => {
-                const currentXP = player.xp || 0;
+                const currentXP = player.tabInfo?.xp || 0;
                 gmSetXP(player.name, (currentXP + amount).toString());
               });
             }} />
@@ -614,7 +621,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
           <div className="flex flex-wrap gap-2">
             <BulkRPGiver onGive={(amount) => {
               players.forEach(player => {
-                const currentRP = player.requisitionPoints || 0;
+                const currentRP = player.tabInfo?.rp || 0;
                 gmSetRP(player.name, (currentRP + amount).toString());
               });
             }} />
@@ -640,7 +647,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
               className="text-xs px-3 py-1 rounded bg-green-600/80 hover:bg-green-600 text-white transition-colors"
               onClick={() => {
                 players.forEach(player => {
-                  if ((player.requisitionPoints || 0) < 10) {
+                  if ((player.tabInfo?.rp || 0) < 10) {
                     gmSetRP(player.name, '50');
                   }
                 });

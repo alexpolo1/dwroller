@@ -1,18 +1,26 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { db } = require('../sqlite-db');
+const { bestiaryHelpers, logToFile } = require('../mariadb');
 const router = express.Router();
 
-// Read bestiary from sqlite table `bestiary`
-function loadBestiaryData() {
+// Read bestiary from MariaDB table `bestiary`
+async function loadBestiaryData() {
   try {
-    const rows = db.prepare('SELECT id,name,book,page,pdf,stats,profile,snippet FROM bestiary ORDER BY name').all();
+    const rows = await bestiaryHelpers.getAll();
     return rows.map(r => {
       let stats = {};
-      try { stats = JSON.parse(r.stats || '{}'); } catch(e){}
+      try { 
+        stats = typeof r.stats === 'string' ? JSON.parse(r.stats) : r.stats || {};
+      } catch(e){
+        logToFile('Error parsing bestiary stats for', r.name, e);
+      }
       let profile = {};
-      try { profile = JSON.parse(r.profile || '{}'); } catch(e){}
+      try { 
+        profile = typeof r.profile === 'string' ? JSON.parse(r.profile) : r.profile || {};
+      } catch(e){
+        logToFile('Error parsing bestiary profile for', r.name, e);
+      }
       return {
         _id: r.id,
         bestiaryName: r.name,
@@ -25,7 +33,8 @@ function loadBestiaryData() {
       };
     });
   } catch (e) {
-    console.error('Failed to load bestiary from sqlite:', e);
+    console.error('Failed to load bestiary from MariaDB:', e);
+    logToFile('Error loading bestiary:', e);
     return [];
   }
 }
@@ -88,9 +97,9 @@ function transformBestiaryEntry(entry) {
 }
 
 // Get all bestiary entries formatted for dice roller
-router.get('/enemies', (req, res) => {
+router.get('/enemies', async (req, res) => {
   try {
-    const entries = loadBestiaryData();
+    const entries = await loadBestiaryData();
     
     // Transform entries for dice roller format
     const enemies = entries
@@ -106,43 +115,46 @@ router.get('/enemies', (req, res) => {
     res.json(enemies);
   } catch (error) {
     console.error('Bestiary enemies error:', error);
+    logToFile('Error getting bestiary enemies:', error);
     res.status(500).json({ error: 'Failed to get enemies' });
   }
 });
 
 // Get full bestiary data (for bestiary tab)
-router.get('/full', (req, res) => {
+router.get('/full', async (req, res) => {
   try {
-    const entries = loadBestiaryData();
+    const entries = await loadBestiaryData();
     res.json(entries);
   } catch (error) {
     console.error('Bestiary full error:', error);
+    logToFile('Error getting full bestiary:', error);
     res.status(500).json({ error: 'Failed to get bestiary data' });
   }
 });
 
 // Get bestiary statistics
-router.get('/stats', (req, res) => {
+router.get('/stats', async (req, res) => {
   try {
-    const entries = loadBestiaryData();
+    const entries = await loadBestiaryData();
     
     const stats = {
       totalEntries: entries.length,
       withValidStats: entries.filter(e => e.stats?.profile?.t).length,
       withWounds: entries.filter(e => e.wounds || e.stats?.wounds).length,
       books: [...new Set(entries.map(e => e.book).filter(Boolean))],
-      lastUpdated: new Date(lastLoaded).toISOString()
+      lastUpdated: new Date().toISOString()
     };
     
     res.json(stats);
   } catch (error) {
     console.error('Bestiary stats error:', error);
+    logToFile('Error getting bestiary stats:', error);
     res.status(500).json({ error: 'Failed to get bestiary stats' });
   }
 });
 
 // Force reload bestiary data (admin only)
-router.post('/reload', (req, res) => {
+router.post('/reload', async (req, res) => {
   try {
     // Check for GM secret
     const gmSecret = req.headers['x-gm-secret'];
@@ -150,19 +162,17 @@ router.post('/reload', (req, res) => {
       return res.status(403).json({ error: 'Unauthorized' });
     }
     
-    // Reset cache
-    bestiaryData = null;
-    lastLoaded = 0;
-    
-    const entries = loadBestiaryData();
+    // No cache to reset since we query MariaDB directly
+    const entries = await loadBestiaryData();
     res.json({
       success: true,
       totalEntries: entries.length,
-      message: 'Bestiary data reloaded successfully'
+      message: 'Bestiary data reloaded from MariaDB successfully'
     });
     
   } catch (error) {
     console.error('Bestiary reload error:', error);
+    logToFile('Error reloading bestiary:', error);
     res.status(500).json({ error: 'Failed to reload bestiary data' });
   }
 });

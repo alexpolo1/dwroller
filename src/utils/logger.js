@@ -173,9 +173,9 @@ export const logApiCall = (component, method, url, data) => {
 
 export const logApiError = (component, method, url, error) => {
   logger.error(component, `API ${method} ${url} failed`, {
-    message: error.message,
-    status: error.response?.status,
-    data: error.response?.data
+    message: error?.message || String(error) || 'Unknown error',
+    status: error?.response?.status,
+    data: error?.response?.data
   });
 };
 

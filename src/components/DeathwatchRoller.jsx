@@ -1,4 +1,4 @@
-const { useEffect, useMemo, useState } = require('react')
+import React, { useEffect, useMemo, useState } from 'react';
 
 // Tooltip component for abbreviations
 function Tooltip({ children, text }) {
