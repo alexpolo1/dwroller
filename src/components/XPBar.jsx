@@ -70,21 +70,21 @@ export function XPSummary({ currentXP = 0, xpSpent = 0, thresholdXP = 500 }) {
   return (
     <div className="space-y-2">
       <div className="grid grid-cols-2 gap-2 text-sm">
-        <div className="bg-slate-700/50 rounded p-2">
-          <div className="text-xs text-slate-400">Total XP</div>
+        <div className="bg-slate-700 rounded p-2 border border-slate-600">
+          <div className="text-xs text-slate-300">Total XP</div>
           <div className="text-lg font-bold text-green-400">{currentXP}</div>
         </div>
-        <div className="bg-slate-700/50 rounded p-2">
-          <div className="text-xs text-slate-400">Available XP</div>
+        <div className="bg-slate-700 rounded p-2 border border-slate-600">
+          <div className="text-xs text-slate-300">Available XP</div>
           <div className="text-lg font-bold text-green-300">{availableXP}</div>
         </div>
-        <div className="bg-slate-700/50 rounded p-2 col-span-2">
-          <div className="text-xs text-slate-400">Current Level</div>
-          <div className="text-lg font-bold text-blue-400">Level {currentLevel}</div>
+        <div className="bg-slate-700 rounded p-2 col-span-2 border border-slate-600">
+          <div className="text-xs text-slate-300">Current Level</div>
+          <div className="text-lg font-bold text-blue-300">Level {currentLevel}</div>
         </div>
       </div>
       {xpSpent > 0 && (
-        <div className="text-xs text-slate-400">
+        <div className="text-xs text-slate-300">
           Spent: {xpSpent} XP | Remaining: {availableXP} XP
         </div>
       )}

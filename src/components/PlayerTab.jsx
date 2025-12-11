@@ -529,14 +529,14 @@ function PlayerTab({
     return (
       <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
         <div className="flex gap-2">
-          <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 flex-1" placeholder="Player name" value={name} onChange={e=>setName(e.target.value)} />
-          <select className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={usePregen ? name : ''} onChange={e=>{ setUsePregen(!!e.target.value); setName(e.target.value); }}>
+          <input className="rounded-xl border border-slate-600 bg-slate-800 px-3 py-2 flex-1" placeholder="Player name" value={name} onChange={e=>setName(e.target.value)} />
+          <select className="rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" value={usePregen ? name : ''} onChange={e=>{ setUsePregen(!!e.target.value); setName(e.target.value); }}>
             <option value="">-- pregens --</option>
             {pregens.map(p => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
-        <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} value={rp} onChange={e=>setRp(parseInt(e.target.value||'0'))} />
-        <input className="rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="password" placeholder="Password" value={pw} onChange={e=>setPw(e.target.value)} />
+        <input className="rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" min={0} value={rp} onChange={e=>setRp(parseInt(e.target.value||'0'))} />
+        <input className="rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="password" placeholder="Password" value={pw} onChange={e=>setPw(e.target.value)} />
         <button onClick={()=>{ onAdd(name, rp, pw); setName(''); setRp(10); setPw('') }} className="rounded-xl px-3 py-2 bg-amber-600 hover:bg-amber-500">Add/Update</button>
         <div className="self-center text-xs opacity-70">Add or overwrite by name</div>
       </div>
@@ -546,7 +546,7 @@ function PlayerTab({
     const [rp, setRp] = useState('')
     return (
       <div className="flex gap-2">
-        <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" type="number" placeholder="RP" value={rp} onChange={e=>setRp(e.target.value)} />
+        <input className="rounded-xl border border-slate-600 bg-slate-800 px-2 py-1 text-sm w-20" type="number" placeholder="RP" value={rp} onChange={e=>setRp(e.target.value)} />
         <button onClick={()=>{ onSet(name, parseInt(rp||'0')); setRp('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set RP</button>
       </div>
     )
@@ -556,7 +556,7 @@ function PlayerTab({
     const [xp, setXp] = useState('')
     return (
       <div className="flex gap-2">
-        <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" type="number" placeholder="XP" value={xp} onChange={e=>setXp(e.target.value)} />
+        <input className="rounded-xl border border-slate-600 bg-slate-800 px-2 py-1 text-sm w-20" type="number" placeholder="XP" value={xp} onChange={e=>setXp(e.target.value)} />
         <button onClick={()=>{ onSet(name, parseInt(xp||'0')); setXp('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set XP</button>
       </div>
     )
@@ -566,7 +566,7 @@ function PlayerTab({
     const [xpSpent, setXpSpent] = useState('')
     return (
       <div className="flex gap-2">
-        <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" type="number" placeholder="XP Spent" value={xpSpent} onChange={e=>setXpSpent(e.target.value)} />
+        <input className="rounded-xl border border-slate-600 bg-slate-800 px-2 py-1 text-sm w-20" type="number" placeholder="XP Spent" value={xpSpent} onChange={e=>setXpSpent(e.target.value)} />
         <button onClick={()=>{ onSet(name, parseInt(xpSpent||'0')); setXpSpent('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set XP Spent</button>
       </div>
     )
@@ -576,7 +576,7 @@ function PlayerTab({
     const [renown, setRenown] = useState(value)
     return (
       <div className="flex gap-2">
-        <select className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm w-20" value={renown} onChange={e=>setRenown(e.target.value)}>
+        <select className="rounded-xl border border-slate-600 bg-slate-800 px-2 py-1 text-sm w-20" value={renown} onChange={e=>setRenown(e.target.value)}>
           {RANK_ORDER.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
         <button onClick={()=>{ onSet(name, renown); setRenown(value) }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Set Renown</button>
@@ -587,7 +587,7 @@ function PlayerTab({
     const [pw, setPw] = useState('')
     return (
       <div className="flex gap-2">
-        <input className="rounded-xl border border-white/10 bg-white/10 px-2 py-1 text-sm" type="password" placeholder="New PW" value={pw} onChange={e=>setPw(e.target.value)} />
+        <input className="rounded-xl border border-slate-600 bg-slate-800 px-2 py-1 text-sm" type="password" placeholder="New PW" value={pw} onChange={e=>setPw(e.target.value)} />
         <button onClick={()=>{ onReset(name, pw); setPw('') }} className="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600">Reset PW</button>
       </div>
     )
@@ -768,9 +768,9 @@ function PlayerTab({
       <div className="mx-auto max-w-7xl space-y-6">
 
         {/* Avatar header (standalone) */}
-        <div className="flex flex-col items-center bg-white/5 rounded-xl p-4 border border-white/10">
+        <div className="flex flex-col items-center bg-slate-800 rounded-xl p-4 border border-slate-600">
           <div className="w-full flex justify-center">
-            <img src={picture || '/logo192.png'} alt="avatar" className="w-36 h-36 md:w-48 md:h-48 rounded-full object-cover border-4 border-white/10 shadow-lg" />
+            <img src={picture || '/logo192.png'} alt="avatar" className="w-36 h-36 md:w-48 md:h-48 rounded-full object-cover border-4 border-slate-600 shadow-lg" />
           </div>
           <div className="mt-3 text-center">
             <div className="text-lg font-semibold">{charName || currentPlayer?.tabInfo?.charName || 'Unknown'}</div>
@@ -781,7 +781,7 @@ function PlayerTab({
               <div className="flex flex-col items-center">
                 <input type="file" accept="image/*" onChange={e=>uploadAvatarFile(e.target.files?.[0])} />
                 <div className="mt-1">Max 200KB. Supported: png/jpg/gif</div>
-                <input className="w-64 md:w-96 mx-auto mt-2 rounded border border-white/10 bg-white/10 px-2 py-1" value={picture} onChange={e=>setPicture(e.target.value)} placeholder="Or paste image URL" />
+                <input className="w-64 md:w-96 mx-auto mt-2 rounded border border-slate-600 bg-slate-800 px-2 py-1" value={picture} onChange={e=>setPicture(e.target.value)} placeholder="Or paste image URL" />
               </div>
             </div>
           )}
@@ -794,14 +794,14 @@ function PlayerTab({
           <div className="flex items-center gap-2">
             <button
               onClick={saveLocal}
-              className={`px-3 py-1.5 rounded-lg border border-white/10 text-sm ${(authedPlayer || gmOpen) ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-emerald-900/40 cursor-not-allowed'}`}
+              className={`px-3 py-1.5 rounded-lg border border-slate-600 text-sm ${(authedPlayer || gmOpen) ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-emerald-800 cursor-not-allowed'}`}
               disabled={!(authedPlayer || gmOpen)}
             >
               Save
             </button>
-            <button onClick={() => setShowLogs(s => !s)} className="px-3 py-1.5 rounded-lg border border-white/10 text-sm bg-slate-700 hover:bg-slate-600">{showLogs ? 'Hide Logs' : 'Show Logs'}</button>
+            <button onClick={() => setShowLogs(s => !s)} className="px-3 py-1.5 rounded-lg border border-slate-600 text-sm bg-slate-700 hover:bg-slate-600">{showLogs ? 'Hide Logs' : 'Show Logs'}</button>
             {saveMsg && (
-              <span className="ml-2 text-xs px-2 py-1 rounded bg-white/10 border border-white/10">
+              <span className="ml-2 text-xs px-2 py-1 rounded bg-slate-800 border border-slate-600">
                 {saveMsg}
               </span>
             )}
@@ -810,7 +810,7 @@ function PlayerTab({
           <div>
             <label className="text-xs uppercase opacity-70">Chapter</label>
             <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
+              className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1"
               value={chapter}
               onChange={(e) => setChapter(e.target.value)}
               disabled={!(shopAuthed || gmOpen)}
@@ -819,7 +819,7 @@ function PlayerTab({
           <div>
             <label className="text-xs uppercase opacity-70">Chapter Demeanour</label>
             <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
+              className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1"
               value={demeanour}
               onChange={(e) => setDemeanour(e.target.value)}
               disabled={!(shopAuthed || gmOpen)}
@@ -828,7 +828,7 @@ function PlayerTab({
           <div>
             <label className="text-xs uppercase opacity-70">Speciality</label>
             <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
+              className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1"
               value={speciality}
               onChange={(e) => setSpeciality(e.target.value)}
               disabled={!(shopAuthed || gmOpen)}
@@ -837,7 +837,7 @@ function PlayerTab({
           <div>
             <label className="text-xs uppercase opacity-70">Rank</label>
             <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
+              className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1"
               value={rank}
               onChange={(e) => setRank(e.target.value)}
               disabled={!(shopAuthed || gmOpen)}
@@ -846,7 +846,7 @@ function PlayerTab({
           <div>
             <label className="text-xs uppercase opacity-70">Power Armour History</label>
             <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
+              className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1"
               value={powerArmour}
               onChange={(e) => setPowerArmour(e.target.value)}
               disabled={!(shopAuthed || gmOpen)}
@@ -855,7 +855,7 @@ function PlayerTab({
           <div>
             <label className="text-xs uppercase opacity-70">Description</label>
             <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
+              className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               disabled={!(shopAuthed || gmOpen)}
@@ -864,7 +864,7 @@ function PlayerTab({
           <div>
             <label className="text-xs uppercase opacity-70">Past Event</label>
             <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
+              className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1"
               value={pastEvent}
               onChange={(e) => setPastEvent(e.target.value)}
               disabled={!(shopAuthed || gmOpen)}
@@ -873,7 +873,7 @@ function PlayerTab({
           <div>
             <label className="text-xs uppercase opacity-70">Personal Demeanour</label>
             <input
-              className="w-full rounded border border-white/10 bg-white/10 px-2 py-1"
+              className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1"
               value={personalDemeanour}
               onChange={(e) => setPersonalDemeanour(e.target.value)}
               disabled={!(shopAuthed || gmOpen)}
@@ -884,7 +884,7 @@ function PlayerTab({
             <div className="col-span-4 flex justify-end mt-4">
               <button
                 onClick={() => setGmOpen(!gmOpen)}
-                className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 border border-white/10 text-sm"
+                className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 border border-slate-600 text-sm"
               >
                 {gmOpen ? 'Close GM Panel' : 'Open GM Panel'}
               </button>
@@ -893,7 +893,7 @@ function PlayerTab({
         </div>
 
         {/* Requisition Points Display */}
-        <div className="rounded-xl border border-white/10 bg-black/20 p-3 space-y-2">
+        <div className="rounded-xl border border-slate-600 bg-slate-900 p-3 space-y-2">
           <div className="text-lg font-medium">Requisition Points</div>
           <div className="text-base">
             Current RP: <span className="font-semibold text-xl text-amber-400">{currentPlayer?.tabInfo?.rp || '0'}</span>
@@ -904,7 +904,7 @@ function PlayerTab({
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  className="w-24 rounded border border-white/10 bg-white/10 px-2 py-1"
+                  className="w-24 rounded border border-slate-600 bg-slate-800 px-2 py-1"
                   placeholder="RP"
                   defaultValue={currentPlayer?.tabInfo?.rp || 0}
                   onChange={(e) => {
@@ -938,7 +938,7 @@ function PlayerTab({
         </div>
 
         {/* Experience Points Display - Minecraft-style XP Bar */}
-        <div className="rounded-xl border border-white/10 bg-black/20 p-3 space-y-2">
+        <div className="rounded-xl border border-slate-600 bg-slate-900 p-3 space-y-2">
           <div className="text-lg font-medium">Experience Points (XP)</div>
           
           {/* XP Bar */}
@@ -966,7 +966,7 @@ function PlayerTab({
 
           {/* GM Controls */}
           {isGMLoggedIn() && (
-            <div className="mt-4 space-y-2 border-t border-white/10 pt-3">
+            <div className="mt-4 space-y-2 border-t border-slate-600 pt-3">
               <div className="text-sm text-slate-300 font-medium">GM Controls</div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -1014,20 +1014,20 @@ function PlayerTab({
         </div>
 
         {/* Characteristics */}
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+        <div className="bg-slate-800 rounded-xl p-3 border border-slate-600">
           <div className="font-semibold mb-2">Characteristics</div>
           <div className="grid grid-cols-2 md:grid-cols-9 gap-2">
             {CHARACTERISTICS.map(c => (
               <div key={c.key} className="flex flex-col items-center">
                 <label className="text-xs opacity-70 mb-1">{c.label}</label>
-                <input type="number" className="w-16 text-center text-lg rounded border border-white/10 bg-white/10 px-2 py-1" value={characteristics[c.key]} onChange={e=>handleCharChange(c.key, parseInt(e.target.value||'0'))} />
+                <input type="number" className="w-16 text-center text-lg rounded border border-slate-600 bg-slate-800 px-2 py-1" value={characteristics[c.key]} onChange={e=>handleCharChange(c.key, parseInt(e.target.value||'0'))} />
               </div>
             ))}
           </div>
         </div>
 
         {/* Skills */}
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+        <div className="bg-slate-800 rounded-xl p-3 border border-slate-600">
           <div className="font-semibold mb-2">Skills</div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {SKILLS.map(skill => (
@@ -1042,11 +1042,11 @@ function PlayerTab({
         </div>
 
         {/* Space Marine Abilities - hover tooltips */}
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+        <div className="bg-slate-800 rounded-xl p-3 border border-slate-600">
           <div className="font-semibold mb-2">Space Marine Abilities</div>
             <div className="text-xs opacity-80 grid grid-cols-2 md:grid-cols-3 gap-2">
             {SPACE_MARINE_ABILITIES.map(a => (
-              <div key={a.name} className="p-2 bg-white/3 rounded flex items-center justify-between">
+              <div key={a.name} className="p-2 bg-slate-800 rounded flex items-center justify-between">
                 <span className="mr-2">{a.name}</span>
                 <Tooltip text={a.desc}><span className="inline-block w-5 h-5 text-center text-black bg-white rounded-full text-xs leading-5">?</span></Tooltip>
               </div>
@@ -1055,11 +1055,11 @@ function PlayerTab({
         </div>
 
         {/* Power Armour Abilities - hover tooltips */}
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10 mt-4">
+        <div className="bg-slate-800 rounded-xl p-3 border border-slate-600 mt-4">
           <div className="font-semibold mb-2">Power Armour Abilities (standard)</div>
           <div className="text-xs opacity-80 grid grid-cols-2 md:grid-cols-3 gap-2">
             {POWER_ARMOUR_ABILITIES.map(a => (
-              <div key={a.name} className="p-2 bg-white/3 rounded flex items-center justify-between">
+              <div key={a.name} className="p-2 bg-slate-800 rounded flex items-center justify-between">
                 <span className="mr-2">{a.name}</span>
                 <Tooltip text={a.desc}><span className="inline-block w-5 h-5 text-center text-black bg-white rounded-full text-xs leading-5">?</span></Tooltip>
               </div>
@@ -1068,7 +1068,7 @@ function PlayerTab({
         </div>
 
         {/* Gear Section */}
-        <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+        <div className="bg-slate-800 rounded-xl p-6 border border-slate-600">
           <div className="font-semibold text-lg mb-4 flex items-center justify-between">
             <span>Assigned Gear</span>
             {isGMOrShopAuthed() && (
@@ -1082,7 +1082,7 @@ function PlayerTab({
           </div>
           <div className="space-y-4 max-h-[600px] overflow-y-auto pr-4">
             {/* Column Headers */}
-            <div className="grid grid-cols-12 gap-4 text-sm font-medium text-slate-400 pb-2 border-b border-white/10">
+            <div className="grid grid-cols-12 gap-4 text-sm font-medium text-slate-400 pb-2 border-b border-slate-600">
               <div className="col-span-5">Item Name</div>
               <div className="col-span-2">Quantity</div>
               <div className="col-span-3">Notes</div>
@@ -1091,9 +1091,9 @@ function PlayerTab({
             
             {/* Gear Items */}
             {gear.map((item, index) => (
-              <div key={index} className="grid grid-cols-12 gap-4 items-center bg-white/5 rounded-lg p-2">
+              <div key={index} className="grid grid-cols-12 gap-4 items-center bg-slate-800 rounded-lg p-2">
                 <input
-                  className="col-span-5 rounded border border-white/10 bg-white/10 px-3 py-2"
+                  className="col-span-5 rounded border border-slate-600 bg-slate-800 px-3 py-2"
                   placeholder="Item name"
                   value={item.name || ''}
                   onChange={(e) => updateGear(item.id, { name: e.target.value })}
@@ -1101,7 +1101,7 @@ function PlayerTab({
                 />
                 <input
                   type="number"
-                  className="col-span-2 rounded border border-white/10 bg-white/10 px-3 py-2"
+                  className="col-span-2 rounded border border-slate-600 bg-slate-800 px-3 py-2"
                   placeholder="Qty"
                   value={item.qty || 1}
                   onChange={(e) => updateGear(item.id, { qty: parseInt(e.target.value) || 1 })}
@@ -1109,7 +1109,7 @@ function PlayerTab({
                   min="1"
                 />
                 <input
-                  className="col-span-3 rounded border border-white/10 bg-white/10 px-3 py-2"
+                  className="col-span-3 rounded border border-slate-600 bg-slate-800 px-3 py-2"
                   placeholder="Add notes..."
                   value={item.note || ''}
                   onChange={(e) => updateGear(item.id, { note: e.target.value })}
@@ -1162,89 +1162,89 @@ function PlayerTab({
 
         {/* Weapons & Armour */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+          <div className="bg-slate-800 rounded-xl p-3 border border-slate-600">
             <div className="font-semibold mb-2">Weapons</div>
             {[0,1,2].map(idx => (
-              <div key={idx} className="mb-2 border-b border-white/10 pb-2">
+              <div key={idx} className="mb-2 border-b border-slate-600 pb-2">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-1">
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Name" value={weapons[idx]?.name||''} onChange={e=>handleWeaponChange(idx,'name',e.target.value)} />
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Class" value={weapons[idx]?.class||''} onChange={e=>handleWeaponChange(idx,'class',e.target.value)} />
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Damage" value={weapons[idx]?.damage||''} onChange={e=>handleWeaponChange(idx,'damage',e.target.value)} />
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Type" value={weapons[idx]?.type||''} onChange={e=>handleWeaponChange(idx,'type',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Name" value={weapons[idx]?.name||''} onChange={e=>handleWeaponChange(idx,'name',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Class" value={weapons[idx]?.class||''} onChange={e=>handleWeaponChange(idx,'class',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Damage" value={weapons[idx]?.damage||''} onChange={e=>handleWeaponChange(idx,'damage',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Type" value={weapons[idx]?.type||''} onChange={e=>handleWeaponChange(idx,'type',e.target.value)} />
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-1">
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Pen" value={weapons[idx]?.pen||''} onChange={e=>handleWeaponChange(idx,'pen',e.target.value)} />
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Range" value={weapons[idx]?.range||''} onChange={e=>handleWeaponChange(idx,'range',e.target.value)} />
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="RoF" value={weapons[idx]?.rof||''} onChange={e=>handleWeaponChange(idx,'rof',e.target.value)} />
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Clip" value={weapons[idx]?.clip||''} onChange={e=>handleWeaponChange(idx,'clip',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Pen" value={weapons[idx]?.pen||''} onChange={e=>handleWeaponChange(idx,'pen',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Range" value={weapons[idx]?.range||''} onChange={e=>handleWeaponChange(idx,'range',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="RoF" value={weapons[idx]?.rof||''} onChange={e=>handleWeaponChange(idx,'rof',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Clip" value={weapons[idx]?.clip||''} onChange={e=>handleWeaponChange(idx,'clip',e.target.value)} />
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-1">
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Rld" value={weapons[idx]?.rld||''} onChange={e=>handleWeaponChange(idx,'rld',e.target.value)} />
-                  <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Special Rules" value={weapons[idx]?.special||''} onChange={e=>handleWeaponChange(idx,'special',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Rld" value={weapons[idx]?.rld||''} onChange={e=>handleWeaponChange(idx,'rld',e.target.value)} />
+                  <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Special Rules" value={weapons[idx]?.special||''} onChange={e=>handleWeaponChange(idx,'special',e.target.value)} />
                 </div>
               </div>
             ))}
           </div>
-          <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+          <div className="bg-slate-800 rounded-xl p-3 border border-slate-600">
             <div className="font-semibold mb-2">Armour</div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Head" value={armour.head} onChange={e=>handleArmourChange('head',e.target.value)} />
-              <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Body" value={armour.body} onChange={e=>handleArmourChange('body',e.target.value)} />
-              <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Right Arm" value={armour.ra} onChange={e=>handleArmourChange('ra',e.target.value)} />
-              <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Left Arm" value={armour.la} onChange={e=>handleArmourChange('la',e.target.value)} />
-              <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Right Leg" value={armour.rl} onChange={e=>handleArmourChange('rl',e.target.value)} />
-              <input className="rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Left Leg" value={armour.ll} onChange={e=>handleArmourChange('ll',e.target.value)} />
+              <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Head" value={armour.head} onChange={e=>handleArmourChange('head',e.target.value)} />
+              <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Body" value={armour.body} onChange={e=>handleArmourChange('body',e.target.value)} />
+              <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Right Arm" value={armour.ra} onChange={e=>handleArmourChange('ra',e.target.value)} />
+              <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Left Arm" value={armour.la} onChange={e=>handleArmourChange('la',e.target.value)} />
+              <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Right Leg" value={armour.rl} onChange={e=>handleArmourChange('rl',e.target.value)} />
+              <input className="rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Left Leg" value={armour.ll} onChange={e=>handleArmourChange('ll',e.target.value)} />
             </div>
             <div className="mt-2">
-              <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" placeholder="Additions/Notes" value={armour.additions} onChange={e=>handleArmourChange('additions',e.target.value)} />
+              <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1" placeholder="Additions/Notes" value={armour.additions} onChange={e=>handleArmourChange('additions',e.target.value)} />
             </div>
           </div>
         </div>
 
         {/* Talents, Psychic Powers */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+          <div className="bg-slate-800 rounded-xl p-3 border border-slate-600">
             <div className="font-semibold mb-2">Talents & Traits</div>
-            <textarea className="w-full h-32 rounded border border-white/10 bg-white/10 px-2 py-1" value={talents} onChange={e=>setTalents(e.target.value)} />
+            <textarea className="w-full h-32 rounded border border-slate-600 bg-slate-800 px-2 py-1" value={talents} onChange={e=>setTalents(e.target.value)} />
           </div>
-          <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+          <div className="bg-slate-800 rounded-xl p-3 border border-slate-600">
             <div className="font-semibold mb-2">Psychic Powers</div>
-            <textarea className="w-full h-32 rounded border border-white/10 bg-white/10 px-2 py-1" value={psychic} onChange={e=>setPsychic(e.target.value)} />
+            <textarea className="w-full h-32 rounded border border-slate-600 bg-slate-800 px-2 py-1" value={psychic} onChange={e=>setPsychic(e.target.value)} />
           </div>
         </div>
 
         {/* Wounds, Insanity, Movement, Fate, Corruption, Renown, XP */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 bg-white/5 rounded-xl p-3 border border-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 bg-slate-800 rounded-xl p-3 border border-slate-600">
           <div>
             <label className="text-xs uppercase opacity-70">Wounds</label>
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" type="number" placeholder="Total" value={wounds.total} onChange={e=>setWounds(w=>({...w,total:parseInt(e.target.value||'0')}))} />
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" type="number" placeholder="Current" value={wounds.current} onChange={e=>setWounds(w=>({...w,current:parseInt(e.target.value||'0')}))} />
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" placeholder="Fatigue" value={wounds.fatigue} onChange={e=>setWounds(w=>({...w,fatigue:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1 mb-1" type="number" placeholder="Total" value={wounds.total} onChange={e=>setWounds(w=>({...w,total:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1 mb-1" type="number" placeholder="Current" value={wounds.current} onChange={e=>setWounds(w=>({...w,current:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1" type="number" placeholder="Fatigue" value={wounds.fatigue} onChange={e=>setWounds(w=>({...w,fatigue:parseInt(e.target.value||'0')}))} />
           </div>
           <div>
             <label className="text-xs uppercase opacity-70">Insanity</label>
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" type="number" placeholder="Current" value={insanity.current} onChange={e=>setInsanity(i=>({...i,current:parseInt(e.target.value||'0')}))} />
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" type="number" placeholder="Battle Fatigue" value={insanity.battleFatigue} onChange={e=>setInsanity(i=>({...i,battleFatigue:parseInt(e.target.value||'0')}))} />
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" placeholder="Primarch's Curse" value={insanity.primarchsCurse} onChange={e=>setInsanity(i=>({...i,primarchsCurse:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1 mb-1" type="number" placeholder="Current" value={insanity.current} onChange={e=>setInsanity(i=>({...i,current:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1 mb-1" type="number" placeholder="Battle Fatigue" value={insanity.battleFatigue} onChange={e=>setInsanity(i=>({...i,battleFatigue:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1" type="number" placeholder="Primarch's Curse" value={insanity.primarchsCurse} onChange={e=>setInsanity(i=>({...i,primarchsCurse:parseInt(e.target.value||'0')}))} />
           </div>
           <div>
             <label className="text-xs uppercase opacity-70">Movement</label>
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" type="number" placeholder="Half" value={movement.half} onChange={e=>setMovement(m=>({...m,half:parseInt(e.target.value||'0')}))} />
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" type="number" placeholder="Charge" value={movement.charge} onChange={e=>setMovement(m=>({...m,charge:parseInt(e.target.value||'0')}))} />
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" placeholder="Full" value={movement.full} onChange={e=>setMovement(m=>({...m,full:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1 mb-1" type="number" placeholder="Half" value={movement.half} onChange={e=>setMovement(m=>({...m,half:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1 mb-1" type="number" placeholder="Charge" value={movement.charge} onChange={e=>setMovement(m=>({...m,charge:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1" type="number" placeholder="Full" value={movement.full} onChange={e=>setMovement(m=>({...m,full:parseInt(e.target.value||'0')}))} />
           </div>
           <div>
             <label className="text-xs uppercase opacity-70">Fate</label>
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" type="number" placeholder="Total" value={fate.total} onChange={e=>setFate(f=>({...f,total:parseInt(e.target.value||'0')}))} />
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" placeholder="Current" value={fate.current} onChange={e=>setFate(f=>({...f,current:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1 mb-1" type="number" placeholder="Total" value={fate.total} onChange={e=>setFate(f=>({...f,total:parseInt(e.target.value||'0')}))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1" type="number" placeholder="Current" value={fate.current} onChange={e=>setFate(f=>({...f,current:parseInt(e.target.value||'0')}))} />
           </div>
           <div>
             <label className="text-xs uppercase opacity-70">Corruption</label>
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" placeholder="Current" value={corruption} onChange={e=>setCorruption(parseInt(e.target.value||'0'))} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1" type="number" placeholder="Current" value={corruption} onChange={e=>setCorruption(parseInt(e.target.value||'0'))} />
           </div>
           <div>
             <label className="text-xs uppercase opacity-70">Renown</label>
-            <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1 mb-1" value={renown} onChange={e=>setRenown(e.target.value)} />
+            <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1 mb-1" value={renown} onChange={e=>setRenown(e.target.value)} />
             <label className="text-xs uppercase opacity-70 mt-3 block">Experience Points</label>
             <div className="mb-3">
               <XPBar currentXP={xp} xpSpent={xpSpent} thresholdXP={500} showLabel={true} compact={false} />
@@ -1252,25 +1252,25 @@ function PlayerTab({
             <div className="grid grid-cols-2 gap-2 text-xs mb-3">
               <div>
                 <label className="uppercase opacity-70 block">XP Total</label>
-                <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" value={xp} onChange={e=>setXp(parseInt(e.target.value||'0'))} />
+                <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1" type="number" value={xp} onChange={e=>setXp(parseInt(e.target.value||'0'))} />
               </div>
               <div>
                 <label className="uppercase opacity-70 block">XP Spent</label>
-                <input className="w-full rounded border border-white/10 bg-white/10 px-2 py-1" type="number" value={xpSpent} onChange={e=>setXpSpent(parseInt(e.target.value||'0'))} />
+                <input className="w-full rounded border border-slate-600 bg-slate-800 px-2 py-1" type="number" value={xpSpent} onChange={e=>setXpSpent(parseInt(e.target.value||'0'))} />
               </div>
             </div>
           </div>
         </div>
 
         {/* Notes */}
-        <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+        <div className="bg-slate-800 rounded-xl p-3 border border-slate-600">
           <div className="font-semibold mb-2">Notes</div>
-          <textarea className="w-full h-24 rounded border border-white/10 bg-white/10 px-2 py-1" value={notes} onChange={e=>setNotes(e.target.value)} />
+          <textarea className="w-full h-24 rounded border border-slate-600 bg-slate-800 px-2 py-1" value={notes} onChange={e=>setNotes(e.target.value)} />
         </div>
 
         {/* GM Panel - Player Management */}
         {isGMLoggedIn() && (
-          <div className="bg-white/5 rounded-xl p-4 border border-white/10 mt-4">
+          <div className="bg-slate-800 rounded-xl p-4 border border-slate-600 mt-4">
             <div className="font-semibold text-lg mb-4">Player Management</div>
             
             {/* Add/Update Player */}
@@ -1349,7 +1349,7 @@ function PlayerTab({
 
         {/* In-app log panel */}
         {showLogs && (
-          <div className="mt-4 bg-white/5 rounded-xl p-3 border border-white/10">
+          <div className="mt-4 bg-slate-800 rounded-xl p-3 border border-slate-600">
             <div className="flex items-center justify-between mb-2">
               <div className="font-semibold">Client Logs (latest)</div>
               <div className="flex gap-2">
@@ -1360,7 +1360,7 @@ function PlayerTab({
             <div className="max-h-64 overflow-y-auto text-xs font-mono">
               {logs.length === 0 && <div className="opacity-70">No logs</div>}
               {logs.map(l => (
-                <div key={l.id} className="mb-1 border-b border-white/5 pb-1">
+                <div key={l.id} className="mb-1 border-b border-slate-600 pb-1">
                   <div className="text-xs opacity-80">{l.timestamp} <span className="uppercase">{l.level}</span> <span className="opacity-60">[{l.component}]</span></div>
                   <div className="text-sm">{l.message}</div>
                   {l.data && <pre className="text-xs mt-1 whitespace-pre-wrap">{l.data}</pre>}

@@ -217,7 +217,7 @@ function App() {
   return (
     <div className="App min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={tab === 'players' ? appBackgroundStyle : {}}>
       {/* Persistent Header */}
-      <div className="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-white/10">
+      <div className="sticky top-0 z-50 backdrop-blur-md bg-slate-900 border-b border-slate-600">
         <div className="mx-auto max-w-6xl px-6 py-4">
           {/* Title and Login Row */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
@@ -239,7 +239,7 @@ function App() {
               ) : (
                 <div className="flex flex-col sm:flex-row gap-2">
                   <input 
-                    className="rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/50 text-sm" 
+                    className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-white placeholder-slate-400 text-sm" 
                     type="text" 
                     placeholder="Username" 
                     value={loginName} 
@@ -247,7 +247,7 @@ function App() {
                     onKeyPress={handleKeyPress}
                   />
                   <input 
-                    className="rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/50 text-sm" 
+                    className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-white placeholder-slate-400 text-sm" 
                     type="password" 
                     placeholder="Password (all users: 1234)" 
                     value={loginPw} 

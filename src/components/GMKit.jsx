@@ -4,7 +4,7 @@ export default function GMKit({ authedPlayer }) {
   const [activeTable, setActiveTable] = useState('difficulty');
 
   if (authedPlayer !== 'gm') return (
-    <div className="p-6 rounded-lg bg-red-900/20 border border-red-500/30">
+    <div className="p-6 rounded-lg bg-red-800 border border-red-700">
       <h2 className="text-xl font-bold text-red-300 mb-2">Access Denied</h2>
       <p className="text-red-200">The GM Kit is only accessible to Game Masters. Please log in as a GM.</p>
     </div>
@@ -393,7 +393,7 @@ export default function GMKit({ authedPlayer }) {
   };
 
   return (
-    <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+    <div className="bg-slate-800 rounded-xl p-6 border border-slate-600">
       <h2 className="text-2xl font-semibold mb-4 text-white">GM Kit - Reference Tables</h2>
       <p className="text-sm text-slate-300 mb-6">Comprehensive Deathwatch reference tables for quick gameplay lookup.</p>
       
@@ -406,7 +406,7 @@ export default function GMKit({ authedPlayer }) {
             className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
               activeTable === key 
                 ? 'bg-blue-600 text-white' 
-                : 'bg-slate-700/50 text-slate-200 hover:bg-slate-600/50'
+                : 'bg-slate-700 text-slate-200 hover:bg-slate-600'
             }`}
           >
             {table.name}
@@ -415,12 +415,12 @@ export default function GMKit({ authedPlayer }) {
       </div>
 
       {/* Active Table Display */}
-      <div className="bg-white/3 rounded-lg p-4 border border-white/5">
+      <div className="bg-slate-800 rounded-lg p-4 border border-slate-600">
         <h3 className="text-lg font-semibold text-slate-100 mb-4">{tables[activeTable].name}</h3>
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="border-b border-white/10">
+              <tr className="border-b border-slate-600">
                 {tables[activeTable].data[0].map((header, index) => (
                   <th key={index} className="px-3 py-2 text-left text-slate-300 font-medium">
                     {header}
@@ -430,7 +430,7 @@ export default function GMKit({ authedPlayer }) {
             </thead>
             <tbody>
               {tables[activeTable].data.slice(1).map((row, rowIndex) => (
-                <tr key={rowIndex} className="border-b border-white/5 hover:bg-white/5">
+                <tr key={rowIndex} className="border-b border-slate-600 hover:bg-slate-800">
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex} className="px-3 py-2 text-slate-200 text-xs">
                       {cell}

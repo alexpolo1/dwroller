@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 // Tooltip component for abbreviations
 function Tooltip({ children, text }) {
   return (
-    <span className="group relative inline-block cursor-help border-b border-dotted border-white/30 hover:border-white/60">
+    <span className="group relative inline-block cursor-help border-b border-dotted border-slate-500 hover:border-white">
       {children}
       <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs bg-black text-white rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
         {text}
@@ -897,7 +897,7 @@ function DeathwatchRoller() {
     <section className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 p-6 md:p-10">
       <div className="mx-auto max-w-6xl space-y-6">
         {(error||info) && (
-          <div className={`rounded-xl px-4 py-3 ${error? 'bg-rose-900/40 border border-rose-500/40 text-rose-200':'bg-emerald-900/30 border border-emerald-500/40 text-emerald-200'}`}>
+          <div className={`rounded-xl px-4 py-3 ${error? 'bg-rose-800 border border-rose-600 text-rose-200':'bg-emerald-800 border border-emerald-600 text-emerald-200'}`}>
             {error ? error : <div dangerouslySetInnerHTML={{ __html: info }} />}
           </div>
         )}
@@ -936,9 +936,9 @@ function DeathwatchRoller() {
           </div>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-5 space-y-4 shadow-xl">
+          <div className="md:col-span-2 rounded-2xl bg-slate-800 border border-slate-700 p-5 space-y-4 shadow-xl">
             {awaitingDefense && pendingHits && (
-              <div className="mb-4 rounded-xl bg-amber-900/50 border border-amber-500/30 p-4">
+              <div className="mb-4 rounded-xl bg-amber-800 border border-amber-600 p-4">
                 <div className="text-lg font-bold mb-2">Incoming Attack!</div>
                 <div className="text-sm mb-4">
                   Attack hit with {pendingHits.hits} potential hit{pendingHits.hits !== 1 ? 's' : ''}.
@@ -947,7 +947,7 @@ function DeathwatchRoller() {
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="text-xs uppercase opacity-70">Defense Type</label>
-                    <select className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={defenseType} onChange={e=>setDefenseType(e.target.value)}>
+                    <select className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" value={defenseType} onChange={e=>setDefenseType(e.target.value)}>
                       <option value="dodge">Dodge (Agility)</option>
                       <option value="parry" disabled={pendingHits?.isRanged}>Parry (WS - Melee Only)</option>
                       <option value="block">Block (WS +10)</option>
@@ -961,23 +961,23 @@ function DeathwatchRoller() {
                   </div>
                   <div>
                     <label className="text-xs uppercase opacity-70">Cover Bonus</label>
-                    <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" value={coverBonus} onChange={e=>setCoverBonus(parseInt(e.target.value||'0'))} />
+                    <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" value={coverBonus} onChange={e=>setCoverBonus(parseInt(e.target.value||'0'))} />
                   </div>
                   <div>
                     <label className="text-xs uppercase opacity-70">
                       <Tooltip text="Agility - Used for dodge and cover defenses">Defender's Ag</Tooltip>
                     </label>
-                    <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" value={defenderAg} onChange={e=>setDefenderAg(parseInt(e.target.value||'0'))} />
+                    <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" value={defenderAg} onChange={e=>setDefenderAg(parseInt(e.target.value||'0'))} />
                   </div>
                   <div>
                     <label className="text-xs uppercase opacity-70">
                       <Tooltip text="Weapon Skill - Used for parry and block defenses">Defender's WS</Tooltip>
                     </label>
-                    <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" value={defenderWS} onChange={e=>setDefenderWS(parseInt(e.target.value||'0'))} />
+                    <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" value={defenderWS} onChange={e=>setDefenderWS(parseInt(e.target.value||'0'))} />
                   </div>
                   <div>
                     <label className="text-xs uppercase opacity-70">Defense Modifier</label>
-                    <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" value={defenderModifier} onChange={e=>setDefenderModifier(parseInt(e.target.value||'0'))} />
+                    <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" value={defenderModifier} onChange={e=>setDefenderModifier(parseInt(e.target.value||'0'))} />
                   </div>
                   <div className="flex items-center">
                     <label className="text-xs uppercase opacity-70">Reaction Used</label>
@@ -1079,8 +1079,8 @@ function DeathwatchRoller() {
                 <label className="text-xs uppercase opacity-70">Weapon</label>
                 <div className="flex gap-2">
                   <div className="flex-1">
-                    <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2 mb-2" placeholder="Search weapons..." value={weaponFilter} onChange={e=>setWeaponFilter(e.target.value)} />
-                    <select className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={weaponName} onChange={e=>onSelectWeapon(e.target.value)}>
+                    <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2 mb-2" placeholder="Search weapons..." value={weaponFilter} onChange={e=>setWeaponFilter(e.target.value)} />
+                    <select className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" value={weaponName} onChange={e=>onSelectWeapon(e.target.value)}>
                       <option value="">Custom</option>
                       {filteredWeapons.map(w => (<option key={w.name} value={w.name}>{w.name}</option>))}
                     </select>
@@ -1104,7 +1104,7 @@ function DeathwatchRoller() {
                     </button>
                   </div>
                 </div>
-                <select className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={enemyName} onChange={e=>onSelectEnemy(e.target.value)}>
+                <select className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" value={enemyName} onChange={e=>onSelectEnemy(e.target.value)}>
                   {enemies.map(en => (<option key={en.name} value={en.name}>{en.name}{en.name==='Custom/None' ? '' : ` (TB ${en.tb} / AR Var / W ${en.wounds??'-'})`}</option>))}
                 </select>
                 <div className="text-xs opacity-60 mt-1">
@@ -1115,21 +1115,21 @@ function DeathwatchRoller() {
                 <label className="text-xs uppercase opacity-70">
                   <Tooltip text="Ballistic Skill - Used for ranged attacks">Attacker's BS</Tooltip>
                 </label>
-                <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" value={bs} onChange={e=>setBS(parseInt(e.target.value||'0'))} />
+                <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" value={bs} onChange={e=>setBS(parseInt(e.target.value||'0'))} />
               </div>
               <div>
                 <label className="text-xs uppercase opacity-70">
                   <Tooltip text="Weapon Skill - Used for melee attacks">Attacker's WS</Tooltip>
                 </label>
-                <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" value={ws} onChange={e=>setWS(parseInt(e.target.value||'0'))} />
+                <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" value={ws} onChange={e=>setWS(parseInt(e.target.value||'0'))} />
               </div>
               <div>
                 <label className="text-xs uppercase opacity-70">Modifier</label>
-                <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" value={modifier} onChange={e=>setModifier(parseInt(e.target.value||'0'))} />
+                <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" value={modifier} onChange={e=>setModifier(parseInt(e.target.value||'0'))} />
               </div>
               <div>
                 <label className="text-xs uppercase opacity-70">Aim</label>
-                <select className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={aim} onChange={e=>setAim(parseInt(e.target.value))}>
+                <select className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" value={aim} onChange={e=>setAim(parseInt(e.target.value))}>
                   <option value={0}>None</option>
                   <option value={10}>Half (+10)</option>
                   <option value={20}>Full (+20)</option>
@@ -1137,7 +1137,7 @@ function DeathwatchRoller() {
               </div>
               <div>
                 <label className="text-xs uppercase opacity-70">Difficulty</label>
-                <select className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={difficulty} onChange={e=>setDifficulty(e.target.value)}>
+                <select className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" value={difficulty} onChange={e=>setDifficulty(e.target.value)}>
                   <option value="easy">Easy (+20)</option>
                   <option value="normal">Normal (+0)</option>
                   <option value="hard">Hard (-20)</option>
@@ -1146,7 +1146,7 @@ function DeathwatchRoller() {
               </div>
               <div>
                 <label className="text-xs uppercase opacity-70">Mode</label>
-                <select className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={mode} onChange={e=>setMode(e.target.value)}>
+                <select className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" value={mode} onChange={e=>setMode(e.target.value)}>
                   {(['single','semi','full']).map(m => (
                     <option key={m} value={m} disabled={!allowedModes.includes(m)}>{m[0].toUpperCase()+m.slice(1)}</option>
                   ))}
@@ -1156,11 +1156,11 @@ function DeathwatchRoller() {
                 <label className="text-xs uppercase opacity-70">
                   <Tooltip text="Rate of Fire - Maximum shots per attack">RoF</Tooltip>
                 </label>
-                <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={1} value={rof} onChange={e=>setRof(parseInt(e.target.value||'1'))} />
+                <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" min={1} value={rof} onChange={e=>setRof(parseInt(e.target.value||'1'))} />
               </div>
               <div className="lg:col-span-3">
                 <label className="text-xs uppercase opacity-70">Damage</label>
-                <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" value={damage} onChange={e=>{ setDamage(e.target.value); if (error) setError('') }} />
+                <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" value={damage} onChange={e=>{ setDamage(e.target.value); if (error) setError('') }} />
               </div>
               <div>
                 <label className="text-xs uppercase opacity-70">
@@ -1172,13 +1172,13 @@ function DeathwatchRoller() {
                 <label className="text-xs uppercase opacity-70">
                   <Tooltip text="Proven - Minimum value for d10 damage dice">Proven</Tooltip>
                 </label>
-                <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} max={10} value={proven} onChange={e=>setProven(parseInt(e.target.value||'0'))} />
+                <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" min={0} max={10} value={proven} onChange={e=>setProven(parseInt(e.target.value||'0'))} />
               </div>
               <div>
                 <label className="text-xs uppercase opacity-70">
                   <Tooltip text="Penetration - Reduces target's armour value">Pen</Tooltip>
                 </label>
-                <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} value={pen} onChange={e=>setPen(parseInt(e.target.value||'0'))} />
+                <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" min={0} value={pen} onChange={e=>setPen(parseInt(e.target.value||'0'))} />
               </div>
               <div>
                 <label className="text-xs uppercase opacity-70">
@@ -1196,18 +1196,18 @@ function DeathwatchRoller() {
                 <label className="text-xs uppercase opacity-70">
                   <Tooltip text="Toughness Bonus - Reduces incoming damage">Target TB</Tooltip>
                 </label>
-                <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} value={targetTB} onChange={e=>setTargetTB(parseInt(e.target.value||'0'))} />
+                <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" min={0} value={targetTB} onChange={e=>setTargetTB(parseInt(e.target.value||'0'))} />
               </div>
               <div>
                 <label className="text-xs uppercase opacity-70">
                   <Tooltip text="Armour - Reduces incoming damage (Body location)">Target Armour (Body)</Tooltip>
                 </label>
-                <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} value={targetArmour} onChange={e=>{ const v = parseInt(e.target.value||'0'); setTargetArmour(v); setArmourMap(uniformArmourMap(v)) }} />
+                <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" min={0} value={targetArmour} onChange={e=>{ const v = parseInt(e.target.value||'0'); setTargetArmour(v); setArmourMap(uniformArmourMap(v)) }} />
               </div>
             </div>
             
             {/* Manual Mode Controls */}
-            <div className="rounded-xl bg-amber-900/20 border border-amber-500/30 p-4 space-y-3">
+            <div className="rounded-xl bg-amber-800 border border-amber-700 p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="text-sm font-semibold text-amber-200">Manual Dice Mode</div>
                 <div className="flex items-center gap-2">
@@ -1236,7 +1236,7 @@ function DeathwatchRoller() {
                   <div>
                     <label className="text-xs uppercase opacity-70">Manual Attack Roll (1-100)</label>
                     <input 
-                      className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" 
+                      className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" 
                       type="number" 
                       min="1" 
                       max="100"
@@ -1248,7 +1248,7 @@ function DeathwatchRoller() {
                   <div>
                     <label className="text-xs uppercase opacity-70">Manual Defense Roll (1-100)</label>
                     <input 
-                      className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" 
+                      className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" 
                       type="number" 
                       min="1" 
                       max="100"
@@ -1260,7 +1260,7 @@ function DeathwatchRoller() {
                   <div>
                     <label className="text-xs uppercase opacity-70">Manual Damage Rolls</label>
                     <input 
-                      className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" 
+                      className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" 
                       type="text"
                       placeholder="e.g., 7, 9"
                       value={manualDamageRolls} 
@@ -1279,17 +1279,17 @@ function DeathwatchRoller() {
             {/* Progress tracker */}
             <div className="mt-3">
               <div className="flex items-center gap-2 text-sm">
-                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='attack' ? 'bg-blue-600 text-white animate-pulse' : 'bg-white/5 text-white/80'}`}>Attack</div>
-                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='defense' ? 'bg-amber-500 text-black animate-pulse' : 'bg-white/5 text-white/80'}`}>Defense</div>
-                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='damage' ? 'bg-rose-500 text-black animate-pulse' : 'bg-white/5 text-white/80'}`}>Damage</div>
-                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='wounds' ? 'bg-emerald-500 text-black animate-pulse' : 'bg-white/5 text-white/80'}`}>Wounds</div>
+                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='attack' ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-800 text-white'}`}>Attack</div>
+                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='defense' ? 'bg-amber-500 text-black animate-pulse' : 'bg-slate-800 text-white'}`}>Defense</div>
+                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='damage' ? 'bg-rose-500 text-black animate-pulse' : 'bg-slate-800 text-white'}`}>Damage</div>
+                <div className={`px-3 py-1 rounded font-semibold ${progressStep==='wounds' ? 'bg-emerald-500 text-black animate-pulse' : 'bg-slate-800 text-white'}`}>Wounds</div>
                 <div className="ml-3 text-xs opacity-70">Phase: <span className="font-semibold">{progressStep}</span></div>
                 <div className="ml-4 text-xs opacity-80">Last Applied: <span className="font-semibold">{lastAppliedDamage}</span></div>
               </div>
             </div>
             {manageWeapons && (
               <>
-              <div className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-3">
+              <div className="rounded-xl bg-slate-800 border border-slate-600 p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">Manage Weapons</div>
                   <div className="flex items-center gap-3 text-xs">
@@ -1304,7 +1304,7 @@ function DeathwatchRoller() {
                 </div>
                 {manageTab==='json' ? (
                   <>
-                    <textarea className="w-full h-48 rounded-xl border border-white/10 bg-black/20 px-3 py-2 font-mono text-xs" value={weaponsJSON} onChange={e=>setWeaponsJSON(e.target.value)} />
+                    <textarea className="w-full h-48 rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 font-mono text-xs" value={weaponsJSON} onChange={e=>setWeaponsJSON(e.target.value)} />
                     <div className="flex gap-2">
                       <button onClick={()=>importFromJSONText(weaponsJSON)} className="rounded-xl px-3 py-2 bg-blue-600">Import JSON</button>
                       <button onClick={()=>{ const merged = importBuildWeapons(weapons); setWeapons(merged); setWeaponsJSON(JSON.stringify(merged,null,2)); setInfo('Imported built DB weapons') }} className="rounded-xl px-3 py-2 bg-emerald-700">Import Built DB</button>
@@ -1314,7 +1314,7 @@ function DeathwatchRoller() {
                   </>
                 ) : (
                   <>
-                    <textarea className="w-full h-48 rounded-xl border border-white/10 bg-black/20 px-3 py-2 font-mono text-xs" value={weaponsCSV} onChange={e=>setWeaponsCSV(e.target.value)} />
+                    <textarea className="w-full h-48 rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 font-mono text-xs" value={weaponsCSV} onChange={e=>setWeaponsCSV(e.target.value)} />
                     <div className="flex gap-2">
                       <button onClick={()=>importFromCSVText(weaponsCSV)} className="rounded-xl px-3 py-2 bg-blue-600">Import CSV</button>
                     </div>
@@ -1334,7 +1334,7 @@ function DeathwatchRoller() {
               </>
             )}
             {history[0] && (
-              <div className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-2">
+              <div className="rounded-xl bg-slate-800 border border-slate-600 p-4 space-y-2">
                 <div className="text-sm">{history[0].weapon ? `${history[0].weapon} • ` : ''}{history[0].using} • Attack <span className="font-semibold">{history[0].attackRoll}</span> → <span className="text-emerald-400">Hit!</span></div>
                 {history[0].defenseRoll && (
                   <div className="text-sm">{history[0].defenseType || 'Defense'} <span className="font-semibold">{history[0].defenseRoll}</span> vs {history[0].defenseTarget} → {history[0].defenseFailed ? <span className="text-rose-400">Failed!</span> : <span className="text-emerald-400">Defended!</span>}</div>
@@ -1350,14 +1350,14 @@ function DeathwatchRoller() {
                 )}
               </div>
             )}
-            <div className="pt-2 border-t border-white/10">
+            <div className="pt-2 border-t border-slate-600">
               <div className="flex gap-2">
-                <input className="flex-1 rounded-xl border border-white/10 bg-white/10 px-3 py-2" placeholder="Preset name" value={presetName} onChange={e=>setPresetName(e.target.value)} />
+                <input className="flex-1 rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" placeholder="Preset name" value={presetName} onChange={e=>setPresetName(e.target.value)} />
                 <button onClick={saveCurrentAsPreset} className="rounded-xl px-3 py-2 bg-slate-700 hover:bg-slate-600">Save</button>
               </div>
               <div className="flex flex-wrap gap-2 mt-2">
                 {presets.map(p => (
-                  <div key={p.name} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 flex items-center gap-2">
+                  <div key={p.name} className="rounded-xl border border-slate-600 bg-slate-800 px-3 py-2 flex items-center gap-2">
                     <button className="underline" onClick={()=>applyPreset(p)}>{p.name}</button>
                     <button onClick={()=>deletePreset(p.name)} className="text-xs px-2 py-1 rounded bg-rose-600">x</button>
                   </div>
@@ -1366,7 +1366,7 @@ function DeathwatchRoller() {
             </div>
           </div>
           <div className="space-y-6">
-            <div className="rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-5 shadow-xl">
+            <div className="rounded-2xl bg-slate-800 backdrop-blur border border-slate-600 p-5 shadow-xl">
               <div className="flex items-center justify-between mb-3">
                 <div className="font-semibold">Enemy Wounds Tracker</div>
                 <button onClick={resetTracker} className="text-xs rounded px-2 py-1 bg-slate-700 hover:bg-slate-600">Reset</button>
@@ -1374,14 +1374,14 @@ function DeathwatchRoller() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs uppercase opacity-70">Max Wounds</label>
-                  <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} value={maxWounds} onChange={e=>setMaxWounds(Math.max(0, parseInt(e.target.value||'0')))} />
+                  <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" min={0} value={maxWounds} onChange={e=>setMaxWounds(Math.max(0, parseInt(e.target.value||'0')))} />
                 </div>
                 <div>
                   <label className="text-xs uppercase opacity-70">Current Wounds</label>
-                  <input className="w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2" type="number" min={0} value={curWounds} onChange={e=>setCurWounds(Math.max(0, parseInt(e.target.value||'0')))} />
+                  <input className="w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2" type="number" min={0} value={curWounds} onChange={e=>setCurWounds(Math.max(0, parseInt(e.target.value||'0')))} />
                 </div>
                 <div className="col-span-2">
-                  <div className="h-2 w-full bg-white/10 rounded overflow-hidden">
+                  <div className="h-2 w-full bg-slate-800 rounded overflow-hidden">
                     <div className="h-2 bg-emerald-500" style={{width: `${woundPct}%`}}></div>
                   </div>
                   <div className="text-xs opacity-70 mt-1">{curWounds}/{maxWounds} remaining</div>
@@ -1389,7 +1389,7 @@ function DeathwatchRoller() {
               </div>
               <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {BODY_PARTS.map(p => (
-                  <div key={p} className="rounded-xl border border-white/10 bg-black/20 p-3">
+                  <div key={p} className="rounded-xl border border-slate-600 bg-slate-900 p-3">
                     <div className="text-xs opacity-70">{p}</div>
                     <div className="text-lg font-semibold">{partDamage[p]||0}</div>
                     <div className="text-xs opacity-60 mt-1">
@@ -1399,7 +1399,7 @@ function DeathwatchRoller() {
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-5 shadow-xl flex flex-col">
+            <div className="rounded-2xl bg-slate-800 backdrop-blur border border-slate-600 p-5 shadow-xl flex flex-col">
               <div className="flex items-center justify-between mb-2">
                 <div className="font-semibold">Roll History</div>
                 <button onClick={clearHistory} className="text-xs rounded px-2 py-1 rounded-xl bg-slate-700 hover:bg-slate-600">Clear</button>
@@ -1407,7 +1407,7 @@ function DeathwatchRoller() {
               <div className="overflow-y-auto space-y-2 pr-2" style={{maxHeight:'520px'}}>
                 {history.length===0 && <div className="text-sm opacity-70">No rolls yet</div>}
                 {history.map(r => (
-                  <div key={r.id} className="rounded-xl border border-white/10 bg-black/20 p-3">
+                  <div key={r.id} className="rounded-xl border border-slate-600 bg-slate-900 p-3">
                     <div className="flex items-center justify-between text-xs opacity-80">
                       <div>{new Date(r.ts).toLocaleTimeString()}</div>
                       <div>{r.weapon ? `${r.weapon} • ` : ''}{r.using || 'Unknown'} • {r.mode ? r.mode.toUpperCase() : 'SINGLE'} • RoF {r.rof || 1}</div>

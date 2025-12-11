@@ -28,7 +28,7 @@
   }
 
   .card {
-    @apply rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-4 sm:p-5 shadow-xl;
+    @apply rounded-2xl bg-slate-800 backdrop-blur border border-slate-600 p-4 sm:p-5 shadow-xl;
   }
 
   .badge {
@@ -48,11 +48,11 @@
   }
 
   .input-field {
-    @apply w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2;
+    @apply w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2;
   }
 
   .textarea-field {
-    @apply w-full rounded-xl border border-white/10 bg-white/10 px-3 py-2;
+    @apply w-full rounded-xl border border-slate-600 bg-slate-800 px-3 py-2;
   }
 
   .select-field {
@@ -76,7 +76,7 @@
   }
 
   .roll-card {
-    @apply rounded-xl border border-white/10 bg-black/20 p-3;
+    @apply rounded-xl border border-slate-600 bg-slate-800 p-3;
   }
 
   .roll-type {
@@ -92,6 +92,6 @@
   }
 
   .progress-bar {
-    @apply h-2 w-full bg-white/10 rounded overflow-hidden;
+    @apply h-2 w-full bg-slate-700 rounded overflow-hidden;
   }
 }

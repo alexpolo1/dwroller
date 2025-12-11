@@ -165,7 +165,7 @@ export default function BestiaryTab(){
           <h2 className="text-2xl font-semibold">Bestiary</h2>
           <div className="flex items-center gap-3">
             <input 
-              className="px-3 py-2 rounded bg-white/5 border border-white/10 text-white placeholder-slate-400" 
+              className="px-3 py-2 rounded bg-slate-800 border border-slate-600 text-white placeholder-slate-400" 
               value={q} 
               onChange={e=>setQ(e.target.value)} 
             />
@@ -188,7 +188,7 @@ export default function BestiaryTab(){
         </div>
 
         {dbDown && Date.now() < (dismissUntil || 0) ? null : dbDown ? (
-          <div className="mb-4 p-3 rounded bg-yellow-900/30 text-yellow-300 flex items-center justify-between" role="status" aria-live="polite">
+          <div className="mb-4 p-3 rounded bg-yellow-800 text-yellow-300 flex items-center justify-between" role="status" aria-live="polite">
             <div>Database unreachable — showing cached data and retrying in background.</div>
             <div className="ml-3">
               <button
@@ -204,7 +204,7 @@ export default function BestiaryTab(){
           {filtered.map((en, idx) => {
             const d = normalizeEntry(en)
             return (
-            <div key={d.name + idx} className="p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+            <div key={d.name + idx} className="p-4 rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700 transition-colors">
               <div className="flex items-start gap-6">
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-3">
@@ -215,7 +215,7 @@ export default function BestiaryTab(){
                   </div>
                   
                   {d.profile && (
-                    <div className="mb-3 p-3 rounded bg-slate-800/50 border border-slate-700">
+                    <div className="mb-3 p-3 rounded bg-slate-700 border border-slate-600">
                       <div className="text-sm font-semibold text-slate-300 mb-1">Profile</div>
                       <div className="text-sm text-slate-200 font-mono">{prettyProfile(d.profile)}</div>
                     </div>
@@ -223,49 +223,49 @@ export default function BestiaryTab(){
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     {d.movement && (
-                      <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
+                      <div className="bg-slate-700 p-2 rounded border border-slate-600">
                         <strong className="text-blue-300">Movement:</strong>
                         <div className="text-slate-200 mt-1">{d.movement}</div>
                       </div>
                     )}
                     {d.toughness && (
-                      <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
+                      <div className="bg-slate-700 p-2 rounded border border-slate-600">
                         <strong className="text-green-300">Toughness:</strong>
                         <div className="text-slate-200 mt-1">{d.toughness}</div>
                       </div>
                     )}
                     {d.armour && (
-                      <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
+                      <div className="bg-slate-700 p-2 rounded border border-slate-600">
                         <strong className="text-yellow-300">Armour:</strong>
                         <div className="text-slate-200 mt-1">{d.armour}</div>
                       </div>
                     )}
                     {d.skills && (
-                      <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
+                      <div className="bg-slate-700 p-2 rounded border border-slate-600">
                         <strong className="text-purple-300">Skills:</strong>
                         <div className="text-slate-200 mt-1">{d.skills}</div>
                       </div>
                     )}
                     {d.talents && (
-                      <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
+                      <div className="bg-slate-700 p-2 rounded border border-slate-600">
                         <strong className="text-orange-300">Talents:</strong>
                         <div className="text-slate-200 mt-1">{d.talents}</div>
                       </div>
                     )}
                     {d.traits && (
-                      <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
+                      <div className="bg-slate-700 p-2 rounded border border-slate-600">
                         <strong className="text-pink-300">Traits:</strong>
                         <div className="text-slate-200 mt-1">{d.traits}</div>
                       </div>
                     )}
                     {d.weapons && (
-                      <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
+                      <div className="bg-slate-700 p-2 rounded border border-slate-600">
                         <strong className="text-red-300">Weapons:</strong>
                         <div className="text-slate-200 mt-1">{d.weapons}</div>
                       </div>
                     )}
                     {d.gear && (
-                      <div className="bg-slate-800/30 p-2 rounded border border-slate-700">
+                      <div className="bg-slate-700 p-2 rounded border border-slate-600">
                         <strong className="text-cyan-300">Gear:</strong>
                         <div className="text-slate-200 mt-1">{d.gear}</div>
                       </div>
@@ -273,7 +273,7 @@ export default function BestiaryTab(){
                   </div>
                   
                   {d.snippet && (
-                    <div className="mt-3 p-3 rounded bg-slate-800/50 border border-slate-700">
+                    <div className="mt-3 p-3 rounded bg-slate-700 border border-slate-600">
                       <div className="text-sm font-semibold text-slate-300 mb-1">Description</div>
                       <div className="text-xs text-slate-400 leading-relaxed">{d.snippet}</div>
                     </div>
@@ -281,7 +281,7 @@ export default function BestiaryTab(){
                 </div>
                 
                 <div className="w-48 flex-shrink-0 text-sm text-slate-400">
-                  <div className="bg-slate-800/50 p-3 rounded border border-slate-700">
+                  <div className="bg-slate-700 p-3 rounded border border-slate-600">
                     <div className="font-semibold text-slate-300 mb-2">Source</div>
                     <div className="text-slate-200 mb-1">{d.book}</div>
                     <div className="text-xs">Page: {d.page ?? '—'}</div>

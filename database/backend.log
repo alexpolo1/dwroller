@@ -11407,3 +11407,120 @@ Connected to MongoDB
 [2025-08-24T20:39:43.003Z] API: Fetch all players (public) Found 7 players
 [2025-08-24T20:39:43.249Z] DB: getAllPlayers - start
 [2025-08-24T20:39:43.250Z] DB: getAllPlayers - resultCount 7
+[2025-12-11T19:30:04.823Z] API: Fetch all players (public) 7
+[2025-12-11T19:30:09.790Z] API: Player login christoffer success
+[2025-12-11T19:30:09.843Z] API: Fetch player christoffer success
+[2025-12-11T19:30:09.859Z] SESSION: Session validation successful christoffer
+[2025-12-11T19:30:09.880Z] API: Fetch player christoffer success
+[2025-12-11T19:30:26.308Z] API: Fetch all players (public) 7
+[2025-12-11T19:30:31.350Z] API: Player login gm success
+[2025-12-11T19:30:31.367Z] API: Fetch player gm success
+[2025-12-11T19:30:31.391Z] API: Fetch all players (public) 7
+[2025-12-11T19:30:31.431Z] SESSION: Session validation successful gm
+[2025-12-11T19:30:31.450Z] API: Fetch player gm success
+[2025-12-11T19:30:33.028Z] API: Fetch all players (public) 7
+[2025-12-11T19:33:27.683Z] SESSION: Session validation successful gm
+[2025-12-11T19:33:27.736Z] API: Fetch player gm success
+[2025-12-11T19:33:30.278Z] API: Fetch all players (public) 7
+[2025-12-11T19:33:31.556Z] SESSION: Session validation successful gm
+[2025-12-11T19:33:31.578Z] API: Fetch player gm success
+[2025-12-11T19:33:33.122Z] API: Fetch all players (public) 7
+[2025-12-11T19:33:34.629Z] API: Fetch all players (public) 7
+[2025-12-11T19:33:35.038Z] API: Fetch all players (public) 7
+[2025-12-11T19:33:36.501Z] API: Fetch all players (public) 7
+[2025-12-11T19:33:52.820Z] SESSION: Session validation successful gm
+[2025-12-11T19:33:52.840Z] API: Fetch player gm success
+[2025-12-11T19:33:53.797Z] API: Fetch all players (public) 7
+[2025-12-11T19:33:54.527Z] API: Fetch all players (public) 7
+[2025-12-11T19:33:56.213Z] API: Fetch all players (public) 7
+[2025-12-11T19:34:26.123Z] API: Fetch all players (public) 7
+[2025-12-11T19:34:26.667Z] API: Fetch all players (public) 7
+[2025-12-11T19:39:19.198Z] SESSION: Session validation successful gm
+[2025-12-11T19:39:19.216Z] API: Fetch player gm success
+[2025-12-11T19:39:20.378Z] API: Fetch all players (public) 7
+[2025-12-11T19:39:21.059Z] API: Fetch all players (public) 7
+[2025-12-11T19:39:31.004Z] SESSION: Session validation successful gm
+[2025-12-11T19:39:31.023Z] API: Fetch player gm success
+[2025-12-11T19:39:31.589Z] SESSION: Session validation successful gm
+[2025-12-11T19:39:31.642Z] API: Fetch player gm success
+[2025-12-11T19:39:32.351Z] API: Fetch all players (public) 7
+[2025-12-11T19:39:33.387Z] SESSION: Session validation successful gm
+[2025-12-11T19:39:33.409Z] API: Fetch player gm success
+[2025-12-11T19:39:33.911Z] API: Fetch all players (public) 7
+[2025-12-11T19:39:35.413Z] API: Fetch all players (public) 7
+[2025-12-11T19:41:11.069Z] SESSION: Session validation successful gm
+[2025-12-11T19:41:11.088Z] API: Fetch player gm success
+[2025-12-11T19:41:12.373Z] API: Fetch all players (public) 7
+[2025-12-11T19:43:28.278Z] SESSION: Session validation successful gm
+[2025-12-11T19:43:28.298Z] API: Fetch player gm success
+[2025-12-11T19:43:29.471Z] SESSION: Session validation successful gm
+[2025-12-11T19:43:29.522Z] API: Fetch player gm success
+[2025-12-11T19:43:30.306Z] SESSION: Session validation successful gm
+[2025-12-11T19:43:30.323Z] API: Fetch player gm success
+[2025-12-11T19:43:30.520Z] SESSION: Session validation successful gm
+[2025-12-11T19:43:30.535Z] API: Fetch player gm success
+[2025-12-11T19:43:30.929Z] SESSION: Session validation successful gm
+[2025-12-11T19:43:30.947Z] API: Fetch player gm success
+[2025-12-11T19:43:31.133Z] SESSION: Session validation successful gm
+[2025-12-11T19:43:31.150Z] API: Fetch player gm success
+[2025-12-11T19:43:31.721Z] SESSION: Session validation successful gm
+[2025-12-11T19:43:31.750Z] API: Fetch player gm success
+[2025-12-11T19:43:32.669Z] API: Fetch all players (public) 7
+[2025-12-11T19:43:33.369Z] API: Fetch all players (public) 7
+[2025-12-11T19:43:35.045Z] API: Fetch all players (public) 7
+[2025-12-11T19:47:27.097Z] SESSION: Session validation successful gm
+[2025-12-11T19:47:27.117Z] API: Fetch player gm success
+[2025-12-11T19:47:29.550Z] API: Fetch all players (public) 7
+[2025-12-11T19:53:49.714Z] SESSION: Session validation successful gm
+[2025-12-11T19:53:49.732Z] API: Fetch player gm success
+[2025-12-11T19:53:51.067Z] SESSION: Session validation successful gm
+[2025-12-11T19:53:51.089Z] API: Fetch player gm success
+[2025-12-11T19:53:51.430Z] SESSION: Session validation successful gm
+[2025-12-11T19:53:51.448Z] API: Fetch player gm success
+[2025-12-11T19:53:51.756Z] SESSION: Session validation successful gm
+[2025-12-11T19:53:52.034Z] SESSION: Session validation successful gm
+[2025-12-11T19:53:52.052Z] API: Fetch player gm success
+[2025-12-11T19:53:52.253Z] SESSION: Session validation successful gm
+[2025-12-11T19:53:52.271Z] API: Fetch player gm success
+[2025-12-11T19:53:52.488Z] SESSION: Session validation successful gm
+[2025-12-11T19:53:52.510Z] API: Fetch player gm success
+[2025-12-11T19:53:54.427Z] API: Fetch all players (public) 7
+[2025-12-11T19:53:55.195Z] API: Fetch all players (public) 7
+[2025-12-11T19:53:56.861Z] SESSION: Session validation successful gm
+[2025-12-11T19:53:56.877Z] API: Fetch player gm success
+[2025-12-11T19:53:57.419Z] API: Fetch all players (public) 7
+[2025-12-11T19:54:34.443Z] SESSION: Session validation successful gm
+[2025-12-11T19:54:34.493Z] API: Fetch player gm success
+[2025-12-11T19:54:34.833Z] SESSION: Session validation successful gm
+[2025-12-11T19:54:34.886Z] API: Fetch player gm success
+[2025-12-11T19:54:35.288Z] SESSION: Session validation successful gm
+[2025-12-11T19:54:35.320Z] API: Fetch player gm success
+[2025-12-11T19:54:35.470Z] SESSION: Session validation successful gm
+[2025-12-11T19:54:35.490Z] API: Fetch player gm success
+[2025-12-11T19:54:35.883Z] SESSION: Session validation successful gm
+[2025-12-11T19:54:35.908Z] API: Fetch player gm success
+[2025-12-11T19:54:36.854Z] API: Fetch all players (public) 7
+[2025-12-11T19:54:48.698Z] SESSION: Session validation successful gm
+[2025-12-11T19:54:48.717Z] API: Fetch player gm success
+[2025-12-11T19:54:49.031Z] SESSION: Session validation successful gm
+[2025-12-11T19:54:49.051Z] API: Fetch player gm success
+[2025-12-11T19:54:49.419Z] SESSION: Session validation successful gm
+[2025-12-11T19:54:49.594Z] SESSION: Session validation successful gm
+[2025-12-11T19:54:49.618Z] API: Fetch player gm success
+[2025-12-11T19:54:50.476Z] API: Fetch all players (public) 7
+[2025-12-11T19:56:27.848Z] MariaDB: Tables created successfully
+[2025-12-11T19:59:38.220Z] SESSION: Session validation successful gm
+[2025-12-11T19:59:38.258Z] API: Fetch player gm success
+[2025-12-11T19:59:39.439Z] API: Fetch all players (public) 7
+[2025-12-11T19:59:40.884Z] SESSION: Session validation successful gm
+[2025-12-11T19:59:40.913Z] API: Fetch player gm success
+[2025-12-11T19:59:41.722Z] API: Fetch all players (public) 7
+[2025-12-11T20:03:59.295Z] SESSION: Session validation successful gm
+[2025-12-11T20:03:59.316Z] API: Fetch player gm success
+[2025-12-11T20:04:01.115Z] API: Fetch all players (public) 7
+[2025-12-11T20:07:09.278Z] SESSION: Session validation successful gm
+[2025-12-11T20:07:09.298Z] API: Fetch player gm success
+[2025-12-11T20:07:11.412Z] API: Fetch all players (public) 7
+[2025-12-11T20:07:14.589Z] API: Fetch all players (public) 7
+[2025-12-11T20:07:15.121Z] API: Fetch all players (public) 7
+[2025-12-11T20:07:29.621Z] API: Fetch all players (public) 7

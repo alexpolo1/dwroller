@@ -234,23 +234,23 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
   }, [errorMsg]);
 
   return (
-    <div className="rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-5 shadow-xl space-y-4">
+    <div className="rounded-2xl bg-slate-800 border border-slate-700 p-5 shadow-xl space-y-4">
       <div className="text-2xl font-bold">Requisition Shop</div>
       
       {errorMsg && (
-        <div className="p-3 rounded-lg bg-red-900/20 border border-red-500/30">
+        <div className="p-3 rounded-lg bg-red-800 border border-red-600">
           <p className="text-red-300">{errorMsg}</p>
         </div>
       )}
 
       {!authedPlayer ? (
-        <div className="p-4 rounded-lg bg-amber-900/20 border border-amber-500/30">
+        <div className="p-4 rounded-lg bg-amber-800 border border-amber-600">
           <p className="text-amber-300">Please log in using the header above to access the shop.</p>
         </div>
       ) : (
         <>
           {/* Player Info */}
-          <div className="p-3 rounded-lg bg-blue-900/20 border border-blue-500/30">
+          <div className="p-3 rounded-lg bg-blue-800 border border-blue-600">
             <div className="text-lg font-semibold text-blue-300">
               Current Player: {authedPlayer}
             </div>
@@ -264,13 +264,13 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
           {/* Search and Filter */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input
-              className="rounded-xl border border-white/10 bg-white/10 px-3 py-2"
+              className="rounded-xl border border-slate-600 bg-slate-800 px-3 py-2"
               placeholder="Search items..."
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
             <select
-              className="rounded-xl border border-white/10 bg-white/10 px-3 py-2"
+              className="rounded-xl border border-slate-600 bg-slate-800 px-3 py-2"
               value={categoryFilter}
               onChange={e => setCategoryFilter(e.target.value)}
             >
@@ -283,7 +283,7 @@ export default function RequisitionShop({ authedPlayer, sessionId }) {
           {/* Items Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredItems.map(item => (
-              <div key={item.id} className="p-3 rounded-lg bg-slate-800/50 border border-white/10">
+              <div key={item.id} className="p-3 rounded-lg bg-slate-800 border border-slate-700">
                 <div className="font-semibold text-white">{item.name}</div>
                 <div className="text-xs text-slate-300 mb-2">{item.category}</div>
                 

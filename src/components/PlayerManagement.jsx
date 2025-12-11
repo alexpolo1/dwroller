@@ -38,7 +38,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
   }, [fetchPlayers]);
 
   if (authedPlayer !== 'gm') return (
-    <div className="p-6 rounded-lg bg-red-900/20 border border-red-500/30">
+    <div className="p-6 rounded-lg bg-red-800 border border-red-700">
       <h2 className="text-xl font-bold text-red-300 mb-2">Access Denied</h2>
       <p className="text-red-200">Player Management is only accessible to Game Masters. Please log in as a GM.</p>
     </div>
@@ -181,25 +181,25 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     const [pw, setPw] = useState('');
     
     return (
-      <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+      <div className="bg-slate-800 rounded-lg p-4 border border-slate-600">
         <h4 className="text-lg font-medium text-white mb-3">Add New Player</h4>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           <input 
-            className="rounded border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/50 text-sm"
+            className="rounded border border-slate-600 bg-slate-800 px-3 py-2 text-white placeholder-slate-400 text-sm"
             type="text" 
             placeholder="Player Name" 
             value={name} 
             onChange={e => setName(e.target.value)} 
           />
           <input 
-            className="rounded border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/50 text-sm"
+            className="rounded border border-slate-600 bg-slate-800 px-3 py-2 text-white placeholder-slate-400 text-sm"
             type="number" 
             placeholder="Requisition Points" 
             value={rp} 
             onChange={e => setRp(e.target.value)} 
           />
           <input 
-            className="rounded border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/50 text-sm"
+            className="rounded border border-slate-600 bg-slate-800 px-3 py-2 text-white placeholder-slate-400 text-sm"
             type="password" 
             placeholder="Password (default: 1234)" 
             value={pw} 
@@ -235,7 +235,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     return (
       <div className="flex items-center gap-2 w-full">
         <input 
-          className="rounded border border-white/20 bg-white/10 px-2 py-1 text-white text-sm flex-1 min-w-0"
+          className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-white text-sm flex-1 min-w-0"
           type="number" 
           value={rp} 
           onChange={e => setRp(e.target.value)} 
@@ -262,7 +262,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     return (
       <div className="flex items-center gap-2 w-full">
         <input 
-          className="rounded border border-white/20 bg-white/10 px-2 py-1 text-white text-sm flex-1 min-w-0"
+          className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-white text-sm flex-1 min-w-0"
           type="number" 
           value={xp} 
           onChange={e => setXp(e.target.value)} 
@@ -289,7 +289,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     return (
       <div className="flex items-center gap-2 w-full">
         <input 
-          className="rounded border border-white/20 bg-white/10 px-2 py-1 text-white text-sm flex-1 min-w-0"
+          className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-white text-sm flex-1 min-w-0"
           type="number" 
           value={xpSpent} 
           onChange={e => setXpSpent(e.target.value)} 
@@ -316,7 +316,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     return (
       <div className="flex items-center gap-2 w-full">
         <select 
-          className="rounded border border-white/20 bg-white/10 px-2 py-1 text-white text-sm flex-1 min-w-0"
+          className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-white text-sm flex-1 min-w-0"
           value={renown} 
           onChange={e => setRenown(e.target.value)}
         >
@@ -341,7 +341,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     return (
       <div className="flex items-center gap-2 w-full">
         <input 
-          className="rounded border border-white/20 bg-white/10 px-2 py-1 text-white placeholder-white/50 text-sm flex-1 min-w-0"
+          className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-white placeholder-slate-400 text-sm flex-1 min-w-0"
           type="password" 
           placeholder="New password (default: 1234)" 
           value={pw} 
@@ -367,13 +367,13 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     return (
       <div className="flex items-center gap-2">
         <input 
-          className="rounded border border-white/20 bg-white/10 px-2 py-1 text-white text-xs w-16"
+          className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-white text-xs w-16"
           type="number" 
           value={amount} 
           onChange={e => setAmount(e.target.value)} 
         />
         <button 
-          className="text-xs px-3 py-1 rounded bg-purple-600/80 hover:bg-purple-600 text-white transition-colors whitespace-nowrap"
+          className="text-xs px-3 py-1 rounded bg-purple-600 hover:bg-purple-600 text-white transition-colors whitespace-nowrap"
           onClick={() => {
             if (window.confirm(`Give ${amount} XP to all ${players.length} players?`)) {
               onGive(parseInt(amount));
@@ -394,13 +394,13 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     return (
       <div className="flex items-center gap-2">
         <input 
-          className="rounded border border-white/20 bg-white/10 px-2 py-1 text-white text-xs w-16"
+          className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-white text-xs w-16"
           type="number" 
           value={amount} 
           onChange={e => setAmount(e.target.value)} 
         />
         <button 
-          className="text-xs px-3 py-1 rounded bg-purple-500/80 hover:bg-purple-500 text-white transition-colors whitespace-nowrap"
+          className="text-xs px-3 py-1 rounded bg-purple-500 hover:bg-purple-500 text-white transition-colors whitespace-nowrap"
           onClick={() => {
             if (window.confirm(`Set all ${players.length} players to ${amount} XP?`)) {
               onSet(parseInt(amount));
@@ -421,13 +421,13 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     return (
       <div className="flex items-center gap-2">
         <input 
-          className="rounded border border-white/20 bg-white/10 px-2 py-1 text-white text-xs w-16"
+          className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-white text-xs w-16"
           type="number" 
           value={amount} 
           onChange={e => setAmount(e.target.value)} 
         />
         <button 
-          className="text-xs px-3 py-1 rounded bg-blue-600/80 hover:bg-blue-600 text-white transition-colors whitespace-nowrap"
+          className="text-xs px-3 py-1 rounded bg-blue-600 hover:bg-blue-600 text-white transition-colors whitespace-nowrap"
           onClick={() => {
             if (window.confirm(`Give ${amount} RP to all ${players.length} players?`)) {
               onGive(parseInt(amount));
@@ -448,13 +448,13 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
     return (
       <div className="flex items-center gap-2">
         <input 
-          className="rounded border border-white/20 bg-white/10 px-2 py-1 text-white text-xs w-16"
+          className="rounded border border-slate-600 bg-slate-800 px-2 py-1 text-white text-xs w-16"
           type="number" 
           value={amount} 
           onChange={e => setAmount(e.target.value)} 
         />
         <button 
-          className="text-xs px-3 py-1 rounded bg-blue-500/80 hover:bg-blue-500 text-white transition-colors whitespace-nowrap"
+          className="text-xs px-3 py-1 rounded bg-blue-500 hover:bg-blue-500 text-white transition-colors whitespace-nowrap"
           onClick={() => {
             if (window.confirm(`Set all ${players.length} players to ${amount} RP?`)) {
               onSet(parseInt(amount));
@@ -469,12 +469,12 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
   }
 
   return (
-    <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+    <div className="bg-slate-800 rounded-xl p-6 border border-slate-600">
       <h2 className="text-2xl font-semibold mb-4 text-white">Player Management</h2>
       <p className="text-sm text-slate-300 mb-6">Manage player accounts, requisition points, experience, and renown.</p>
       
       {saveMsg && (
-        <div className="mb-4 p-3 rounded bg-green-500/20 border border-green-500/30 text-green-300 text-sm">
+        <div className="mb-4 p-3 rounded bg-green-800 border border-green-700 text-green-300 text-sm">
           {saveMsg}
         </div>
       )}
@@ -493,7 +493,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
         ) : (
           <div className="space-y-4">
             {players.map(player => (
-              <div key={player.name} className="bg-white/3 rounded-lg p-4 border border-white/5">
+              <div key={player.name} className="bg-slate-800 rounded-lg p-4 border border-slate-600">
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                   {/* Player Info Section */}
                   <div className="space-y-4">
@@ -522,7 +522,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
                           <span className="text-slate-400">Available XP:</span> <span className="text-green-400 font-medium">{(player.tabInfo?.xp || 0) - (player.tabInfo?.xpSpent || 0)}</span>
                         </div>
                       </div>
-                      <div className="bg-slate-800/50 rounded p-3 border border-slate-700">
+                      <div className="bg-slate-800 rounded p-3 border border-slate-700">
                         <div className="text-xs font-medium text-slate-300 uppercase tracking-wide mb-2">Experience Progress</div>
                         <XPBar 
                           currentXP={player.tabInfo?.xp || 0} 
@@ -594,7 +594,7 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
       </div>
 
       {/* Quick Actions */}
-      <div className="mt-6 p-4 bg-white/3 rounded-lg border border-white/5">
+      <div className="mt-6 p-4 bg-slate-800 rounded-lg border border-slate-600">
         <h4 className="text-sm font-medium text-white mb-3">Quick Actions</h4>
         
         {/* Bulk XP Actions */}
@@ -638,13 +638,13 @@ export default function PlayerManagement({ authedPlayer, sessionId }) {
           <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">Other Actions</h5>
           <div className="flex flex-wrap gap-2">
             <button 
-              className="text-xs px-3 py-1 rounded bg-blue-600/80 hover:bg-blue-600 text-white transition-colors"
+              className="text-xs px-3 py-1 rounded bg-blue-600 hover:bg-blue-600 text-white transition-colors"
               onClick={fetchPlayers}
             >
               Refresh Players
             </button>
             <button 
-              className="text-xs px-3 py-1 rounded bg-green-600/80 hover:bg-green-600 text-white transition-colors"
+              className="text-xs px-3 py-1 rounded bg-green-600 hover:bg-green-600 text-white transition-colors"
               onClick={() => {
                 players.forEach(player => {
                   if ((player.tabInfo?.rp || 0) < 10) {

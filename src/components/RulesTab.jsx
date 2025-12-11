@@ -174,7 +174,7 @@ function RulesTab({ authedPlayer, sessionId }) {
         </div>
 
         {/* Search Section */}
-        <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+        <div className="bg-slate-800 rounded-xl p-6 border border-slate-600">
           <form onSubmit={handleSearch} className="space-y-4">
             <div className="flex gap-4">
               <div className="flex-1">
@@ -183,13 +183,13 @@ function RulesTab({ authedPlayer, sessionId }) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search for rules, weapons, talents, skills..."
-                  className="w-full px-4 py-2 rounded-lg border border-white/20 bg-white/10 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 rounded-lg border border-slate-600 bg-slate-800 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <select
                 value={selectedCategory}
                 onChange={(e) => handleCategoryChange(e.target.value)}
-                className="px-4 py-2 rounded-lg border border-white/20 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 rounded-lg border border-slate-600 bg-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {ruleCategories.map(cat => (
                   <option key={cat.id} value={cat.id} className="bg-slate-800">
@@ -235,7 +235,7 @@ function RulesTab({ authedPlayer, sessionId }) {
                 <button
                   key={rule}
                   onClick={() => handleQuickSearch(rule)}
-                  className="px-3 py-1 text-sm bg-white/10 hover:bg-white/20 rounded-md border border-white/20 transition-colors"
+                  className="px-3 py-1 text-sm bg-slate-800 hover:bg-slate-700 rounded-md border border-slate-600 transition-colors"
                 >
                   {rule}
                 </button>
@@ -255,7 +255,7 @@ function RulesTab({ authedPlayer, sessionId }) {
                     setSelectedCategory(cid);
                     await fetchRandom(cid, browseCount);
                   }}
-                  className={`px-3 py-1 text-sm rounded-md border transition-colors ${selectedCategory === cat.id ? 'bg-blue-500 text-white border-blue-600' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+                  className={`px-3 py-1 text-sm rounded-md border transition-colors ${selectedCategory === cat.id ? 'bg-blue-500 text-white border-blue-600' : 'bg-slate-800 text-white border-slate-600 hover:bg-slate-700'}`}
                 >
                   {cat.name}
                 </button>
@@ -272,7 +272,7 @@ function RulesTab({ authedPlayer, sessionId }) {
                   <button
                     key={index}
                     onClick={() => handleQuickSearch(query)}
-                    className="px-2 py-1 text-xs bg-white/5 hover:bg-white/10 rounded border border-white/10 transition-colors"
+                    className="px-2 py-1 text-xs bg-slate-800 hover:bg-slate-800 rounded border border-slate-600 transition-colors"
                   >
                     {query}
                   </button>
@@ -284,7 +284,7 @@ function RulesTab({ authedPlayer, sessionId }) {
 
         {/* Search Results */}
         {searchResults.length > 0 && (
-          <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+          <div className="bg-slate-800 rounded-xl p-6 border border-slate-600">
             <h2 className="text-xl font-semibold mb-4">
               Search Results ({searchResults.length})
             </h2>
@@ -293,20 +293,20 @@ function RulesTab({ authedPlayer, sessionId }) {
               {searchResults.map((rule, index) => (
                 <div
                   key={rule.id || index}
-                  className="bg-white/5 rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                  className="bg-slate-800 rounded-lg p-4 border border-slate-600 hover:bg-slate-800 transition-colors cursor-pointer"
                   onClick={() => setSelectedRule(rule)}
                 >
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-medium text-blue-300">{rule.title}</h3>
                     <div className="flex gap-2 text-xs">
                       {rule.category && (
-                        <span className="px-2 py-1 bg-blue-600/30 rounded">{rule.category}</span>
+                        <span className="px-2 py-1 bg-blue-700 rounded">{rule.category}</span>
                       )}
                       {rule.page && (
-                        <span className="px-2 py-1 bg-green-600/30 rounded">p.{rule.page}</span>
+                        <span className="px-2 py-1 bg-green-700 rounded">p.{rule.page}</span>
                       )}
                       {rule.source && (
-                        <span className="px-2 py-1 bg-purple-600/30 rounded">{rule.source}</span>
+                        <span className="px-2 py-1 bg-purple-700 rounded">{rule.source}</span>
                       )}
                     </div>
                   </div>
@@ -339,8 +339,8 @@ function RulesTab({ authedPlayer, sessionId }) {
 
         {/* Rule Detail Modal */}
         {selectedRule && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-slate-800 rounded-xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto border border-white/20">
+          <div className="fixed inset-0 bg-black flex items-center justify-center p-4 z-50">
+            <div className="bg-slate-800 rounded-xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto border border-slate-600">
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-2xl font-bold text-blue-300">{selectedRule.title}</h2>
                 <button
@@ -353,13 +353,13 @@ function RulesTab({ authedPlayer, sessionId }) {
               
               <div className="flex gap-2 mb-4 text-xs">
                 {selectedRule.category && (
-                  <span className="px-2 py-1 bg-blue-600/30 rounded">{selectedRule.category}</span>
+                  <span className="px-2 py-1 bg-blue-700 rounded">{selectedRule.category}</span>
                 )}
                 {selectedRule.page && (
-                  <span className="px-2 py-1 bg-green-600/30 rounded">Page {selectedRule.page}</span>
+                  <span className="px-2 py-1 bg-green-700 rounded">Page {selectedRule.page}</span>
                 )}
                 {selectedRule.source && (
-                  <span className="px-2 py-1 bg-purple-600/30 rounded">{selectedRule.source}</span>
+                  <span className="px-2 py-1 bg-purple-700 rounded">{selectedRule.source}</span>
                 )}
               </div>
               
@@ -371,7 +371,7 @@ function RulesTab({ authedPlayer, sessionId }) {
               />
               
               {selectedRule.examples && (
-                <div className="mt-4 p-4 bg-white/5 rounded-lg border border-white/10">
+                <div className="mt-4 p-4 bg-slate-800 rounded-lg border border-slate-600">
                   <h4 className="font-semibold mb-2 text-green-300">Examples:</h4>
                   <div className="text-slate-300">{selectedRule.examples}</div>
                 </div>
@@ -385,7 +385,7 @@ function RulesTab({ authedPlayer, sessionId }) {
                       <button
                         key={index}
                         onClick={() => handleQuickSearch(related)}
-                        className="px-2 py-1 text-xs bg-white/10 hover:bg-white/20 rounded border border-white/20 transition-colors"
+                        className="px-2 py-1 text-xs bg-slate-800 hover:bg-slate-700 rounded border border-slate-600 transition-colors"
                       >
                         {related}
                       </button>
@@ -399,7 +399,7 @@ function RulesTab({ authedPlayer, sessionId }) {
 
         {/* No Results */}
         {searchQuery && !loading && searchResults.length === 0 && (
-          <div className="bg-white/5 rounded-xl p-6 border border-white/10 text-center">
+          <div className="bg-slate-800 rounded-xl p-6 border border-slate-600 text-center">
             <p className="text-slate-400">No rules found for "{searchQuery}"</p>
             <p className="text-xs text-slate-500 mt-2">Try different keywords or check a different category</p>
           </div>
